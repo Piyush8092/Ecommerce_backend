@@ -1,0 +1,72 @@
+let mongoose = require('mongoose');
+
+let productSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+    },
+
+
+    image: [{
+        type: String,
+        required: true,
+    }],
+    price:{
+        type: Number,
+        required: true,
+    },
+    description:{
+        type: String,
+        required: true,
+    },
+    catagory:{
+        type: String,
+        required: true,
+    },
+    discount:{
+        type: Number,
+        required: false,
+    },
+    stock:{
+        type: Number,
+        required: true,
+    },
+
+    comments:[{
+    comment:{
+        type: String,
+        required: false,
+    },
+    rating:{
+        type: Number,
+        required: false,
+    },
+    reviews:{
+        type: String,
+        required: false,
+    },
+    userId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+    },
+
+    userCaseFAQ:[
+        {
+            question:{
+                type: String,
+                required: false,
+            },
+            answer:{
+                type: String,
+                required: false,
+            }
+        }
+    ]
+}
+],
+    },
+    { timestamps: true }
+);
+
+module.exports = Product = mongoose.model('Product', productSchema);
