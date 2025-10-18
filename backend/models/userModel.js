@@ -34,6 +34,10 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Order',
     }],
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
 
     subscriptions: [{
         type: mongoose.Schema.Types.ObjectId,
