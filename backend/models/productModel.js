@@ -50,7 +50,11 @@ let productSchema = new mongoose.Schema({
         ref: 'User',
         required: true,
     },
-
+Availability:{
+    type: String,
+    enum: ['AVAILABLE', 'OUT_OF_STOCK'],
+    default: 'AVAILABLE',
+},
     userCaseFAQ:[
         {
             question:{

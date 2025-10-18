@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
     role: {
         type: String,
         // order accept delete and fororder,  emplye => diplsy employ section 
-        enum: ['GENERAL', 'ADMIN','order-manager','employee'],
+        enum: ['GENERAL', 'ADMIN','MANAGER','EMPLOYEE'],
         default: 'GENERAL'
     },
     token: {
@@ -30,6 +30,11 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
+    orders: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Order',
+    }],
+
     subscriptions: [{
         type: mongoose.Schema.Types.ObjectId,
     }]
