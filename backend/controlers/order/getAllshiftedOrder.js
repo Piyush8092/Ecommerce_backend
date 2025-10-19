@@ -1,6 +1,6 @@
 let Order = require('../../models/orderModel');
 
-const getAllPendingOrder = async (req, res) => {
+const getAllShiftedOrder = async (req, res) => {
     try {
         let page = req.query.page || 1;
         let limit = req.query.limit || 10;
@@ -20,6 +20,6 @@ const getAllPendingOrder = async (req, res) => {
     }
 };
 
-module.exports = { getAllPendingOrder };
+module.exports = { getAllShiftedOrder };
 
 

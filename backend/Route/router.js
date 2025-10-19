@@ -32,7 +32,30 @@ const { createCart } = require('../controlers/cart/createCart');
 const { getAllCart } = require('../controlers/cart/getAllCart');
 const { updateCart } = require('../controlers/cart/updateCart');
 const { deleteCart } = require('../controlers/cart/deleteCart');
-
+const { createContact } = require('../controlers/contact/createContact');
+const { getContact } = require('../controlers/contact/getContactData');
+const { getSpecificContact } = require('../controlers/contact/getSpecificContact');
+const { updateContact } = require('../controlers/contact/updateContact');
+const { deleteContact } = require('../controlers/contact/DeleteContact');
+const { queryContact } = require('../controlers/contact/queryContact');
+const {createOrder}=require('../controlers/order/createOrder');
+const { getLoginUserOrder } = require('../controlers/order/GetLoginUserOrder');
+const { getAllPendingOrder } = require('../controlers/order/getAllPendingOrder');
+const { getAllAcceptedOrder } = require('../controlers/order/getAllAcceptedOrder');
+const { getAllShiftedOrder } = require('../controlers/order/getAllshiftedOrder');
+// const { getAllDeliveredOrder } = require('../controlers/order/getAllDeliveredOrder');
+const { getAllCancelOrder } = require('../controlers/order/getAllCancelOrder');
+const { updateOrderStatus } = require('../controlers/order/UpdateOrderStatusMannegerAndAdmin');
+const { updateOrderStatusEmploye } = require('../controlers/order/updateOrderStatusEmploye');
+const { createBlog } = require('../controlers/blogs/createBlog');
+const { getAllBlog } = require('../controlers/blogs/getAllBlog');
+const { getSpecificBlog } = require('../controlers/blogs/getSpecificBlog');
+const { updateBlog } = require('../controlers/blogs/updateBlog');
+const { deleteBlog } = require('../controlers/blogs/deleteBlogs');
+const { getQueryBlog } = require('../controlers/blogs/getQueryBlog');
+const { updateOrder } = require('../controlers/order/updateOrder');
+const { getSpecificCarsole } = require('../controlers/carsole/getSpecificCarsole');
+ 
  cookieParser();
 
 
@@ -43,23 +66,23 @@ const { deleteCart } = require('../controlers/cart/deleteCart');
 //  carsole
 router.post('/createCarsole', authGuard, createCarsole);
 router.get('/getAllCarsole', getCarsole);
+router.get('/getSpecificCarsole/:id', getSpecificCarsole );
 router.put('/updateCarsole/:id', authGuard, updateCarsole);
 router.delete('/deleteCarsole/:id', authGuard, deleteCarsole);
 
 // product
- 
 router.post('/createProduct', authGuard, createProduct);
 router.get('/getAllProduct', getAllProduct);
 router.get('/getSpecificProduct/:id', getSpecificProduct );
 router.put('/updateProduct/:id', authGuard, updateProduct);
 router.delete('/deleteProduct/:id', authGuard, deleteProduct);
-router.post('/createComments/:id', createComments);
+router.post('/createComments/:id',authGuard, createComments);
 router.get('/queryProduct', queryProduct);
 // product FAQ
-router.post('/createProductFAQ/:id', createProductFAQ);
+router.post('/createProductFAQ/:id', authGuard, createProductFAQ);
 router.get('/getSpacificFAQ/:id', getSpacificFAQ);
-router.put('/updateProductFAQ/:id/:faqId', updateProductFAQ);
-router.delete('/deleteProductFAQ/:id/:faqId', deleteProductFAQ);
+router.put('/updateProductFAQ/:id/:faqId', authGuard, updateProductFAQ);
+router.delete('/deleteProductFAQ/:id/:faqId', authGuard, deleteProductFAQ);
 
 
 
@@ -84,6 +107,38 @@ router.post('/createCart', authGuard, createCart);
 router.get('/getAllCart', authGuard, getAllCart);
 router.put('/updateCart/:id', authGuard, updateCart);
 router.delete('/deleteCart/:id', authGuard, deleteCart);
+
+// order
+router.post('/createOrder', authGuard, createOrder);
+router.get('/getLoginUserOrder', authGuard, getLoginUserOrder);
+router.get('/getAllPendingOrder', authGuard, getAllPendingOrder);
+router.get('/getAllAcceptedOrder', authGuard, getAllAcceptedOrder);
+router.get('/getAllShiftedOrder', authGuard, getAllShiftedOrder);
+// router.get('/getAllDeliveredOrder', authGuard, getAllDeliveredOrder);
+router.get('/getAllCancelOrder', authGuard, getAllCancelOrder);
+router.put('/updateOrderStatusByManneger/:id', authGuard, updateOrderStatus);
+router.put('/updateOrderStatusByEmploye/:id', authGuard, updateOrderStatusEmploye);
+router.put('/updateOrder/:id', authGuard, updateOrder);
+
+
+// blog route
+router.post('/createBlog', authGuard, createBlog);
+router.get('/getAllBlog', getAllBlog);
+router.get('/getSpecificBlog/:id', getSpecificBlog);
+router.put('/updateBlog/:id', authGuard, updateBlog);
+router.delete('/deleteBlog/:id', authGuard, deleteBlog);
+router.get('/queryBlog', getQueryBlog);
+
+
+
+// contact route
+router.post('/createContact', createContact);
+router.get('/getContact', getContact);
+router.get('/getSpecificContact/:id', getSpecificContact);
+router.put('/updateContact/:id', authGuard, updateContact);
+router.delete('/deleteContact/:id', authGuard, deleteContact);
+router.get('/queryContact', queryContact);
+
 
 
 module.exports = router;

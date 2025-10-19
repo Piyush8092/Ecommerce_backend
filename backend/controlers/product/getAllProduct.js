@@ -28,7 +28,7 @@ const getAllProduct = async (req, res) => {
             return productObj;
         });
 
-        res.json({ message: 'Product fetched successfully', status: 200, data: productsWithRating, success: true, error: false });
+        res.json({ message: 'Product fetched successfully', status: 200, data: productsWithRating, success: true, error: false,total: products.length });
     }
     catch (e) {
         res.json({ message: 'Something went wrong', status: 500, data: e, success: false, error: true });

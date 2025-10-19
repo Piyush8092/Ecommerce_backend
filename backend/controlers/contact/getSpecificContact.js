@@ -1,4 +1,4 @@
-let contactModel=require('../../model/contactModel');
+let contactModel=require('../../models/contactModel');
 
 const getSpecificContact=async(req,res)=>{
     try{

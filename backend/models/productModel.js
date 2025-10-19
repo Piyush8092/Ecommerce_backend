@@ -33,28 +33,29 @@ let productSchema = new mongoose.Schema({
     },
 
     comments:[{
-    comment:{
+        comment:{
+            type: String,
+            required: false,
+        },
+        rating:{
+            type: Number,
+            required: false,
+        },
+        reviews:{
+            type: String,
+            required: false,
+        },
+        userId:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true,
+        }
+    }],
+    Availability:{
         type: String,
-        required: false,
+        enum: ['AVAILABLE', 'OUT_OF_STOCK'],
+        default: 'AVAILABLE',
     },
-    rating:{
-        type: Number,
-        required: false,
-    },
-    reviews:{
-        type: String,
-        required: false,
-    },
-    userId:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
-    },
-Availability:{
-    type: String,
-    enum: ['AVAILABLE', 'OUT_OF_STOCK'],
-    default: 'AVAILABLE',
-},
     userCaseFAQ:[
         {
             question:{
@@ -67,8 +68,6 @@ Availability:{
             }
         }
     ]
-}
-],
     },
     { timestamps: true }
 );

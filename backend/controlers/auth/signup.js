@@ -45,7 +45,7 @@ const SignupRout = async (req, res) => {
         const newUser = new User({
             name,
             email,
-             role: 'ADMIN'
+             role: 'GENERAL'
         });
 
         // Save user to DB

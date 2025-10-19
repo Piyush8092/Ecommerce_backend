@@ -18,9 +18,9 @@ if (!existAddress) {
         }
 
 
-        const updatedAddress = await DeliveryAddress.findByIdAndUpdate({_id:id}, {
+        const updatedAddress = await DeliveryAddress.findByIdAndUpdate({_id:id}, 
            payload
-        }, { new: true });
+        , { new: true });
         res.json({ message: 'Address updated successfully', status: 200, data: updatedAddress, success: true, error: false });
     }
     catch (e) {
