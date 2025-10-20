@@ -11,11 +11,13 @@ const updateBlog = async (req, res) => {
         if (!existBlog) {
             return res.status(404).json({ message: 'Blog not found' });
         }
-        payload.userId = req.user._id;
 
-        if(req.user.role !== 'ADMIN' || req.user._id.toString() !== existBlog.userId.toString()) {
+        // Check authorization: must be ADMIN or the blog owner
+        if(req.user.role !== 'ADMIN' && req.user._id.toString() !== existBlog.userId.toString()) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
+
+        payload.userId = req.user._id;
         const updatedBlog = await Blog.findByIdAndUpdate({_id:id},
            payload
         , { new: true });

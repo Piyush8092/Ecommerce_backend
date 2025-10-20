@@ -55,13 +55,20 @@ const { deleteBlog } = require('../controlers/blogs/deleteBlogs');
 const { getQueryBlog } = require('../controlers/blogs/getQueryBlog');
 const { updateOrder } = require('../controlers/order/updateOrder');
 const { getSpecificCarsole } = require('../controlers/carsole/getSpecificCarsole');
- 
+const { createPayment } = require('../controlers/payment/createPayment');
+const { getAllPaymentAdminView } = require('../controlers/payment/getAllPaymentAdminView');
+const { getAllFaildPayment } = require('../controlers/payment/getAllFaildPayment');
+const { getAllSuccessPayment } = require('../controlers/payment/getAllSuccessPayment');
+const { getSpecificPayment } = require('../controlers/payment/getSpecificPayment');
+const { updatePayment } = require('../controlers/payment/updatePayment');
+const { deletePayment } = require('../controlers/payment/deletePayment');
+
  cookieParser();
 
 
 // ceate user
  router.post('/signup', SignupRout );
- router.get('/logout', LogoutRout);
+ router.get('/logout',authGuard, LogoutRout);
 
 //  carsole
 router.post('/createCarsole', authGuard, createCarsole);
@@ -140,7 +147,12 @@ router.delete('/deleteContact/:id', authGuard, deleteContact);
 router.get('/queryContact', queryContact);
 
 // payment route
-
-
+router.post('/createPayment', authGuard, createPayment);
+router.get('/getAllPaymentAdminView', authGuard, getAllPaymentAdminView);
+router.get('/getAllFaildPayment', authGuard, getAllFaildPayment);
+router.get('/getAllSuccessPayment', authGuard, getAllSuccessPayment);
+router.get('/getSpecificPayment/:id', authGuard, getSpecificPayment);
+router.put('/updatePayment/:id', authGuard, updatePayment);
+router.delete('/deletePayment/:id', authGuard, deletePayment);
 
 module.exports = router;

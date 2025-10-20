@@ -37,7 +37,7 @@ const SignupRout = async (req, res) => {
             role: existingUser.role,
             token
         };
-            return res.status(400).json({ data:userResponse, message: 'User already exists.' });
+            return res.status(200).json({ data:userResponse, message: 'User already exists.', success: true });
         }
 
         
