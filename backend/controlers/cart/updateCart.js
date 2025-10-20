@@ -17,9 +17,9 @@ const updateCart = async (req, res) => {
         if(req.user.role !== 'ADMIN' && req.user._id.toString()!== existCart.userId.toString()) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
-        const updatedCart = await Cart.findByIdAndUpdate({_id:id}, {
+        const updatedCart = await Cart.findByIdAndUpdate({_id:id}, 
            payload
-        }, { new: true });
+        , { new: true });
         res.json({ message: 'Cart updated successfully', status: 200, data: updatedCart, success: true, error: false });
     }
     catch (e) {

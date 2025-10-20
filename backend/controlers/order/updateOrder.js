@@ -14,9 +14,9 @@ const updateOrder = async (req, res) => {
         if(req.user.role !== 'ADMIN' && req.user.role !== 'MANAGER' ) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
-        const updatedOrder = await Order.findByIdAndUpdate({_id:id}, {
+        const updatedOrder = await Order.findByIdAndUpdate({_id:id}, 
            payload
-        }, { new: true });
+        , { new: true });
         res.json({ message: 'Order updated successfully', status: 200, data: updatedOrder, success: true, error: false });
     }
     

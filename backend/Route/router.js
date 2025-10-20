@@ -132,12 +132,14 @@ router.get('/queryBlog', getQueryBlog);
 
 
 // contact route
-router.post('/createContact', createContact);
+router.post('/createContact',authGuard, createContact);
 router.get('/getContact', getContact);
 router.get('/getSpecificContact/:id', getSpecificContact);
 router.put('/updateContact/:id', authGuard, updateContact);
 router.delete('/deleteContact/:id', authGuard, deleteContact);
 router.get('/queryContact', queryContact);
+
+// payment route
 
 
 

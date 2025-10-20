@@ -16,9 +16,9 @@ const updateBlog = async (req, res) => {
         if(req.user.role !== 'ADMIN' || req.user._id.toString() !== existBlog.userId.toString()) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
-        const updatedBlog = await Blog.findByIdAndUpdate({_id:id}, {
+        const updatedBlog = await Blog.findByIdAndUpdate({_id:id},
            payload
-        }, { new: true });
+        , { new: true });
 
         res.json({ message: 'Blog updated successfully', status: 200, data: updatedBlog, success: true, error: false });
     }
