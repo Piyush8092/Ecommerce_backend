@@ -3,9 +3,8 @@ let DeliveryAddress = require('../../models/deliveryAddressModel');
 const createDeliveryAddress = async (req, res) => {
     try {
         let userId = req.user._id;
-        let name = req.user.name;
-        let email = req.user.email;
-        let {  phoneNo, optionalPhoneNo, Address, landmark, city, state, zip } = req.body;
+         
+        let { name,email ,phoneNo, optionalPhoneNo, Address, landmark, city, state, zip } = req.body;
         if (!name || !email || !Address || !city || !state || !zip) {
             return res.status(400).json({ message: 'All fields are required' });
         }
