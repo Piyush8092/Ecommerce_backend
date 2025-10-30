@@ -83,6 +83,9 @@ const { getAllSubscription } = require('../controlers/subscription/getAllSubscri
   const { getSpecificTermsAndConditions } = require('../controlers/term/getSpecificTerm');
   const { editTermsAndConditions } = require('../controlers/term/termEdit');
   const { deleteTermsAndConditions } = require('../controlers/term/termDelete');
+const { createGetInTouch } = require('../controlers/getInTouchAndSocalLink/createGetInTouch');
+const { getGetInTouch } = require('../controlers/getInTouchAndSocalLink/getGetInTouch');
+const { updateGetInTouch } = require('../controlers/getInTouchAndSocalLink/updateGetInTouch');
  
 
  cookieParser();
@@ -215,6 +218,11 @@ router.put('/editPrivacyPolicy/:id', authGuard, editPrivacyPolicy);
     router.get('/getSpecificTermsAndConditions/:id', getSpecificTermsAndConditions);
     router.put('/editTermsAndConditions/:id', authGuard, editTermsAndConditions);
       router.delete('/deleteTermsAndConditions/:id', authGuard, deleteTermsAndConditions);
+
+      // get in touch and social link route
+      router.post('/createGetInTouch', authGuard, createGetInTouch);
+      router.get('/getGetInTouch', getGetInTouch);
+      router.put('/updateGetInTouch/:id', authGuard, updateGetInTouch);
 
 
 
