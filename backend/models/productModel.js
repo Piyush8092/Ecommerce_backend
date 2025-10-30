@@ -31,6 +31,11 @@ let productSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    limit:{
+        type: Number,
+        required: true,
+        default: 1,
+    },
 
     comments:[{
         comment:{
@@ -41,10 +46,10 @@ let productSchema = new mongoose.Schema({
             type: Number,
             required: false,
         },
-        reviews:{
-            type: String,
-            required: false,
-        },
+        // reviews:{
+        //     type: String,
+        //     required: false,
+        // },
         userId:{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
@@ -69,6 +74,13 @@ let productSchema = new mongoose.Schema({
         }
     ]
     },
+    // color:{
+
+    // },
+    // size:{
+
+    // }
+
     { timestamps: true }
 );
 

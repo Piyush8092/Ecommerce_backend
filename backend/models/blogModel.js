@@ -35,7 +35,7 @@ let blogSchema = new mongoose.Schema({
             }
         ],
         productLink:{
-            type: String,
+            type: String ,
             required: false,
         }
 

@@ -85,6 +85,13 @@ router.put('/updateProduct/:id', authGuard, updateProduct);
 router.delete('/deleteProduct/:id', authGuard, deleteProduct);
 router.post('/createComments/:id',authGuard, createComments);
 router.get('/queryProduct', queryProduct);
+// router.get('/getProductByCatagory/:catagory', getProductByCatagory);
+// top seling product // by admin
+// new lonch product by dataa
+// price range
+// revi
+
+
 // product FAQ
 router.post('/createProductFAQ/:id', authGuard, createProductFAQ);
 router.get('/getSpacificFAQ/:id', getSpacificFAQ);
