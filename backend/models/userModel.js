@@ -16,6 +16,9 @@ const userSchema = new mongoose.Schema({
          sparse: true,
          
     },
+    image: {
+        type: String,
+    },
    
     role: {
         type: String,
@@ -38,6 +41,9 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    loginDeviceName:[ {
+        type: String,
+    }],
 
     subscriptions: [{
         type: mongoose.Schema.Types.ObjectId,

@@ -72,16 +72,22 @@ let productSchema = new mongoose.Schema({
                 required: false,
             }
         }
-    ]
+    ],
+    
+     color:{
+type: String,
+required: false,
     },
-    // color:{
+    size:{
 
-    // },
-    // size:{
-
-    // }
-
-    { timestamps: true }
+        type: String,
+        required: false,
+    },
+    topSelling:{
+        type: Boolean,
+        default: false,
+    }
+},{ timestamps: true }
 );
 
 module.exports = Product = mongoose.model('Product', productSchema);

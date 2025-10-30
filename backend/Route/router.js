@@ -62,6 +62,14 @@ const { getAllSuccessPayment } = require('../controlers/payment/getAllSuccessPay
 const { getSpecificPayment } = require('../controlers/payment/getSpecificPayment');
 const { updatePayment } = require('../controlers/payment/updatePayment');
 const { deletePayment } = require('../controlers/payment/deletePayment');
+const { getProductByCatagory } = require('../controlers/product/getProductByCatagory');
+const { getNewLaunchProduct } = require('../controlers/product/getNewLanchProduct');
+const { getTopSellingProduct } = require('../controlers/product/getTopSellingProduct');
+const { getPriceRange } = require('../controlers/product/getPriceRange');
+const { updateUserSelf } = require('../controlers/users/updateUserSelf');
+const { createWish } = require('../controlers/wishlist/createWish');
+const { getAllWishList } = require('../controlers/wishlist/getAllWishList');
+const { deleteFromWishList } = require('../controlers/wishlist/deleteFromWishList');
 
  cookieParser();
 
@@ -85,11 +93,14 @@ router.put('/updateProduct/:id', authGuard, updateProduct);
 router.delete('/deleteProduct/:id', authGuard, deleteProduct);
 router.post('/createComments/:id',authGuard, createComments);
 router.get('/queryProduct', queryProduct);
-// router.get('/getProductByCatagory/:catagory', getProductByCatagory);
+router.get('/getProductByCatagory/:catagory', getProductByCatagory);
+ // new lonch product by dataa
+router.get('/new-launch-product', getNewLaunchProduct);
 // top seling product // by admin
-// new lonch product by dataa
-// price range
-// revi
+router.get('/top-selling-product', getTopSellingProduct);
+// price range =>api gose this formet=>   /api/products/price-range?min=500&max=2000
+router.get('/price-range', getPriceRange);
+
 
 
 // product FAQ
@@ -106,6 +117,15 @@ router.get('/AdminSpecificUserView/:id', authGuard, AdminSpecificUserView);
 router.put('/AdminRoleUpdate/:id', authGuard, AdminRoleUpdate);
 router.delete('/deleteUser/:id', authGuard, deleteUser);
 router.get('/queryAdminUser', authGuard, queryAdminUser);
+// update user self image add and other thing add
+router.put('/updateUserSelf', authGuard, updateUserSelf);
+
+
+// wishlist
+router.post('/createWish', authGuard, createWish);
+router.get('/getAllWishList', authGuard, getAllWishList);
+router.delete('/deleteFromWishList', authGuard, deleteFromWishList);
+
 
 
 // delivery Address

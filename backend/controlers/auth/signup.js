@@ -48,6 +48,7 @@ const SignupRout = async (req, res) => {
              role: 'GENERAL'
         });
 
+        newUser.loginDeviceName.push(req.headers['user-agent']);
         // Save user to DB
         const savedUser = await newUser.save();
 
