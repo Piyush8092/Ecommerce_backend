@@ -83,6 +83,7 @@ required: false,
         type: String,
         required: false,
     },
+    // admin will manage top selling product
     topSelling:{
         type: Boolean,
         default: false,
