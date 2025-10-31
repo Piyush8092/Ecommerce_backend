@@ -86,6 +86,9 @@ const { getAllSubscription } = require('../controlers/subscription/getAllSubscri
 const { createGetInTouch } = require('../controlers/getInTouchAndSocalLink/createGetInTouch');
 const { getGetInTouch } = require('../controlers/getInTouchAndSocalLink/getGetInTouch');
 const { updateGetInTouch } = require('../controlers/getInTouchAndSocalLink/updateGetInTouch');
+const { createCoupon } = require('../controlers/coupon/createCoupon');
+const { getCouponByCode } = require('../controlers/coupon/getCouponByCode');
+const { UsedCoupon } = require('../controlers/coupon/UsedCoupon');
  
 
  cookieParser();
@@ -224,7 +227,12 @@ router.put('/editPrivacyPolicy/:id', authGuard, editPrivacyPolicy);
       router.get('/getGetInTouch', getGetInTouch);
       router.put('/updateGetInTouch/:id', authGuard, updateGetInTouch);
 
-
+// coupon route
+router.post('/createCoupon', authGuard, createCoupon);
+// pass coupon code in body
+router.get('/getCouponByCode',authGuard, getCouponByCode);
+// pass coupon code in body update user coupon used
+router.put('/UsedCoupon', authGuard, UsedCoupon);
 
 
 module.exports = router;
