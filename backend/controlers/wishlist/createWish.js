@@ -13,7 +13,8 @@ const createWish = async (req, res) => {
                 productId,
             });
 
-              const savedWish = (await newWish.save()).populate('productId', 'name price image description catagory discount stock limit ');
+const savedWish = await newWish.save();
+await savedWish.populate('productId', 'name price image description catagory discount stock limit');
               
             res.json({ message: 'Wish created successfully', status: 200, data: savedWish, success: true, error: false });
     }
