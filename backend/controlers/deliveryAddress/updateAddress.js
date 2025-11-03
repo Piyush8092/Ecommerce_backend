@@ -17,7 +17,13 @@ if (!existAddress) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
 
-
+if(payload.isDefault){
+let existDefaultAddress = await DeliveryAddress.findOne({userId: req.user._id, isDefault: true});
+if(existDefaultAddress){
+    existDefaultAddress.isDefault = false;
+    await existDefaultAddress.save();
+}
+}
         const updatedAddress = await DeliveryAddress.findByIdAndUpdate({_id:id}, 
            payload
         , { new: true });

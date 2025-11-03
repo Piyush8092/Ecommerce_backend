@@ -222,10 +222,12 @@ router.put('/editPrivacyPolicy/:id', authGuard, editPrivacyPolicy);
     router.put('/editTermsAndConditions/:id', authGuard, editTermsAndConditions);
       router.delete('/deleteTermsAndConditions/:id', authGuard, deleteTermsAndConditions);
 
-      // get in touch and social link route
-      router.post('/createGetInTouch', authGuard, createGetInTouch);
-      router.get('/getGetInTouch', getGetInTouch);
-      router.put('/updateGetInTouch/:id', authGuard, updateGetInTouch);
+// get in touch and social link route
+router.post('/createGetInTouch', authGuard, createGetInTouch);
+router.get('/getGetInTouch', getGetInTouch);
+router.put('/updateGetInTouch/:id', authGuard, updateGetInTouch);
+
+
 
 // coupon route
 router.post('/createCoupon', authGuard, createCoupon);

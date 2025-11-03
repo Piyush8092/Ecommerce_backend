@@ -41,8 +41,13 @@ let deliveryAddressSchema = new mongoose.Schema({
     zip:{
         type: Number,
         required: true,
-    }
     },
+    isDefault:{
+        type: Boolean,
+        default: false,
+    }, //only one address can be default
+    
+},
     { timestamps: true }
 );
 
