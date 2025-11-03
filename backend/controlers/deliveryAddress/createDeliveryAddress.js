@@ -4,11 +4,16 @@ const createDeliveryAddress = async (req, res) => {
     try {
         let userId = req.user._id;
          
-        let { name,email ,phoneNo, optionalPhoneNo, Address, landmark, city, state, zip } = req.body;
+        let { name,email ,phoneNo, optionalPhoneNo, Address, landmark, city, state, zip ,isDefault} = req.body;
         if (!name || !email || !Address || !city || !state || !zip) {
             return res.status(400).json({ message: 'All fields are required' });
         }
         
+        let existDefaultAddress = await DeliveryAddress.findOne({userId, isDefault: true});
+        if(existDefaultAddress && isDefault){
+            existDefaultAddress.isDefault = false;
+            await existDefaultAddress.save();
+        }
         // Create new delivery address
         const newDeliveryAddress = new DeliveryAddress({
             userId,
@@ -21,6 +26,7 @@ const createDeliveryAddress = async (req, res) => {
             city,
             state,
             zip,
+            isDefault:true,
         });
 
           const savedDeliveryAddress = await newDeliveryAddress.save();
