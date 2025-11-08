@@ -9,7 +9,8 @@ const updateOrderStatus = async (req, res) => {
         if (!existOrder) {
             return res.status(404).json({ message: 'Order not found' });
         }
-        if(req.user.role !== 'ADMIN' && req.user.role !== 'MANAGER' ) {
+        //can oder by user also ***************************. user can alos cancel his order
+        if(req.user.role !== 'ADMIN' && req.user.role !== 'MANAGER' && req.user._id.toString() !== existOrder.userId.toString() ) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         

@@ -1,3 +1,6 @@
+
+let Carsole = require('../../models/CarsoleModel');
+
 const updateCarsole = async (req, res) => {
     try {
         const payload = req.body;

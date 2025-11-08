@@ -19,6 +19,10 @@ let couponCodeSchema = new mongoose.Schema({
         ref: 'User',
         required: false,
     },
+    assignToAllUsers: {
+        type: Boolean,
+        default: false,
+    }
     
 },
     { timestamps: true }

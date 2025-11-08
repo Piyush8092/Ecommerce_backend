@@ -45,7 +45,7 @@ const { getAllAcceptedOrder } = require('../controlers/order/getAllAcceptedOrder
 const { getAllShiftedOrder } = require('../controlers/order/getAllshiftedOrder');
 // const { getAllDeliveredOrder } = require('../controlers/order/getAllDeliveredOrder');
 const { getAllCancelOrder } = require('../controlers/order/getAllCancelOrder');
-const { updateOrderStatus } = require('../controlers/order/UpdateOrderStatusMannegerAndAdmin');
+const { updateOrderStatus } = require('../controlers/order/UpdateOrderStatusMannegerAndAdminAndLoginUser');
 const { updateOrderStatusEmploye } = require('../controlers/order/updateOrderStatusEmploye');
 const { createBlog } = require('../controlers/blogs/createBlog');
 const { getAllBlog } = require('../controlers/blogs/getAllBlog');
@@ -230,6 +230,7 @@ router.put('/updateGetInTouch/:id', authGuard, updateGetInTouch);
 
 
 // coupon route
+//by admin Body=> { code: 'SAVE20', discount: 20, expiryDate: '2024-12-31T23:59:59.000Z', assignToAllUsers: true }
 router.post('/createCoupon', authGuard, createCoupon);
 // pass coupon code in body
 router.get('/getCouponByCode',authGuard, getCouponByCode);

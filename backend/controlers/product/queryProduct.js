@@ -33,6 +33,9 @@ const queryProduct = async (req, res) => {
             message: 'Products fetched successfully',
             status: 200,
             data: products,
+            total: products.length,
+            totalPages: Math.ceil(products.length / limit),
+            currentPage: page,
             success: true,
             error: false
         });

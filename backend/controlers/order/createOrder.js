@@ -12,6 +12,8 @@ const createOrder = async (req, res) => {
 
         // Create new order
         const newOrder = new Order(payload);
+        
+        // update stock no afer order palace
 
           const savedOrder = await newOrder.save();
           

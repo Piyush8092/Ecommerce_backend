@@ -1,24 +1,46 @@
-let     Order = require('../../models/orderModel');
+let Order = require('../../models/orderModel');
 
 const getLoginUserOrder = async (req, res) => {
     try {
-        let userId = req.user._id;
-        let page = req.query.page || 1;
-        let limit = req.query.limit || 10;
-        let skip = (page - 1) * limit;
-            let total = await Order.countDocuments({userId});
-            let totalPages = Math.ceil(total / limit);
+        const userId = req.user._id;
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
 
-            const order = await Order.find({userId}).skip(skip).limit(limit).populate('userId', 'name email').populate('deliveryAddressId', 'name email').populate('productId', 'name price');
-            res.json({ message: 'Order fetched successfully', status: 200, data: order, success: true, error: false, total, totalPages});
+        // Count total documents for pagination
+        const total = await Order.countDocuments({ userId });
+        const totalPages = Math.ceil(total / limit);
 
-             }
-    catch (e) {
-        res.json({ message: 'Something went wrong', status: 500, data: e, success: false, error: true });
+        // Fetch orders with all related details
+        const orders = await Order.find({ userId })
+            .skip(skip)
+            .limit(limit)
+            .populate('userId', 'name email')
+            .populate('deliveryAddressId', 'name email phoneNo Address city state zip landmark optionalPhoneNo')
+            .populate({
+                path: 'productId',   // array of ObjectIds
+                select: '_id name price image description'
+            });
+
+        res.status(200).json({
+            message: 'Orders fetched successfully',
+            status: 200,
+            data: orders,
+            success: true,
+            error: false,
+            total,
+            totalPages
+        });
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({
+            message: 'Something went wrong',
+            status: 500,
+            data: e.message,
+            success: false,
+            error: true
+        });
     }
 };
 
 module.exports = { getLoginUserOrder };
-
-
-
