@@ -12,7 +12,7 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 app.use(cookieParser());
 app.use(cors({
-  origin: ["https://www.softerint.com","http://localhost:5173","https://localhost:5173",'https://nakshpath.com', 'https://www.nakshpath.com' ], 
+  origin: ["https://www.softerint.com","http://localhost:5173","https://localhost:5173",'https://nakshpath.com', 'https://www.nakshpath.com' ,'https://admin.nakshpath.com'], 
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
