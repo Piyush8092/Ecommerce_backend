@@ -2,23 +2,18 @@ const mongoose = require("mongoose");
 
 const privacyPolicySchema = new mongoose.Schema(
   {
-    title: {
-      type: String,
+    content: {
+      type: String, // Storing Tiptap HTML output
       required: true,
     },
-    lastUpdated: {
-      type: String,
-      required: true,
+    isActive: {
+      type: Boolean,
+      default: false,
     },
-    sections: [
-      {
-        number: { type: String, required: true }, // e.g. "1", "1.1", "2.3"
-        title: { type: String, default: Date.now },
-        content: { type: String }, // for paragraphs
-        items: [{ type: String }], // for bullet points
-      },
-    ],
-    commitment: { type: String }, // optional (e.g. security note)
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   { timestamps: true }
 );

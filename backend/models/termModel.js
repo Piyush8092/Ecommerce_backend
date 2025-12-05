@@ -2,23 +2,18 @@ const mongoose = require("mongoose");
 
 const termsAndConditionsSchema = new mongoose.Schema(
   {
-    title: {
-      type: String,
+    content: {
+      type: String, // Storing Tiptap HTML output
       required: true,
-      default: "TERMS AND CONDITIONS",
     },
-    lastUpdated: {
-      type: String,
-     default: Date.now,
+    isActive: {
+      type: Boolean,
+      default: false,
     },
-    sections: [
-      {
-        number: { type: String, required: true }, // e.g. "1", "3.2"
-        title: { type: String, required: true },
-        content: { type: String }, // for paragraphs
-        items: [{ type: String }], // for bullet points
-      },
-    ],
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   { timestamps: true }
 );

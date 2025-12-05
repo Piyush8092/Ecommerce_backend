@@ -22,9 +22,9 @@ const editPrivacyPolicy = async (req, res) => {
         }
         
         // Validate required fields if being updated
-        if (payload.title !== undefined && !payload.title) {
+        if (payload.content !== undefined && !payload.content) {
             return res.status(400).json({
-                message: 'Title cannot be empty',
+                message: 'Content cannot be empty',
                 status: 400,
                 success: false,
                 error: true
@@ -32,18 +32,18 @@ const editPrivacyPolicy = async (req, res) => {
         }
         
         // Validate sections array if being updated
-        if (payload.sections && Array.isArray(payload.sections)) {
-            for (let section of payload.sections) {
-                if (!section.number || !section.title) {
-                    return res.status(400).json({
-                        message: 'Section number and title are required for each section',
-                        status: 400,
-                        success: false,
-                        error: true
-                    });
-                }
-            }
-        }
+        // if (payload.sections && Array.isArray(payload.sections)) {
+        //     for (let section of payload.sections) {
+        //         if (!section.number || !section.title) {
+        //             return res.status(400).json({
+        //                 message: 'Section number and title are required for each section',
+        //                 status: 400,
+        //                 success: false,
+        //                 error: true
+        //             });
+        //         }
+        //     }
+        // }
         
         const result = await PrivacyPolicyModel.findByIdAndUpdate(id, payload, {
             new: true,
