@@ -1,35 +1,44 @@
-let Product = require('../../models/productModel');
+let Product = require("../../models/productModel");
 
 const deleteProductFAQ = async (req, res) => {
-    try {
-        let id = req.params.id;
-        let faqArrayId = req.params.faqId;
+  try {
+    let id = req.params.id;
+    let faqArrayId = req.params.faqId;
 
-        if (req.user.role !== 'ADMIN') {
-            return res.status(401).json({ message: 'Unauthorized' });
-        }
-
-        const product = await Product.findById(id);
-        if (!product) {
-            return res.status(404).json({ message: 'Product not found' });
-        }
-
-        // Find and remove the FAQ item by array index
-        if (faqArrayId < 0 || faqArrayId >= product.userCaseFAQ.length) {
-            return res.status(404).json({ message: 'FAQ not found' });
-        }
-
-        product.userCaseFAQ.splice(faqArrayId, 1);
-        await product.save();
-
-        res.json({ message: 'FAQ deleted successfully', status: 200, data: product, success: true, error: false });
+    if (req.user.role !== "ADMIN") {
+      return res.status(401).json({ message: "Unauthorized" });
     }
-    catch (e) {
-        console.error('Error deleting FAQ:', e);
-        res.json({ message: 'Something went wrong', status: 500, data: e.message, success: false, error: true });
+
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
     }
+
+    // Find and remove the FAQ item by array index
+    if (faqArrayId < 0 || faqArrayId >= product.userCaseFAQ.length) {
+      return res.status(404).json({ message: "FAQ not found" });
+    }
+
+    product.userCaseFAQ.splice(faqArrayId, 1);
+    await product.save();
+
+    res.json({
+      message: "FAQ deleted successfully",
+      status: 200,
+      data: product,
+      success: true,
+      error: false,
+    });
+  } catch (e) {
+    console.error("Error deleting FAQ:", e);
+    res.json({
+      message: "Something went wrong",
+      status: 500,
+      data: e.message,
+      success: false,
+      error: true,
+    });
+  }
 };
 
 module.exports = { deleteProductFAQ };
-
-

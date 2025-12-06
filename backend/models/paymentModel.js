@@ -1,39 +1,37 @@
-let mongoose = require('mongoose');
+let mongoose = require("mongoose");
 
-let paymentSchema = new mongoose.Schema({
-    orderId:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Order',
-        required: true,
+let paymentSchema = new mongoose.Schema(
+  {
+    orderId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Order",
+      required: true,
     },
-    amount:{
-        type: Number,
-        required: true,
+    amount: {
+      type: Number,
+      required: true,
     },
-    paymentMethod:{
-        type: String,
-        enum: ['CASH', 'CARD', 'UPI'],
-        default: 'CASH',
+    paymentMethod: {
+      type: String,
+      enum: ["CASH", "CARD", "UPI"],
+      default: "CASH",
     },
-    paymentStatus:{
-        type: String,
-        enum: ['PAID', 'UNPAID'],
-        default: 'UNPAID'
+    paymentStatus: {
+      type: String,
+      enum: ["PAID", "UNPAID"],
+      default: "UNPAID",
     },
-    userId:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-    paymentId:{
-        type: String,
-        required: true,
-    }
-},
-    { timestamps: true }
-
+    paymentId: {
+      type: String,
+      required: true,
+    },
+  },
+  { timestamps: true }
 );
 
-module.exports = Payment = mongoose.model('Payment', paymentSchema);
-
-
+module.exports = Payment = mongoose.model("Payment", paymentSchema);
