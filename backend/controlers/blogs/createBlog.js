@@ -30,15 +30,13 @@ const createBlog = async (req, res) => {
     });
   } catch (e) {
     console.error("Create blog error:", e);
-    res
-      .status(500)
-      .json({
-        message: "Something went wrong",
-        status: 500,
-        data: e.message,
-        success: false,
-        error: true,
-      });
+    res.status(500).json({
+      message: "Something went wrong",
+      status: 500,
+      data: e.message,
+      success: false,
+      error: true,
+    });
   }
 };
 

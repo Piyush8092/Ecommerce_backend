@@ -33,7 +33,9 @@ const updateAddress = async (req, res) => {
     const updatedAddress = await DeliveryAddress.findByIdAndUpdate(
       { _id: id },
       payload,
-      { new: true }
+      {
+        new: true,
+      }
     );
     res.json({
       message: "Address updated successfully",

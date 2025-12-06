@@ -39,13 +39,11 @@ const SignupRout = async (req, res) => {
         role: existingUser.role,
         token,
       };
-      return res
-        .status(200)
-        .json({
-          data: userResponse,
-          message: "User already exists.",
-          success: true,
-        });
+      return res.status(200).json({
+        data: userResponse,
+        message: "User already exists.",
+        success: true,
+      });
     }
 
     // Create new user

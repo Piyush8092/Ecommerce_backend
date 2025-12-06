@@ -8,14 +8,12 @@ const updatePayment = async (req, res) => {
     // Find the payment
     const payment = await Payment.findById(id);
     if (!payment) {
-      return res
-        .status(404)
-        .json({
-          message: "Payment not found",
-          status: 404,
-          success: false,
-          error: true,
-        });
+      return res.status(404).json({
+        message: "Payment not found",
+        status: 404,
+        success: false,
+        error: true,
+      });
     }
 
     // Check authorization - only ADMIN or the user who made the payment can update
@@ -23,14 +21,12 @@ const updatePayment = async (req, res) => {
       req.user.role !== "ADMIN" &&
       req.user._id.toString() !== payment.userId.toString()
     ) {
-      return res
-        .status(401)
-        .json({
-          message: "Unauthorized",
-          status: 401,
-          success: false,
-          error: true,
-        });
+      return res.status(401).json({
+        message: "Unauthorized",
+        status: 401,
+        success: false,
+        error: true,
+      });
     }
 
     // Update payment

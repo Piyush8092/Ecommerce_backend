@@ -18,13 +18,11 @@ const getCouponByCode = async (req, res) => {
       userId: req.user._id,
     });
     if (AlreadyUsedCoupon) {
-      return res
-        .status(400)
-        .json({
-          message: "Coupon already used",
-          data: { discount: 0 },
-          used: true,
-        });
+      return res.status(400).json({
+        message: "Coupon already used",
+        data: { discount: 0 },
+        used: true,
+      });
     }
 
     res.json({
