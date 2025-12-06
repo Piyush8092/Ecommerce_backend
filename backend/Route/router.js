@@ -150,6 +150,13 @@ const { createCoupon } = require("../controlers/coupon/createCoupon");
 const { getCouponByCode } = require("../controlers/coupon/getCouponByCode");
 const { UsedCoupon } = require("../controlers/coupon/UsedCoupon");
 
+const { createPolicyPage } = require("../controlers/policyPage/createPolicyPage");
+const { getAllPolicyPages } = require("../controlers/policyPage/getAllPolicyPages");
+const { getPolicyPageBySlug } = require("../controlers/policyPage/getPolicyPageBySlug");
+const { updatePolicyPage } = require("../controlers/policyPage/updatePolicyPage");
+const { deletePolicyPage } = require("../controlers/policyPage/deletePolicyPage");
+const permit = require("../middleware/permit");
+
 cookieParser();
 
 // ceate user
@@ -282,6 +289,13 @@ router.delete(
   authGuard,
   deleteTermsAndConditions
 );
+
+// policy page route
+router.post("/createPolicyPage", authGuard, permit("ADMIN"), createPolicyPage);
+router.get("/getAllPolicyPages", getAllPolicyPages);
+router.get("/getPolicyPageBySlug/:slug", getPolicyPageBySlug);
+router.put("/updatePolicyPage/:slug", authGuard, permit("ADMIN"), updatePolicyPage);
+router.delete("/deletePolicyPage/:slug", authGuard, permit("ADMIN"), deletePolicyPage);
 
 // get in touch and social link route
 router.post("/createGetInTouch", authGuard, createGetInTouch);
