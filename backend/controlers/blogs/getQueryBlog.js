@@ -9,7 +9,6 @@ const getQueryBlog = async (req, res) => {
     let queryObj = {};
     if (query) {
       queryObj.heading = { $regex: query, $options: "i" };
-      queryObj.description = { $regex: query, $options: "i" };
       queryObj.catagory = { $regex: query, $options: "i" };
     }
 

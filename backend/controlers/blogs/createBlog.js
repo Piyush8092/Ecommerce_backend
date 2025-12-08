@@ -9,7 +9,8 @@ const createBlog = async (req, res) => {
       !payload.heading ||
       !payload.image ||
       !payload.catagory ||
-      !payload.description
+      !payload.contentHTML ||
+      !payload.contentJSON
     ) {
       return res.status(400).json({ message: "All fields are required" });
     }

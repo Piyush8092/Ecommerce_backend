@@ -19,22 +19,8 @@ let blogSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    description: {
-      type: String,
-      required: true,
-    },
-    faq: [
-      {
-        question: {
-          type: String,
-          required: false,
-        },
-        answer: {
-          type: String,
-          required: false,
-        },
-      },
-    ],
+    contentHTML: { type: String }, // Storing Tiptap HTML output
+    contentJSON: { type: mongoose.Schema.Types.Mixed },
     productLink: {
       type: String,
       required: false,
