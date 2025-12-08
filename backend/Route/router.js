@@ -150,12 +150,33 @@ const { createCoupon } = require("../controlers/coupon/createCoupon");
 const { getCouponByCode } = require("../controlers/coupon/getCouponByCode");
 const { UsedCoupon } = require("../controlers/coupon/UsedCoupon");
 
-const { createPolicyPage } = require("../controlers/policyPage/createPolicyPage");
-const { getAllPolicyPages } = require("../controlers/policyPage/getAllPolicyPages");
-const { getPolicyPageBySlug } = require("../controlers/policyPage/getPolicyPageBySlug");
-const { updatePolicyPage } = require("../controlers/policyPage/updatePolicyPage");
-const { deletePolicyPage } = require("../controlers/policyPage/deletePolicyPage");
+const {
+  createPolicyPage,
+} = require("../controlers/policyPage/createPolicyPage");
+const {
+  getAllPolicyPages,
+} = require("../controlers/policyPage/getAllPolicyPages");
+const {
+  getPolicyPageBySlug,
+} = require("../controlers/policyPage/getPolicyPageBySlug");
+const {
+  updatePolicyPage,
+} = require("../controlers/policyPage/updatePolicyPage");
+const {
+  deletePolicyPage,
+} = require("../controlers/policyPage/deletePolicyPage");
 const permit = require("../middleware/permit");
+const { getTotalUserCount } = require("../controlers/users/getTotalUserCount");
+const {
+  getTotalProductCount,
+} = require("../controlers/product/getTotalProductCount");
+const {
+  getTotalOrderCount,
+} = require("../controlers/order/getTotalOrderCount");
+const { getTotalBlogCount } = require("../controlers/blogs/getTotalBlogCount");
+const {
+  deleteSubscription,
+} = require("../controlers/subscription/deleteSubscription");
 
 cookieParser();
 
@@ -189,6 +210,13 @@ router.get("/new-launch-product", getNewLaunchProduct);
 router.get("/top-selling-product", getTopSellingProduct);
 // price range =>api gose this formet=>   /api/products/price-range?min=500&max=2000
 router.get("/price-range", getPriceRange);
+// total product count
+router.get(
+  "/getTotalProductCount",
+  authGuard,
+  permit("ADMIN"),
+  getTotalProductCount
+);
 
 // product FAQ
 router.post("/createProductFAQ/:id", authGuard, createProductFAQ);
@@ -197,6 +225,7 @@ router.put("/updateProductFAQ/:id/:faqId", authGuard, updateProductFAQ);
 router.delete("/deleteProductFAQ/:id/:faqId", authGuard, deleteProductFAQ);
 
 // user information
+router.get("/getTotalUserCount", authGuard, permit("ADMIN"), getTotalUserCount); // for admin dashboard
 router.get("/adminAllUserView", authGuard, adminAllUserView);
 router.get("/AdminSpecificUserView/:id", authGuard, AdminSpecificUserView);
 router.put("/AdminRoleUpdate/:id", authGuard, AdminRoleUpdate);
@@ -242,6 +271,12 @@ router.put(
   updateOrderStatusEmploye
 );
 router.put("/updateOrder/:id", authGuard, updateOrder);
+router.get(
+  "/getTotalOrderCount",
+  authGuard,
+  permit("ADMIN"),
+  getTotalOrderCount
+); // for admin dashboard
 
 // blog route
 router.post("/createBlog", authGuard, createBlog);
@@ -250,6 +285,7 @@ router.get("/getSpecificBlog/:id", getSpecificBlog);
 router.put("/updateBlog/:id", authGuard, updateBlog);
 router.delete("/deleteBlog/:id", authGuard, deleteBlog);
 router.get("/queryBlog", getQueryBlog);
+router.get("/getTotalBlogCount", authGuard, permit("ADMIN"), getTotalBlogCount); // for admin dashboard
 
 // contact route
 router.post("/createContact", authGuard, createContact);
@@ -271,6 +307,12 @@ router.delete("/deletePayment/:id", authGuard, deletePayment);
 // subscription route
 router.post("/createSubscription", authGuard, createSubscription);
 router.get("/getAllSubscription", authGuard, getAllSubscription);
+router.delete(
+  "/deleteSubscription/:id",
+  authGuard,
+  permit("ADMIN"),
+  deleteSubscription
+);
 
 // privacy policy route
 router.post("/createPrivacyPolicy", authGuard, createPrivacyPolicy);
@@ -294,8 +336,18 @@ router.delete(
 router.post("/createPolicyPage", authGuard, permit("ADMIN"), createPolicyPage);
 router.get("/getAllPolicyPages", getAllPolicyPages);
 router.get("/getPolicyPageBySlug/:slug", getPolicyPageBySlug);
-router.put("/updatePolicyPage/:slug", authGuard, permit("ADMIN"), updatePolicyPage);
-router.delete("/deletePolicyPage/:slug", authGuard, permit("ADMIN"), deletePolicyPage);
+router.put(
+  "/updatePolicyPage/:slug",
+  authGuard,
+  permit("ADMIN"),
+  updatePolicyPage
+);
+router.delete(
+  "/deletePolicyPage/:slug",
+  authGuard,
+  permit("ADMIN"),
+  deletePolicyPage
+);
 
 // get in touch and social link route
 router.post("/createGetInTouch", authGuard, createGetInTouch);
