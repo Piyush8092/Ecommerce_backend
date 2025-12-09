@@ -1,40 +1,42 @@
-let Blog = require("../../models/blogModel");
+const Blog = require("../../models/blogModel");
 
 const getQueryBlog = async (req, res) => {
   try {
-    let query = req.query.query;
-    let page = req.query.page || 1;
-    let limit = req.query.limit || 10;
-    let skip = (page - 1) * limit;
+    const query = req.query.query || "";
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
     let queryObj = {};
     if (query) {
-      queryObj.heading = { $regex: query, $options: "i" };
-      queryObj.catagory = { $regex: query, $options: "i" };
+      queryObj.$or = [
+        { heading: { $regex: query, $options: "i" } },
+        { catagory: { $regex: query, $options: "i" } },
+      ];
     }
 
-    let total = await Blog.countDocuments(queryObj);
-    let totalPages = Math.ceil(total / limit);
+    const [total, blogs] = await Promise.all([
+      Blog.countDocuments(queryObj),
+      Blog.find(queryObj)
+        .skip(skip)
+        .limit(limit)
+        .populate("userId", "name email"),
+    ]);
 
-    const blog = await Blog.find(queryObj)
-      .skip(skip)
-      .limit(limit)
-      .populate("userId", "name email");
-    res.json({
-      message: "Blog fetched successfully",
-      status: 200,
-      data: blog,
+    res.status(200).json({
+      message: "Blogs fetched successfully",
       success: true,
       error: false,
+      data: blogs,
       total,
-      totalPages,
+      totalPages: Math.ceil(total / limit),
     });
   } catch (e) {
-    res.json({
+    res.status(500).json({
       message: "Something went wrong",
-      status: 500,
-      data: e,
       success: false,
       error: true,
+      data: e,
     });
   }
 };
