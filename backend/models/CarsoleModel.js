@@ -18,6 +18,10 @@ let carsoleSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    isMobile: {
+      type: Boolean,
+      required: true,
+    },
     link: {
       type: String,
       required: false,

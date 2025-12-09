@@ -177,6 +177,11 @@ const { getTotalBlogCount } = require("../controlers/blogs/getTotalBlogCount");
 const {
   deleteSubscription,
 } = require("../controlers/subscription/deleteSubscription");
+const {
+  deleteGetInTouch,
+} = require("../controlers/getInTouchAndSocalLink/deleteGetInTouch");
+const { getAllUserNames } = require("../controlers/users/getAllUserNames");
+const { getQueryDeliveryAddress } = require("../controlers/deliveryAddress/getQueryDeliveryAddress");
 
 cookieParser();
 
@@ -233,6 +238,7 @@ router.delete("/deleteUser/:id", authGuard, deleteUser);
 router.get("/queryAdminUser", authGuard, queryAdminUser);
 // update user self image add and other thing add
 router.put("/updateUserSelf", authGuard, updateUserSelf);
+router.get("/getAllUserNames", authGuard, permit("ADMIN"), getAllUserNames);
 
 // wishlist
 router.post("/createWish", authGuard, createWish);
@@ -249,6 +255,7 @@ router.get(
 );
 router.put("/updateAddress/:id", authGuard, updateAddress);
 router.delete("/deleteDeliveryAddress/:id", authGuard, deleteDeliveryAddress);
+router.get("/queryDeliveryAddress",authGuard, permit("ADMIN"), getQueryDeliveryAddress); // for admin dashboard
 
 // cart
 router.post("/createCart", authGuard, createCart);
@@ -353,6 +360,12 @@ router.delete(
 router.post("/createGetInTouch", authGuard, createGetInTouch);
 router.get("/getGetInTouch", getGetInTouch);
 router.put("/updateGetInTouch/:id", authGuard, updateGetInTouch);
+router.delete(
+  "/deleteGetInTouch/:id",
+  authGuard,
+  permit("ADMIN"),
+  deleteGetInTouch
+);
 
 // coupon route
 //by admin Body=> { code: 'SAVE20', discount: 20, expiryDate: '2024-12-31T23:59:59.000Z', assignToAllUsers: true }

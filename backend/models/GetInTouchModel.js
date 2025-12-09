@@ -58,103 +58,20 @@ let getInTouchSchema = new mongoose.Schema(
 
     // Business Hours Section
     businessHours: {
-      monday: {
-        day: {
-          type: String,
-          default: "Monday",
-        },
-        startTime: {
-          type: String,
-          // required: true
-        },
-        endTime: {
-          type: String,
-          // required: true
-        },
-      },
-      tuesday: {
-        day: {
-          type: String,
-          default: "Tuesday",
-        },
-        startTime: {
-          type: String,
-          // required: true
-        },
-        endTime: {
-          type: String,
-          // required: true
-        },
-      },
-      wednesday: {
-        day: {
-          type: String,
-          default: "Wednesday",
-        },
-        startTime: {
-          type: String,
-          // required: true
-        },
-        endTime: {
-          type: String,
-          // required: true
-        },
-      },
-      thursday: {
-        day: {
-          type: String,
-          default: "Thursday",
-        },
-        startTime: {
-          type: String,
-          // required: true
-        },
-        endTime: {
-          type: String,
-          // required: true
-        },
-      },
-      friday: {
-        day: {
-          type: String,
-          default: "Friday",
-        },
-        startTime: {
-          type: String,
-          // required: true
-        },
-        endTime: {
-          type: String,
-          // required: true
-        },
+      weekdays: {
+        startTime: { type: String, default: "" },
+        endTime: { type: String, default: "" },
+        closed: { type: Boolean, default: false },
       },
       saturday: {
-        day: {
-          type: String,
-          default: "Saturday",
-        },
-        startTime: {
-          type: String,
-          // required: true
-        },
-        endTime: {
-          type: String,
-          // required: true
-        },
+        startTime: { type: String, default: "" },
+        endTime: { type: String, default: "" },
+        closed: { type: Boolean, default: false },
       },
       sunday: {
-        day: {
-          type: String,
-          default: "Sunday",
-        },
-        startTime: {
-          type: String,
-          // required: true
-        },
-        endTime: {
-          type: String,
-          // required: true
-        },
+        startTime: { type: String, default: "" },
+        endTime: { type: String, default: "" },
+        closed: { type: Boolean, default: false },
       },
     },
 
@@ -187,16 +104,6 @@ let getInTouchSchema = new mongoose.Schema(
         type: String,
         trim: true,
       },
-    },
-
-    // Timestamps
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-    updatedAt: {
-      type: Date,
-      default: Date.now,
     },
   },
   { timestamps: true }
