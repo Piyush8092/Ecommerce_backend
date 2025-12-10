@@ -181,9 +181,20 @@ const {
   deleteGetInTouch,
 } = require("../controlers/getInTouchAndSocalLink/deleteGetInTouch");
 const { getAllUserNames } = require("../controlers/users/getAllUserNames");
-const { getQueryDeliveryAddress } = require("../controlers/deliveryAddress/getQueryDeliveryAddress");
+const {
+  getQueryDeliveryAddress,
+} = require("../controlers/deliveryAddress/getQueryDeliveryAddress");
 const productQueryBuilder = require("../middleware/productQueryBuilder");
-const { getProductSearchFilters } = require("../controlers/product/getProductSearchFilters");
+const {
+  getProductSearchFilters,
+} = require("../controlers/product/getProductSearchFilters");
+const { createCategory } = require("../controlers/category/createCategory");
+const { getAllCategory } = require("../controlers/category/getAllCategory");
+const {
+  getSpecificCategory,
+} = require("../controlers/category/getSpecificCategory");
+const { updateCategory } = require("../controlers/category/updateCategory");
+const { deleteCategory } = require("../controlers/category/deleteCategory");
 
 cookieParser();
 
@@ -232,6 +243,18 @@ router.get("/getSpacificFAQ/:id", getSpacificFAQ);
 router.put("/updateProductFAQ/:id/:faqId", authGuard, updateProductFAQ);
 router.delete("/deleteProductFAQ/:id/:faqId", authGuard, deleteProductFAQ);
 
+// category
+router.post("/createCategory", authGuard, permit("ADMIN"), createCategory);
+router.get("/getAllCategory", getAllCategory);
+router.get("/getSpecificCategory/:id", getSpecificCategory);
+router.put("/updateCategory/:id", authGuard, permit("ADMIN"), updateCategory);
+router.delete(
+  "/deleteCategory/:id",
+  authGuard,
+  permit("ADMIN"),
+  deleteCategory
+);
+
 // user information
 router.get("/getTotalUserCount", authGuard, permit("ADMIN"), getTotalUserCount); // for admin dashboard
 router.get("/adminAllUserView", authGuard, adminAllUserView);
@@ -258,7 +281,12 @@ router.get(
 );
 router.put("/updateAddress/:id", authGuard, updateAddress);
 router.delete("/deleteDeliveryAddress/:id", authGuard, deleteDeliveryAddress);
-router.get("/queryDeliveryAddress",authGuard, permit("ADMIN"), getQueryDeliveryAddress); // for admin dashboard
+router.get(
+  "/queryDeliveryAddress",
+  authGuard,
+  permit("ADMIN"),
+  getQueryDeliveryAddress
+); // for admin dashboard
 
 // cart
 router.post("/createCart", authGuard, createCart);
