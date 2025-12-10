@@ -1,49 +1,19 @@
-let Product = require("../../models/productModel");
+const Product = require("../../models/productModel");
 
 const queryProduct = async (req, res) => {
   try {
-    const { query, page = 1, limit = 10 } = req.query;
+    const { mongoQuery, sort } = req;
+    const { page = 1, limit = 10 } = req.query;
     const skip = (page - 1) * limit;
 
-    let searchConditions = {};
-
-    if (query) {
-      let numericQuery = Number(query);
-
-      // If query is a number → treat as price search
-      if (!isNaN(numericQuery)) {
-        searchConditions = {
-          $or: [
-            {
-              price: {
-                $gte: numericQuery - 200, // flexible price band
-                $lte: numericQuery + 200,
-              },
-            },
-            { stock: numericQuery },
-            { discount: numericQuery },
-          ],
-        };
-      } else {
-        // Text search
-        searchConditions = {
-          $or: [
-            { name: new RegExp(query, "i") },
-            { description: new RegExp(query, "i") },
-            { category: new RegExp(query, "i") },
-          ],
-        };
-      }
-    }
-
     // 1. total matched products count
-    const totalDocuments = await Product.countDocuments(searchConditions);
+    const totalDocuments = await Product.countDocuments(mongoQuery);
 
     // 2. paginated list
-    const products = await Product.find(searchConditions)
+    const products = await Product.find(mongoQuery)
       .skip(skip)
       .limit(Number(limit))
-      .sort({ createdAt: -1 }); // newest first
+      .sort(sort);
 
     res.status(200).json({
       message: "Products fetched successfully",

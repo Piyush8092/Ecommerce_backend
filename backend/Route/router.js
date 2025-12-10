@@ -182,6 +182,8 @@ const {
 } = require("../controlers/getInTouchAndSocalLink/deleteGetInTouch");
 const { getAllUserNames } = require("../controlers/users/getAllUserNames");
 const { getQueryDeliveryAddress } = require("../controlers/deliveryAddress/getQueryDeliveryAddress");
+const productQueryBuilder = require("../middleware/productQueryBuilder");
+const { getProductSearchFilters } = require("../controlers/product/getProductSearchFilters");
 
 cookieParser();
 
@@ -203,7 +205,8 @@ router.get("/getSpecificProduct/:id", getSpecificProduct);
 router.put("/updateProduct/:id", authGuard, updateProduct);
 router.delete("/deleteProduct/:id", authGuard, deleteProduct);
 router.post("/createComments/:id", authGuard, createComments);
-router.get("/queryProduct", queryProduct);
+router.get("/queryProduct", productQueryBuilder, queryProduct);
+router.get("/getProductSearchFilters", getProductSearchFilters);
 router.get(
   "/getProductNameAndImageByCatagory",
   getProductNameAndImageByCatagory
