@@ -7,6 +7,8 @@ const getAllProduct = async (req, res) => {
     let limit = req.query.limit || 10;
     let skip = (page - 1) * limit;
 
+    let total = await Product.countDocuments();
+    let totalPages = Math.ceil(total / limit);
     let products = await Product.find().skip(skip).limit(limit);
 
     // Calculate average rating for each product
@@ -36,7 +38,8 @@ const getAllProduct = async (req, res) => {
       data: productsWithRating,
       success: true,
       error: false,
-      total: products.length,
+      total,
+      totalPages,
     });
   } catch (e) {
     res.json({

@@ -8,47 +8,57 @@ const queryProduct = async (req, res) => {
     let searchConditions = {};
 
     if (query) {
-      const numericQuery = Number(query);
+      let numericQuery = Number(query);
 
-      // Build a flexible search with $or
-      searchConditions = {
-        $or: [
-          { name: { $regex: query, $options: "i" } },
-          { description: { $regex: query, $options: "i" } },
-          { catagory: { $regex: query, $options: "i" } },
-          ...(isNaN(numericQuery)
-            ? []
-            : [
-                { price: numericQuery },
-                { stock: numericQuery },
-                { discount: numericQuery },
-              ]),
-        ],
-      };
+      // If query is a number → treat as price search
+      if (!isNaN(numericQuery)) {
+        searchConditions = {
+          $or: [
+            {
+              price: {
+                $gte: numericQuery - 200, // flexible price band
+                $lte: numericQuery + 200,
+              },
+            },
+            { stock: numericQuery },
+            { discount: numericQuery },
+          ],
+        };
+      } else {
+        // Text search
+        searchConditions = {
+          $or: [
+            { name: new RegExp(query, "i") },
+            { description: new RegExp(query, "i") },
+            { category: new RegExp(query, "i") },
+          ],
+        };
+      }
     }
 
+    // 1. total matched products count
+    const totalDocuments = await Product.countDocuments(searchConditions);
+
+    // 2. paginated list
     const products = await Product.find(searchConditions)
       .skip(skip)
-      .limit(Number(limit));
+      .limit(Number(limit))
+      .sort({ createdAt: -1 }); // newest first
 
-    res.json({
+    res.status(200).json({
       message: "Products fetched successfully",
-      status: 200,
       data: products,
-      total: products.length,
-      totalPages: Math.ceil(products.length / limit),
-      currentPage: page,
+      total: totalDocuments,
+      totalPages: Math.ceil(totalDocuments / limit),
       success: true,
       error: false,
     });
   } catch (e) {
     console.error(e);
-    res.json({
+    res.status(500).json({
       message: "Something went wrong",
-      status: 500,
-      data: e,
-      success: false,
       error: true,
+      success: false,
     });
   }
 };

@@ -77,15 +77,10 @@ let productSchema = new mongoose.Schema(
         },
       },
     ],
-
-    color: {
-      type: String,
-      required: false,
-    },
-    size: {
-      type: String,
-      required: false,
-    },
+    colors: [String],
+    sizes: [String],
+    allowCustomColor: { type: Boolean, default: false },
+    allowCustomSize: { type: Boolean, default: false },
     // admin will manage top selling product
     topSelling: {
       type: Boolean,

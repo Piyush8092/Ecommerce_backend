@@ -12,15 +12,7 @@ const createProduct = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
     // Create new product
-    const newProduct = new Product({
-      name,
-      image,
-      price,
-      description,
-      catagory,
-      discount,
-      stock,
-    });
+    const newProduct = new Product(req.body);
 
     const savedProduct = await newProduct.save();
 
