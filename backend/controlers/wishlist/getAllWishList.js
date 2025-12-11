@@ -5,7 +5,7 @@ const getAllWishList = async (req, res) => {
     let userId = req.user._id;
     let wish = await Wish.find({ userId }).populate(
       "productId",
-      "name price image description catagory discount stock limit "
+      "name price image description category discount stock limit "
     );
     res.json({
       message: "Wish fetched successfully",

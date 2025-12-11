@@ -16,7 +16,7 @@ const createWish = async (req, res) => {
     const savedWish = await newWish.save();
     await savedWish.populate(
       "productId",
-      "name price image description catagory discount stock limit"
+      "name price image description category discount stock limit"
     );
 
     res.json({

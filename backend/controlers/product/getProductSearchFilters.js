@@ -10,7 +10,6 @@ const getProductSearchFilters = async (req, res) => {
       searchFilter.$or = [
         { name: { $regex: query, $options: "i" } },
         { description: { $regex: query, $options: "i" } },
-        { catagory: { $regex: query, $options: "i" } },
       ];
     }
 

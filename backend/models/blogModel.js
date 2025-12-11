@@ -15,8 +15,9 @@ let blogSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    catagory: {
-      type: String,
+    categoryId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
       required: true,
     },
     contentHTML: { type: String }, // Storing Tiptap HTML output

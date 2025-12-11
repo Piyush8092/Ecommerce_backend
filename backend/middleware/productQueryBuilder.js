@@ -9,7 +9,6 @@ function buildMongoQuery(req) {
       $or: [
         { name: new RegExp(query, "i") },
         { description: new RegExp(query, "i") },
-        { catagory: new RegExp(query, "i") },
       ],
     });
   }

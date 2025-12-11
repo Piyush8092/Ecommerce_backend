@@ -11,7 +11,7 @@ const getQueryBlog = async (req, res) => {
     if (query) {
       queryObj.$or = [
         { heading: { $regex: query, $options: "i" } },
-        { catagory: { $regex: query, $options: "i" } },
+        { contentHTML: { $regex: query, $options: "i" } },
       ];
     }
 
@@ -20,7 +20,8 @@ const getQueryBlog = async (req, res) => {
       Blog.find(queryObj)
         .skip(skip)
         .limit(limit)
-        .populate("userId", "name email"),
+        .populate("userId", "name email")
+        .populate("categoryId", "name"),
     ]);
 
     res.status(200).json({

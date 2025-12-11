@@ -1,23 +1,31 @@
-let Product = require("../../models/productModel");
+const Product = require("../../models/productModel");
 
 const getProductNameAndImageByCatagory = async (req, res) => {
   try {
-    const products = await Product.find({}, "catagory image name").lean();
+    const products = await Product.find(
+      { categoryId: { $ne: null } },
+      "categoryId image name"
+    ).populate("categoryId", "name");
 
-    // Filter unique categories
-    const uniqueProducts = [];
-    const seenCategories = new Set();
+    const uniqueMap = new Map();
 
     for (const item of products) {
-      if (!seenCategories.has(item.catagory)) {
-        seenCategories.add(item.catagory);
-        uniqueProducts.push({
+      if (!item.categoryId) continue; // safety check
+
+      const catId = item.categoryId._id.toString();
+
+      // only insert if category not added before
+      if (!uniqueMap.has(catId)) {
+        uniqueMap.set(catId, {
+          categoryId: catId,
+          categoryName: item.categoryId.name,
           name: item.name,
-          catagory: item.catagory,
-          image: item.image && item.image.length > 0 ? item.image[0] : null,
+          image: item.image?.[0] || null,
         });
       }
     }
+
+    const uniqueProducts = Array.from(uniqueMap.values());
 
     res.json({
       message: "Unique category products fetched successfully",
@@ -26,11 +34,11 @@ const getProductNameAndImageByCatagory = async (req, res) => {
       success: true,
       error: false,
     });
-  } catch (e) {
-    res.json({
+  } catch (err) {
+    res.status(500).json({
       message: "Something went wrong",
       status: 500,
-      data: e,
+      data: err.message,
       success: false,
       error: true,
     });

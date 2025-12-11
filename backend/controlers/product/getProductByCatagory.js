@@ -2,9 +2,9 @@ let Product = require("../../models/productModel");
 
 const getProductByCatagory = async (req, res) => {
   try {
-    let catagory = req.params.catagory;
+    let categoryId = req.params.categoryId;
 
-    const products = await Product.find({ catagory });
+    const products = await Product.find({ categoryId });
     res.json({
       message: "Product fetched successfully",
       status: 200,

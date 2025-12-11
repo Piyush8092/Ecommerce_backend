@@ -5,10 +5,10 @@ const createProduct = async (req, res) => {
     if (role !== "ADMIN") {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    const { name, image, price, description, catagory, discount, stock } =
+    const { name, image, price, description, categoryId, discount, stock } =
       req.body;
 
-    if (!name || !image || !price || !description || !catagory || !stock) {
+    if (!name || !image || !price || !description || !categoryId || !stock) {
       return res.status(400).json({ message: "All fields are required" });
     }
     // Create new product

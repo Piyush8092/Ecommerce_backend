@@ -222,7 +222,7 @@ router.get(
   "/getProductNameAndImageByCatagory",
   getProductNameAndImageByCatagory
 );
-router.get("/getProductByCatagory/:catagory", getProductByCatagory);
+router.get("/getProductByCatagory/:categoryId", getProductByCatagory);
 // new lonch product by dataa
 router.get("/new-launch-product", getNewLaunchProduct);
 // top seling product // by admin => // admin will manage top selling product {topSelling: true}

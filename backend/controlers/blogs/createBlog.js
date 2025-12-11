@@ -8,7 +8,7 @@ const createBlog = async (req, res) => {
     if (
       !payload.heading ||
       !payload.image ||
-      !payload.catagory ||
+      !payload.categoryId ||
       !payload.contentHTML ||
       !payload.contentJSON
     ) {

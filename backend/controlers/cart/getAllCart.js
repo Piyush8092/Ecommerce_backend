@@ -7,7 +7,7 @@ const getAllCart = async (req, res) => {
       .find({ userId })
       .populate(
         "productId",
-        "name price image description catagory discount stock limit "
+        "name price image description category discount stock limit "
       );
     res.json({
       message: "Cart fetched successfully",
