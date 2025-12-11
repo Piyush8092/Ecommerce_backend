@@ -107,7 +107,6 @@ const {
 const {
   getTopSellingProduct,
 } = require("../controlers/product/getTopSellingProduct");
-const { getPriceRange } = require("../controlers/product/getPriceRange");
 const { updateUserSelf } = require("../controlers/users/updateUserSelf");
 const { createWish } = require("../controlers/wishlist/createWish");
 const { getAllWishList } = require("../controlers/wishlist/getAllWishList");
@@ -227,8 +226,6 @@ router.get("/getProductByCatagory/:categoryId", getProductByCatagory);
 router.get("/new-launch-product", getNewLaunchProduct);
 // top seling product // by admin => // admin will manage top selling product {topSelling: true}
 router.get("/top-selling-product", getTopSellingProduct);
-// price range =>api gose this formet=>   /api/products/price-range?min=500&max=2000
-router.get("/price-range", getPriceRange);
 // total product count
 router.get(
   "/getTotalProductCount",

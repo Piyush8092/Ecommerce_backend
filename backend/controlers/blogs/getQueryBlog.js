@@ -21,7 +21,7 @@ const getQueryBlog = async (req, res) => {
         .skip(skip)
         .limit(limit)
         .populate("userId", "name email")
-        .populate("categoryId", "name"),
+        .populate("categoryId"),
     ]);
 
     res.status(200).json({

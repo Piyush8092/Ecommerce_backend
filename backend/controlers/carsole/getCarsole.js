@@ -2,7 +2,7 @@ let Carsole = require("../../models/CarsoleModel");
 
 const getCarsole = async (req, res) => {
   try {
-    const carsole = await Carsole.find();
+    const carsole = await Carsole.find().populate("productId");
     res.json({
       message: "Carsole fetched successfully",
       status: 200,

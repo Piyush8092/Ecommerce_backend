@@ -9,7 +9,7 @@ const getAllProduct = async (req, res) => {
 
     let total = await Product.countDocuments();
     let totalPages = Math.ceil(total / limit);
-    let products = await Product.find().skip(skip).limit(limit);
+    let products = await Product.find().skip(skip).limit(limit).populate("categoryId");
 
     // Calculate average rating for each product
     let productsWithRating = products.map((product) => {

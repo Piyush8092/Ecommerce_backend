@@ -11,7 +11,8 @@ const getNewLaunchProduct = async (req, res) => {
       createdAt: { $gte: oneWeekAgo }, // greater than or equal to 1 week ago
     })
       .sort({ createdAt: -1 }) // newest first
-      .limit(10);
+      .limit(10)
+      .populate("categoryId");
 
     res.json({
       message: "Newly launched products fetched successfully",

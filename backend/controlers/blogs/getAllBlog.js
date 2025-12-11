@@ -11,7 +11,8 @@ const getAllBlog = async (req, res) => {
     const blog = await Blog.find()
       .skip(skip)
       .limit(limit)
-      .populate("userId", "name email");
+      .populate("userId", "name email")
+      .populate("categoryId");
     res.json({
       message: "Blog fetched successfully",
       status: 200,

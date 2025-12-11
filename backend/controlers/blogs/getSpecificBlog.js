@@ -3,7 +3,7 @@ let Blog = require("../../models/blogModel");
 const getSpecificBlog = async (req, res) => {
   try {
     let id = req.params.id;
-    const blog = await Blog.findById(id).populate("userId", "name email");
+    const blog = await Blog.findById(id).populate("userId", "name email").populate("categoryId");
     res.json({
       message: "Blog fetched successfully",
       status: 200,

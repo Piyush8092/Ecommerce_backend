@@ -5,7 +5,7 @@ const getProductNameAndImageByCatagory = async (req, res) => {
     const products = await Product.find(
       { categoryId: { $ne: null } },
       "categoryId image name"
-    ).populate("categoryId", "name");
+    ).populate("categoryId");
 
     const uniqueMap = new Map();
 
