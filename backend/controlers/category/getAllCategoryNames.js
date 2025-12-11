@@ -1,11 +1,11 @@
 const Category = require("../../models/CategoryModel");
 
-const getAllCategory = async (req, res) => {
+const getAllCategoryNames = async (req, res) => {
   try {
-    const categories = await Category.find({});
+    const categories = await Category.find({}, "name _id");
 
     res.json({
-      message: "Categories retrieved successfully",
+      message: "Categories name retrieved successfully",
       status: 200,
       data: categories,
       success: true,
@@ -22,4 +22,4 @@ const getAllCategory = async (req, res) => {
   }
 };
 
-module.exports = { getAllCategory };
+module.exports = { getAllCategoryNames };

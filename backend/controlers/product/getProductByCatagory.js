@@ -4,7 +4,7 @@ const getProductByCatagory = async (req, res) => {
   try {
     let categoryId = req.params.categoryId;
 
-    const products = await Product.find({ categoryId }).populate("categoryId");
+    const products = await Product.find({ categoryId });
     res.json({
       message: "Product fetched successfully",
       status: 200,

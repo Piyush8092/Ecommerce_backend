@@ -12,7 +12,7 @@ const getAllBlog = async (req, res) => {
       .skip(skip)
       .limit(limit)
       .populate("userId", "name email")
-      .populate("categoryId");
+      .populate("categoryId", "name");
     res.json({
       message: "Blog fetched successfully",
       status: 200,

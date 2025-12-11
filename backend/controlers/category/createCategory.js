@@ -2,10 +2,10 @@ let Category = require("../../models/CategoryModel");
 
 const createCategory = async (req, res) => {
   try {
-    const { name } = req.body;
+    const { name, image } = req.body;
 
-    if (!name) {
-      return res.status(400).json({ message: "Category name is required" });
+    if (!name || !image) {
+      return res.status(400).json({ message: "Name and Image fields are required" });
     }
 
     // Check if category already exists
@@ -15,7 +15,7 @@ const createCategory = async (req, res) => {
     }
 
     // Create new category
-    const newCategory = new Category({ name });
+    const newCategory = new Category(req.body);
     const savedCategory = await newCategory.save();
 
     res.json({
@@ -37,4 +37,3 @@ const createCategory = async (req, res) => {
 };
 
 module.exports = { createCategory };
-

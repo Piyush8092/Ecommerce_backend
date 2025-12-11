@@ -10,12 +10,7 @@ const createCarsole = async (req, res) => {
     }
 
     // Create new carsole
-    const newCarsole = new Carsole({
-      heading,
-      title,
-      image,
-      categoryId,
-    });
+    const newCarsole = new Carsole(req.body);
 
     const savedCarsole = await newCarsole.save();
 

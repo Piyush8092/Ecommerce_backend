@@ -194,6 +194,12 @@ const {
 } = require("../controlers/category/getSpecificCategory");
 const { updateCategory } = require("../controlers/category/updateCategory");
 const { deleteCategory } = require("../controlers/category/deleteCategory");
+const {
+  getCategorySummary,
+} = require("../controlers/category/getCategorySummary");
+const { getCategoryItems } = require("../controlers/category/getCategoryItems");
+const { queryCategory } = require("../controlers/category/queryCategory");
+const { getAllCategoryNames } = require("../controlers/category/getAllCategoryNames");
 
 cookieParser();
 
@@ -251,6 +257,16 @@ router.delete(
   permit("ADMIN"),
   deleteCategory
 );
+router.get(
+  "/getCategorySummary",
+  authGuard,
+  permit("ADMIN"),
+  getCategorySummary
+); // for admin dashboard
+router.get("/getCategoryItems", authGuard, permit("ADMIN"), getCategoryItems);
+router.get("/queryCategory", authGuard, permit("ADMIN"), queryCategory);
+router.get("/getAllCategoryNames", authGuard, permit("ADMIN"), getAllCategoryNames);
+
 
 // user information
 router.get("/getTotalUserCount", authGuard, permit("ADMIN"), getTotalUserCount); // for admin dashboard
