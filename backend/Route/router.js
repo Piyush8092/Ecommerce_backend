@@ -203,6 +203,9 @@ const { getAllCategoryNames } = require("../controlers/category/getAllCategoryNa
 
 cookieParser();
 
+// route's health check api
+router.get("/health", (req, res) => res.json({ status: "ok" }));
+
 // ceate user
 router.post("/signup", SignupRout);
 router.get("/logout", authGuard, LogoutRout);

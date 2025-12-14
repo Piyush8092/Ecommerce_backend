@@ -28,7 +28,7 @@ const authGuard = async (req, res, next) => {
     // Verify JWT token
     const decoded = jwt.verify(
       token,
-      process.env.SECRET_KEY || "me333enneffiimsqoqomcngfehdj3idss"
+      process.env.JWT_SECRET
     );
 
     if (!decoded || !decoded.id) {
