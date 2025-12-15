@@ -206,6 +206,9 @@ cookieParser();
 // route's health check api
 router.get("/health", (req, res) => res.json({ status: "ok" }));
 
+
+router.get("/check", (req, res) => res.json({ status: "CI/CD" }));
+
 // ceate user
 router.post("/signup", SignupRout);
 router.get("/logout", authGuard, LogoutRout);
