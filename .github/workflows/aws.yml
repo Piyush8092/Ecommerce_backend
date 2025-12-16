@@ -21,8 +21,11 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd ${{ secrets.APP_DIR }}
+            pwd
+            git branch
+            git log --oneline -3
             git pull origin main
             npm install
-            pm2 reload ${{ secrets.PM2_APP }}
+            pm2 restart ${{ secrets.PM2_APP }}
             pm2 save
             echo "Deployment completed successfully."
