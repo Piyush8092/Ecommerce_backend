@@ -27,8 +27,8 @@ let orderSchema = new mongoose.Schema(
     },
     paymentMethod: {
       type: String,
-      enum: ["CASH", "CARD", "UPI"],
-      default: "CASH",
+      enum: ["PREPAID", "CARD", "UPI"], // Razorpay payment methods only
+      default: "PREPAID",
     },
     totalAmount: {
       type: Number,
@@ -36,8 +36,38 @@ let orderSchema = new mongoose.Schema(
     },
     paymentStatus: {
       type: String,
-      enum: ["PAID", "UNPAID"],
+      enum: ["PAID", "FAILED", "UNPAID"], // Razorpay payment statuses
       default: "UNPAID",
+    },
+    // Razorpay payment details
+    razorpayOrderId: {
+      type: String,
+      default: null,
+    },
+    razorpayPaymentId: {
+      type: String,
+      default: null,
+    },
+    razorpaySignature: {
+      type: String,
+      default: null,
+    },
+    // Shipment tracking
+    shipmentStatus: {
+      type: String,
+      enum: [
+        "NOT_CREATED",
+        "PENDING",
+        "PICKUP_SCHEDULED",
+        "PICKED_UP",
+        "IN_TRANSIT",
+        "OUT_FOR_DELIVERY",
+        "DELIVERED",
+        "CANCELLED",
+        "RTO",
+        "LOST",
+      ],
+      default: "NOT_CREATED",
     },
   },
   { timestamps: true }

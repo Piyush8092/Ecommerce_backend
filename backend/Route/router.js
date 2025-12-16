@@ -198,14 +198,40 @@ const {
   getCategorySummary,
 } = require("../controlers/category/getCategorySummary");
 const { getCategoryItems } = require("../controlers/category/getCategoryItems");
+
+// Razorpay payment controllers
+const {
+  createRazorpayOrder,
+} = require("../controlers/payment/createRazorpayOrder");
+const {
+  verifyRazorpayPayment,
+} = require("../controlers/payment/verifyRazorpayPayment");
+const { getRazorpayKey } = require("../controlers/payment/getRazorpayKey");
+
+// Shiprocket shipment controllers
+const { createShipment } = require("../controlers/shipment/createShipment");
+const { getShipment } = require("../controlers/shipment/getShipment");
+const {
+  getShipmentTracking,
+} = require("../controlers/shipment/getShipmentTracking");
+const {
+  shiprocketWebhook,
+} = require("../controlers/shipment/shiprocketWebhook");
+const {
+  generateShipmentLabel,
+} = require("../controlers/shipment/generateShipmentLabel");
+const {
+  getAvailableCouriers,
+} = require("../controlers/shipment/getAvailableCouriers");
 const { queryCategory } = require("../controlers/category/queryCategory");
-const { getAllCategoryNames } = require("../controlers/category/getAllCategoryNames");
+const {
+  getAllCategoryNames,
+} = require("../controlers/category/getAllCategoryNames");
 
 cookieParser();
 
 // route's health check api
 router.get("/health", (req, res) => res.json({ status: "ok" }));
-
 
 router.get("/check", (req, res) => res.json({ status: "CI/CD" }));
 
@@ -271,8 +297,12 @@ router.get(
 ); // for admin dashboard
 router.get("/getCategoryItems", authGuard, permit("ADMIN"), getCategoryItems);
 router.get("/queryCategory", authGuard, permit("ADMIN"), queryCategory);
-router.get("/getAllCategoryNames", authGuard, permit("ADMIN"), getAllCategoryNames);
-
+router.get(
+  "/getAllCategoryNames",
+  authGuard,
+  permit("ADMIN"),
+  getAllCategoryNames
+);
 
 // user information
 router.get("/getTotalUserCount", authGuard, permit("ADMIN"), getTotalUserCount); // for admin dashboard
@@ -360,6 +390,19 @@ router.get("/getAllSuccessPayment", authGuard, getAllSuccessPayment);
 router.get("/getSpecificPayment/:id", authGuard, getSpecificPayment);
 router.put("/updatePayment/:id", authGuard, updatePayment);
 router.delete("/deletePayment/:id", authGuard, deletePayment);
+
+// Razorpay payment routes
+router.get("/razorpay/key", getRazorpayKey);
+router.post("/razorpay/create-order", authGuard, createRazorpayOrder);
+router.post("/razorpay/verify-payment", authGuard, verifyRazorpayPayment);
+
+// Shiprocket shipment routes
+router.post("/shipments/create/:orderId", authGuard, createShipment);
+router.get("/shipments/:orderId", authGuard, getShipment);
+router.get("/shipments/:orderId/tracking", authGuard, getShipmentTracking);
+router.get("/shipments/:orderId/couriers", authGuard, getAvailableCouriers);
+router.post("/shipments/:orderId/label", authGuard, generateShipmentLabel);
+router.post("/shipments/webhook", shiprocketWebhook); // No auth for webhook
 
 // subscription route
 router.post("/createSubscription", authGuard, createSubscription);
