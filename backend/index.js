@@ -33,9 +33,8 @@ app.use(
   })
 );
 
-app.get("/health", (req, res) => res.json({ status: "ok" }));
 
-app.use("/api", router);
+app.use("/", router);
 
 
 // Error handling middleware
