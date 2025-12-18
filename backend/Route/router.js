@@ -27,6 +27,7 @@ const {
 const { AdminRoleUpdate } = require("../controlers/users/AdminRoleUpdate");
 const { deleteUser } = require("../controlers/users/deleteUser");
 const { queryAdminUser } = require("../controlers/users/queryUserModel");
+const { getUserProfileImageUploadUrl } = require("../controlers/users/getUserProfileImageUploadUrl ");
 const {
   createDeliveryAddress,
 } = require("../controlers/deliveryAddress/createDeliveryAddress");
@@ -314,6 +315,7 @@ router.get("/queryAdminUser", authGuard, queryAdminUser);
 // update user self image add and other thing add
 router.put("/updateUserSelf", authGuard, updateUserSelf);
 router.get("/getAllUserNames", authGuard, permit("ADMIN"), getAllUserNames);
+router.post("/getUserProfileImageUploadUrl", authGuard, getUserProfileImageUploadUrl);
 
 // wishlist
 router.post("/createWish", authGuard, createWish);

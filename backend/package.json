@@ -13,6 +13,8 @@
   "license": "ISC",
   "description": "Production-ready Node.js backend for nakshpath e-commerce application",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.954.0",
+    "@aws-sdk/s3-request-presigner": "^3.954.0",
     "axios": "^1.13.2",
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
