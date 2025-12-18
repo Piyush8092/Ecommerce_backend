@@ -1,4 +1,5 @@
 let Blog = require("../../models/blogModel");
+const { deleteBlogImage } = require("../../services/s3/blogImage.service");
 
 const deleteBlog = async (req, res) => {
   try {
@@ -15,6 +16,17 @@ const deleteBlog = async (req, res) => {
     ) {
       return res.status(401).json({ message: "Unauthorized" });
     }
+
+    // Delete blog image from S3 if exists
+    if (existBlog.image) {
+      try {
+        await deleteBlogImage(existBlog.image);
+      } catch (s3Error) {
+        console.error("Error deleting blog image from S3:", s3Error);
+        // Continue with blog deletion even if S3 deletion fails
+      }
+    }
+
     const deletedBlog = await Blog.findByIdAndDelete(id);
     res.json({
       message: "Blog deleted successfully",

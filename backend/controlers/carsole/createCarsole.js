@@ -1,15 +1,17 @@
 let Carsole = require("../../models/CarsoleModel");
 const createCarsole = async (req, res) => {
   try {
-    const { heading, title, image, categoryId } = req.body;
+    const { heading, title, categoryId } = req.body;
     if (req.user.role !== "ADMIN") {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    if (!heading || !title || !image || !categoryId) {
-      return res.status(400).json({ message: "All fields are required" });
+    if (!heading || !title || !categoryId) {
+      return res
+        .status(400)
+        .json({ message: "Heading, title, and category are required" });
     }
 
-    // Create new carsole
+    // Create new carsole (image can be added later via update)
     const newCarsole = new Carsole(req.body);
 
     const savedCarsole = await newCarsole.save();

@@ -7,18 +7,19 @@ const createBlog = async (req, res) => {
 
     if (
       !payload.heading ||
-      !payload.image ||
       !payload.categoryId ||
       !payload.contentHTML ||
       !payload.contentJSON
     ) {
-      return res.status(400).json({ message: "All fields are required" });
+      return res
+        .status(400)
+        .json({ message: "Heading, category, and content are required" });
     }
 
     // Add userId to payload BEFORE creating blog
     payload.userId = userId;
 
-    // Create new blog with userId
+    // Create new blog with userId (image can be added later via update)
     const newBlog = new Blog(payload);
     const savedBlog = await newBlog.save();
 

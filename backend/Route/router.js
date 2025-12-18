@@ -28,6 +28,21 @@ const { AdminRoleUpdate } = require("../controlers/users/AdminRoleUpdate");
 const { deleteUser } = require("../controlers/users/deleteUser");
 const { queryAdminUser } = require("../controlers/users/queryUserModel");
 const {
+  getUserProfileImageUploadUrl,
+} = require("../controlers/users/getUserProfileImageUploadUrl ");
+const {
+  getProductImageUploadUrl,
+} = require("../controlers/product/getProductImageUploadUrl");
+const {
+  getCategoryImageUploadUrl,
+} = require("../controlers/category/getCategoryImageUploadUrl");
+const {
+  getCarouselImageUploadUrl,
+} = require("../controlers/carsole/getCarouselImageUploadUrl");
+const {
+  getBlogImageUploadUrl,
+} = require("../controlers/blogs/getBlogImageUploadUrl");
+const {
   createDeliveryAddress,
 } = require("../controlers/deliveryAddress/createDeliveryAddress");
 const {
@@ -245,6 +260,7 @@ router.get("/getAllCarsole", getCarsole);
 router.get("/getSpecificCarsole/:id", getSpecificCarsole);
 router.put("/updateCarsole/:id", authGuard, updateCarsole);
 router.delete("/deleteCarsole/:id", authGuard, deleteCarsole);
+router.post("/getCarouselImageUploadUrl", authGuard, getCarouselImageUploadUrl);
 
 // product
 router.post("/createProduct", authGuard, createProduct);
@@ -271,6 +287,8 @@ router.get(
   permit("ADMIN"),
   getTotalProductCount
 );
+// product image upload URL
+router.post("/getProductImageUploadUrl", authGuard, getProductImageUploadUrl);
 
 // product FAQ
 router.post("/createProductFAQ/:id", authGuard, createProductFAQ);
@@ -303,6 +321,13 @@ router.get(
   permit("ADMIN"),
   getAllCategoryNames
 );
+// category image upload URL
+router.post(
+  "/getCategoryImageUploadUrl",
+  authGuard,
+  permit("ADMIN"),
+  getCategoryImageUploadUrl
+);
 
 // user information
 router.get("/getTotalUserCount", authGuard, permit("ADMIN"), getTotalUserCount); // for admin dashboard
@@ -314,6 +339,11 @@ router.get("/queryAdminUser", authGuard, queryAdminUser);
 // update user self image add and other thing add
 router.put("/updateUserSelf", authGuard, updateUserSelf);
 router.get("/getAllUserNames", authGuard, permit("ADMIN"), getAllUserNames);
+router.post(
+  "/getUserProfileImageUploadUrl",
+  authGuard,
+  getUserProfileImageUploadUrl
+);
 
 // wishlist
 router.post("/createWish", authGuard, createWish);
@@ -373,6 +403,8 @@ router.put("/updateBlog/:id", authGuard, updateBlog);
 router.delete("/deleteBlog/:id", authGuard, deleteBlog);
 router.get("/queryBlog", getQueryBlog);
 router.get("/getTotalBlogCount", authGuard, permit("ADMIN"), getTotalBlogCount); // for admin dashboard
+// blog image upload URL
+router.post("/getBlogImageUploadUrl", authGuard, getBlogImageUploadUrl);
 
 // contact route
 router.post("/createContact", authGuard, createContact);

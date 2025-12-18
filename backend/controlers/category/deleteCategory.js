@@ -1,4 +1,7 @@
 let Category = require("../../models/CategoryModel");
+const {
+  deleteCategoryImage,
+} = require("../../services/s3/categoryImage.service");
 
 const deleteCategory = async (req, res) => {
   try {
@@ -12,6 +15,16 @@ const deleteCategory = async (req, res) => {
         success: false,
         error: true,
       });
+    }
+
+    // Delete category image from S3 if exists
+    if (existCategory.image) {
+      try {
+        await deleteCategoryImage(existCategory.image);
+      } catch (s3Error) {
+        console.error("Error deleting category image from S3:", s3Error);
+        // Continue with category deletion even if S3 deletion fails
+      }
     }
 
     const deletedCategory = await Category.findByIdAndDelete(id);
