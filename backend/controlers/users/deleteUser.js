@@ -1,4 +1,5 @@
 let userModel = require("../../models/userModel");
+const { deleteUserImage } = require("../../services/s3/userImage.service");
 
 const deleteUser = async (req, res) => {
   try {
@@ -13,6 +14,16 @@ const deleteUser = async (req, res) => {
     let UserRole = req.user.role;
     if (UserRole !== "ADMIN" && userId.toString() !== id.toString()) {
       return res.status(403).json({ message: "Unauthorized access" });
+    }
+
+    // Delete user image from S3 if exists
+    if (ExistUser.image) {
+      try {
+        await deleteUserImage(ExistUser.image);
+      } catch (s3Error) {
+        console.error("Error deleting user image from S3:", s3Error);
+        // Continue with user deletion even if S3 deletion fails
+      }
     }
 
     const result = await userModel.findByIdAndDelete(id);
