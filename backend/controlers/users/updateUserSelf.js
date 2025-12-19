@@ -14,9 +14,13 @@ const updateUserSelf = async (req, res) => {
       runValidators: true,
     });
 
-    // Delete old user image from S3 if exists
-    if (ExistUser.image) {
-      await deleteObject(ExistUser.image);
+    // Delete old user image ONLY if a new one is provided
+    if (payload.image && ExistUser.image && payload.image !== ExistUser.image) {
+      try {
+        await deleteObject(ExistUser.image);
+      } catch (err) {
+        console.error("Failed to delete old user image:", err);
+      }
     }
 
     res.json({

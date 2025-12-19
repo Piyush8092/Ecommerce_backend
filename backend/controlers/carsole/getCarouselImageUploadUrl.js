@@ -1,6 +1,4 @@
-const {
-  generateCarouselImageUploadUrl,
-} = require("../../services/s3/carouselImage.service");
+const { generateUploadUrl } = require("../../services/s3.service");
 
 /**
  * Generate pre-signed URL for carousel image upload
@@ -17,16 +15,19 @@ const getCarouselImageUploadUrl = async (req, res) => {
     }
 
     if (!fileType || !fileType.startsWith("image/")) {
-      return res.status(400).json({ message: "Invalid file type. Only images are allowed." });
+      return res
+        .status(400)
+        .json({ message: "Invalid file type. Only images are allowed." });
     }
 
-    // Validate file size limit (10MB)
-    const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+    // Validate file size limit (5MB)
+    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
-    const { uploadUrl, key } = await generateCarouselImageUploadUrl(
-      carouselId,
-      fileType
-    );
+    const { uploadUrl, key } = await generateUploadUrl({
+      folder: "carousel",
+      entityId: carouselId,
+      fileType,
+    });
 
     res.json({
       uploadUrl,
@@ -35,11 +36,10 @@ const getCarouselImageUploadUrl = async (req, res) => {
     });
   } catch (error) {
     console.error("Error generating carousel image upload URL:", error);
-    res.status(500).json({ 
-      message: error.message || "Failed to generate upload URL" 
+    res.status(500).json({
+      message: error.message || "Failed to generate upload URL",
     });
   }
 };
 
 module.exports = { getCarouselImageUploadUrl };
-

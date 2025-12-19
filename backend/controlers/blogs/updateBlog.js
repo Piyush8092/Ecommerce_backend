@@ -1,4 +1,5 @@
 let Blog = require("../../models/blogModel");
+const { deleteObject } = require("../../services/s3.service");
 
 const updateBlog = async (req, res) => {
   try {
@@ -24,6 +25,15 @@ const updateBlog = async (req, res) => {
     const updatedBlog = await Blog.findByIdAndUpdate({ _id: id }, payload, {
       new: true,
     });
+
+    // Delete old image ONLY if a new one is provided
+    if (payload.image && existBlog.image && payload.image !== existBlog.image) {
+      try {
+        await deleteObject(existBlog.image);
+      } catch (err) {
+        console.error("Failed to delete old blog image:", err);
+      }
+    }
 
     res.json({
       message: "Blog updated successfully",

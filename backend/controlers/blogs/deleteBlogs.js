@@ -1,5 +1,5 @@
 let Blog = require("../../models/blogModel");
-const { deleteBlogImage } = require("../../services/s3/blogImage.service");
+const { deleteObject } = require("../../services/s3.service");
 
 const deleteBlog = async (req, res) => {
   try {
@@ -20,7 +20,7 @@ const deleteBlog = async (req, res) => {
     // Delete blog image from S3 if exists
     if (existBlog.image) {
       try {
-        await deleteBlogImage(existBlog.image);
+        await deleteObject(existBlog.image);
       } catch (s3Error) {
         console.error("Error deleting blog image from S3:", s3Error);
         // Continue with blog deletion even if S3 deletion fails

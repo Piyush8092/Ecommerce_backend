@@ -3,12 +3,11 @@ const { generateUploadUrl } = require("../../services/s3.service");
 /**
  * Generate pre-signed URL for user image upload
  * Requires authentication
- * Body: { fileType }
+ * Body: { fileType, entityId }
  */
 const getUserProfileImageUploadUrl = async (req, res) => {
   try {
-    const { fileType } = req.body;
-    const userId = req.user.id;
+    const { fileType, userId } = req.body;
 
     const { uploadUrl, key } = await generateUploadUrl({
       folder: "users",

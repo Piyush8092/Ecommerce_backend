@@ -1,8 +1,5 @@
-let mongoose = require("mongoose");
 let Carsole = require("../../models/CarsoleModel");
-const {
-  deleteCarouselImage,
-} = require("../../services/s3/carouselImage.service");
+const { deleteObject } = require("../../services/s3.service");
 
 const deleteCarsole = async (req, res) => {
   try {
@@ -25,7 +22,7 @@ const deleteCarsole = async (req, res) => {
     // Delete carousel image from S3 if exists
     if (carousel.image) {
       try {
-        await deleteCarouselImage(carousel.image);
+        await deleteObject(carousel.image);
       } catch (s3Error) {
         console.error("Error deleting carousel image from S3:", s3Error);
         // Continue with carousel deletion even if S3 deletion fails
@@ -33,6 +30,7 @@ const deleteCarsole = async (req, res) => {
     }
 
     const deletedCarsole = await Carsole.findByIdAndDelete(id);
+    
     res.json({
       message: "Carsole deleted successfully",
       status: 200,

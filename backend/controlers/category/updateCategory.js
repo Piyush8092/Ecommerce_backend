@@ -1,4 +1,5 @@
 let Category = require("../../models/CategoryModel");
+const { deleteObject } = require("../../services/s3.service");
 
 const updateCategory = async (req, res) => {
   try {
@@ -14,7 +15,9 @@ const updateCategory = async (req, res) => {
     if (payload.name && payload.name !== existCategory.name) {
       const duplicateCategory = await Category.findOne({ name: payload.name });
       if (duplicateCategory) {
-        return res.status(400).json({ message: "Category name already exists" });
+        return res
+          .status(400)
+          .json({ message: "Category name already exists" });
       }
     }
 
@@ -22,6 +25,19 @@ const updateCategory = async (req, res) => {
       new: true,
       runValidators: true,
     });
+
+    // Delete old image ONLY if a new one is provided
+    if (
+      payload.image &&
+      existCategory.image &&
+      payload.image !== existCategory.image
+    ) {
+      try {
+        await deleteObject(existCategory.image);
+      } catch (err) {
+        console.error("Failed to delete old category image:", err);
+      }
+    }
 
     res.json({
       message: "Category updated successfully",
@@ -42,4 +58,3 @@ const updateCategory = async (req, res) => {
 };
 
 module.exports = { updateCategory };
-
