@@ -1,5 +1,5 @@
 let userModel = require("../../models/userModel");
-const { deleteUserImage } = require("../../services/s3/userImage.service");
+const { deleteObject } = require("../../services/s3.service");
 
 const deleteUser = async (req, res) => {
   try {
@@ -19,7 +19,7 @@ const deleteUser = async (req, res) => {
     // Delete user image from S3 if exists
     if (ExistUser.image) {
       try {
-        await deleteUserImage(ExistUser.image);
+        await deleteObject(ExistUser.image);
       } catch (s3Error) {
         console.error("Error deleting user image from S3:", s3Error);
         // Continue with user deletion even if S3 deletion fails

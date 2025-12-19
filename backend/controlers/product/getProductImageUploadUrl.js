@@ -1,37 +1,33 @@
-const {
-  generateProductImageUploadUrl,
-} = require("../../services/s3/productImage.service");
+const { generateUploadUrl } = require("../../services/s3.service");
 
 /**
  * Generate pre-signed URL for product image upload
  * Requires authentication
- * Body: { productId, imageIndex, fileType }
+ * Body: { productId, fileType }
  */
 const getProductImageUploadUrl = async (req, res) => {
   try {
-    const { productId, imageIndex, fileType } = req.body;
+    const { productId, fileType } = req.body;
 
     // Validate required fields
     if (!productId) {
       return res.status(400).json({ message: "Product ID is required" });
     }
 
-    if (imageIndex === undefined || imageIndex === null) {
-      return res.status(400).json({ message: "Image index is required" });
-    }
-
     if (!fileType || !fileType.startsWith("image/")) {
-      return res.status(400).json({ message: "Invalid file type. Only images are allowed." });
+      return res
+        .status(400)
+        .json({ message: "Invalid file type. Only images are allowed." });
     }
 
-    // Validate file size limit (10MB) - this is informational, actual validation happens on frontend
-    const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+    // Validate file size limit (5MB)
+    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
-    const { uploadUrl, key } = await generateProductImageUploadUrl(
-      productId,
-      imageIndex,
-      fileType
-    );
+    const { uploadUrl, key } = await generateUploadUrl({
+      folder: "products",
+      entityId: productId,
+      fileType,
+    });
 
     res.json({
       uploadUrl,
@@ -40,11 +36,10 @@ const getProductImageUploadUrl = async (req, res) => {
     });
   } catch (error) {
     console.error("Error generating product image upload URL:", error);
-    res.status(500).json({ 
-      message: error.message || "Failed to generate upload URL" 
+    res.status(500).json({
+      message: error.message || "Failed to generate upload URL",
     });
   }
 };
 
 module.exports = { getProductImageUploadUrl };
-

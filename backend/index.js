@@ -22,6 +22,7 @@ app.use(
     origin: [
       "https://www.softerint.com",
       "http://localhost:5173",
+      "http://localhost:5174",
       "https://localhost:5173",
       "https://nakshpath.com",
       "https://www.nakshpath.com",

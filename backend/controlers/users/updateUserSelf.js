@@ -1,4 +1,5 @@
 let userModel = require("../../models/userModel");
+const { deleteObject } = require("../../services/s3.service");
 
 const updateUserSelf = async (req, res) => {
   try {
@@ -12,6 +13,15 @@ const updateUserSelf = async (req, res) => {
       new: true,
       runValidators: true,
     });
+
+    // Delete old user image ONLY if a new one is provided
+    if (payload.image && ExistUser.image && payload.image !== ExistUser.image) {
+      try {
+        await deleteObject(ExistUser.image);
+      } catch (err) {
+        console.error("Failed to delete old user image:", err);
+      }
+    }
 
     res.json({
       message: "User updated successfully",
