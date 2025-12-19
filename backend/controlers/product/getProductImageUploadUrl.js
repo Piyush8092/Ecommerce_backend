@@ -1,23 +1,17 @@
-const {
-  generateProductImageUploadUrl,
-} = require("../../services/s3/productImage.service");
+const { generateUploadUrl } = require("../../services/s3.service");
 
 /**
  * Generate pre-signed URL for product image upload
  * Requires authentication
- * Body: { productId, imageIndex, fileType }
+ * Body: { productId, fileType }
  */
 const getProductImageUploadUrl = async (req, res) => {
   try {
-    const { productId, imageIndex, fileType } = req.body;
+    const { productId, fileType } = req.body;
 
     // Validate required fields
     if (!productId) {
       return res.status(400).json({ message: "Product ID is required" });
-    }
-
-    if (imageIndex === undefined || imageIndex === null) {
-      return res.status(400).json({ message: "Image index is required" });
     }
 
     if (!fileType || !fileType.startsWith("image/")) {
@@ -26,14 +20,14 @@ const getProductImageUploadUrl = async (req, res) => {
         .json({ message: "Invalid file type. Only images are allowed." });
     }
 
-    // Validate file size limit (5MB) - this is informational, actual validation happens on frontend
+    // Validate file size limit (5MB)
     const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
-    const { uploadUrl, key } = await generateProductImageUploadUrl(
-      productId,
-      imageIndex,
-      fileType
-    );
+    const { uploadUrl, key } = await generateUploadUrl({
+      folder: "products",
+      entityId: productId,
+      fileType,
+    });
 
     res.json({
       uploadUrl,

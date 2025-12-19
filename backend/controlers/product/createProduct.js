@@ -1,4 +1,5 @@
 let Product = require("../../models/productModel");
+
 const createProduct = async (req, res) => {
   try {
     let role = req.user.role;
@@ -8,11 +9,9 @@ const createProduct = async (req, res) => {
     const { name, price, description, categoryId, stock } = req.body;
 
     if (!name || !price || !description || !categoryId || !stock) {
-      return res
-        .status(400)
-        .json({
-          message: "Name, price, description, category, and stock are required",
-        });
+      return res.status(400).json({
+        message: "Name, price, description, category, and stock are required",
+      });
     }
     // Create new product (images can be added later via update)
     const newProduct = new Product(req.body);

@@ -1,8 +1,5 @@
-let mongoose = require("mongoose");
 let Product = require("../../models/productModel");
-const {
-  deleteProductImages,
-} = require("../../services/s3/productImage.service");
+const { deleteObject } = require("../../services/s3.service");
 
 const deleteProduct = async (req, res) => {
   try {
@@ -25,7 +22,9 @@ const deleteProduct = async (req, res) => {
     // Delete all product images from S3 if they exist
     if (product.image && product.image.length > 0) {
       try {
-        await deleteProductImages(product.image);
+        for (const image of product.image) {
+          await deleteObject(image);
+        }
       } catch (s3Error) {
         console.error("Error deleting product images from S3:", s3Error);
         // Continue with product deletion even if S3 deletion fails
