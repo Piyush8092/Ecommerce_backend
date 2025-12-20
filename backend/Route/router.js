@@ -242,6 +242,9 @@ const { queryCategory } = require("../controlers/category/queryCategory");
 const {
   getAllCategoryNames,
 } = require("../controlers/category/getAllCategoryNames");
+const { sendOtp } = require("../controlers/auth/sendOtp");
+const { verifyOtp } = require("../controlers/auth/verifyOtp");
+const { completeProfile } = require("../controlers/auth/completeProfile");
 
 cookieParser();
 
@@ -250,9 +253,14 @@ router.get("/health", (req, res) => res.json({ status: "ok" }));
 
 router.get("/check", (req, res) => res.json({ status: "CI/CD" }));
 
+// OTP routes
+router.post("/send-otp", sendOtp);
+router.post("/verify-otp", verifyOtp);
+
 // ceate user
 router.post("/signup", SignupRout);
 router.get("/logout", authGuard, LogoutRout);
+router.post("/complete-profile", completeProfile);
 
 //  carsole
 router.post("/createCarsole", authGuard, createCarsole);
