@@ -41,7 +41,7 @@ const verifyOtp = async (req, res) => {
     // existing user → login
     if (user) {
       const authToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: "7d",
+        expiresIn: "30d",
       });
 
       // Set cookie
@@ -49,7 +49,7 @@ const verifyOtp = async (req, res) => {
         httpOnly: true,
         secure: true,
         sameSite: "none",
-        maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
+        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
       });
 
       const userResponse = {
@@ -57,6 +57,7 @@ const verifyOtp = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        image: user.image,
         authToken,
       };
 
