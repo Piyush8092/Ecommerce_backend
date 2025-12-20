@@ -6,15 +6,20 @@ const userSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, "Name is required"],
+      trim: true,
     },
     email: {
       type: String,
-      required: true,
-      sparse: true,
+      required: [true, "Email is required"],
+      lowercase: true,
+      unique: true,
+      validate: [validator.isEmail, "Invalid email"],
     },
     phone: {
-      type: Number,
-      sparse: true,
+      type: String,
+      required: [true, "Phone number is required"],
+      unique: true,
+      match: [/^[0-9]{10}$/, "Invalid phone number"],
     },
     image: {
       type: String,
@@ -29,7 +34,7 @@ const userSchema = new mongoose.Schema(
     token: {
       type: String,
     },
-    verified: {
+    isPhoneVerified: {
       type: Boolean,
       default: true,
     },
