@@ -1,25 +1,44 @@
-let Order = require('../../models/orderModel');
+let Order = require("../../models/orderModel");
 
 const getAllAcceptedOrder = async (req, res) => {
-    try {
-        let page = req.query.page || 1;
-        let limit = req.query.limit || 10;
-        let skip = (page - 1) * limit;
-        let total = await Order.countDocuments({status: 'ACCEPTED'});
-        let totalPages = Math.ceil(total / limit);
-        if(req.user.role !== 'ADMIN' && req.user.role !== 'MANAGER' && req.user.role !== 'EMPLOYEE' ) {
-            return res.status(401).json({ message: 'Unauthorized' });
-        }
-        const order = await Order.find({status: 'PENDING'}).skip(skip).limit(limit).populate('userId', 'name email').populate('deliveryAddressId', 'name email').populate('productId', 'name price');
-
-        res.json({ message: 'Order fetched successfully', status: 200, data: order, success: true, error: false, total, totalPages});
-
-             }
-    catch (e) {
-        res.json({ message: 'Something went wrong', status: 500, data: e, success: false, error: true });
+  try {
+    let page = req.query.page || 1;
+    let limit = req.query.limit || 10;
+    let skip = (page - 1) * limit;
+    let total = await Order.countDocuments({ status: "ACCEPTED" });
+    let totalPages = Math.ceil(total / limit);
+    if (
+      req.user.role !== "ADMIN" &&
+      req.user.role !== "MANAGER" &&
+      req.user.role !== "EMPLOYEE"
+    ) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
+    const order = await Order.find({ status: "PENDING" })
+      .skip(skip)
+      .limit(limit)
+      .populate("userId", "name email")
+      .populate("deliveryAddressId", "name email")
+      .populate("productId", "name price");
+
+    res.json({
+      message: "Order fetched successfully",
+      status: 200,
+      data: order,
+      success: true,
+      error: false,
+      total,
+      totalPages,
+    });
+  } catch (e) {
+    res.json({
+      message: "Something went wrong",
+      status: 500,
+      data: e,
+      success: false,
+      error: true,
+    });
+  }
 };
 
 module.exports = { getAllAcceptedOrder };
-
-

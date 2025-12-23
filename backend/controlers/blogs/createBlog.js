@@ -1,28 +1,45 @@
-let Blog = require('../../models/blogModel');
+let Blog = require("../../models/blogModel");
 
 const createBlog = async (req, res) => {
-    try {
-        let userId = req.user._id;
-        let payload = req.body;
+  try {
+    let userId = req.user._id;
+    let payload = req.body;
 
-        if (!payload.heading || !payload.image || !payload.catagory || !payload.description) {
-            return res.status(400).json({ message: 'All fields are required' });
-        }
-
-        // Add userId to payload BEFORE creating blog
-        payload.userId = userId;
-
-        // Create new blog with userId
-        const newBlog = new Blog(payload);
-        const savedBlog = await newBlog.save();
-
-        res.json({ message: 'Blog created successfully', status: 200, data: savedBlog, success: true, error: false });
+    if (
+      !payload.heading ||
+      !payload.categoryId ||
+      !payload.contentHTML ||
+      !payload.contentJSON
+    ) {
+      return res
+        .status(400)
+        .json({ message: "Heading, category, and content are required" });
     }
-    catch (e) {
-        console.error('Create blog error:', e);
-        res.status(500).json({ message: 'Something went wrong', status: 500, data: e.message, success: false, error: true });
-    }
+
+    // Add userId to payload BEFORE creating blog
+    payload.userId = userId;
+
+    // Create new blog with userId (image can be added later via update)
+    const newBlog = new Blog(payload);
+    const savedBlog = await newBlog.save();
+
+    res.json({
+      message: "Blog created successfully",
+      status: 200,
+      data: savedBlog,
+      success: true,
+      error: false,
+    });
+  } catch (e) {
+    console.error("Create blog error:", e);
+    res.status(500).json({
+      message: "Something went wrong",
+      status: 500,
+      data: e.message,
+      success: false,
+      error: true,
+    });
+  }
 };
 
 module.exports = { createBlog };
-

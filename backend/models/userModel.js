@@ -1,66 +1,79 @@
-const mongoose = require('mongoose');
-const validator = require('validator');
+const mongoose = require("mongoose");
+const validator = require("validator");
 
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema(
+  {
     name: {
-        type: String,
-        required: [true, 'Name is required'],
+      type: String,
+      required: [true, "Name is required"],
+      trim: true,
     },
     email: {
-        type: String,
-         required: true,
-        sparse: true,
+      type: String,
+      required: [true, "Email is required"],
+      lowercase: true,
+      unique: true,
+      validate: [validator.isEmail, "Invalid email"],
     },
     phone: {
-        type: Number,
-         sparse: true,
-         
+      type: String,
+      required: [true, "Phone number is required"],
+      unique: true,
+      match: [/^[0-9]{10}$/, "Invalid phone number"],
     },
     image: {
-        type: String,
+      type: String,
     },
-   
+
     role: {
-        type: String,
-        // order accept delete and fororder,  emplye => diplsy employ section 
-        enum: ['GENERAL', 'ADMIN','MANAGER','EMPLOYEE'],
-        default: 'GENERAL'
+      type: String,
+      // order accept delete and fororder,  emplye => diplsy employ section
+      enum: ["GENERAL", "ADMIN", "MANAGER", "EMPLOYEE"],
+      default: "GENERAL",
     },
     token: {
-        type: String,
+      type: String,
     },
-    verified: {
-        type: Boolean,
-        default: true
+    isPhoneVerified: {
+      type: Boolean,
+      default: true,
     },
-    orders: [{
+    orders: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Order',
-    }],
+        ref: "Order",
+      },
+    ],
     isVerified: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false,
     },
-    loginDeviceName:[ {
+    loginDeviceName: [
+      {
         type: String,
-    }],
+      },
+    ],
 
-    subscriptions: [{
+    subscriptions: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-    }]
-}, { timestamps: true });
+      },
+    ],
+  },
+  { timestamps: true }
+);
 
 /**
  * Custom validation: require at least email or phone
  */
-userSchema.pre('validate', function (next) {
-    if (!this.email && !this.phone) {
-        this.invalidate('email', 'Either email or phone is required');
-        this.invalidate('phone', 'Either email or phone is required');
-    }
-    next();
+userSchema.pre("validate", function (next) {
+  if (!this.email && !this.phone) {
+    this.invalidate("email", "Either email or phone is required");
+    this.invalidate("phone", "Either email or phone is required");
+  }
+  next();
 });
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;

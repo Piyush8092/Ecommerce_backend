@@ -1,55 +1,36 @@
-let Product = require('../../models/productModel');
+const Product = require("../../models/productModel");
 
 const queryProduct = async (req, res) => {
-    try {
-        const { query, page = 1, limit = 10 } = req.query;
-        const skip = (page - 1) * limit;
+  try {
+    const { mongoQuery, sort } = req;
+    const { page = 1, limit = 10 } = req.query;
+    const skip = (page - 1) * limit;
 
-        let searchConditions = {};
+    // 1. total matched products count
+    const totalDocuments = await Product.countDocuments(mongoQuery);
 
-        if (query) {
-            const numericQuery = Number(query);
+    // 2. paginated list
+    const products = await Product.find(mongoQuery)
+      .skip(skip)
+      .limit(Number(limit))
+      .sort(sort);
 
-            // Build a flexible search with $or
-            searchConditions = {
-                $or: [
-                    { name: { $regex: query, $options: 'i' } },
-                    { description: { $regex: query, $options: 'i' } },
-                    { catagory: { $regex: query, $options: 'i' } },
-                    ...(isNaN(numericQuery) ? [] : [
-                        { price: numericQuery },
-                        { stock: numericQuery },
-                        { discount: numericQuery }
-                    ])
-                ]
-            };
-        }
-
-        const products = await Product.find(searchConditions)
-            .skip(skip)
-            .limit(Number(limit));
-
-        res.json({
-            message: 'Products fetched successfully',
-            status: 200,
-            data: products,
-            total: products.length,
-            totalPages: Math.ceil(products.length / limit),
-            currentPage: page,
-            success: true,
-            error: false
-        });
-
-    } catch (e) {
-        console.error(e);
-        res.json({
-            message: 'Something went wrong',
-            status: 500,
-            data: e,
-            success: false,
-            error: true
-        });
-    }
+    res.status(200).json({
+      message: "Products fetched successfully",
+      data: products,
+      total: totalDocuments,
+      totalPages: Math.ceil(totalDocuments / limit),
+      success: true,
+      error: false,
+    });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({
+      message: "Something went wrong",
+      error: true,
+      success: false,
+    });
+  }
 };
 
 module.exports = { queryProduct };

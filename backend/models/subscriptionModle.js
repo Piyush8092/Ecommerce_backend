@@ -1,20 +1,21 @@
-let mongoose = require('mongoose');
+let mongoose = require("mongoose");
 
-let subscriptionSchema = new mongoose.Schema({
-    userId:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
+let subscriptionSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-  email:{
-        type: String,
-        required: true,
-    }
-},
-    { timestamps: true }
-
+    email: {
+      type: String,
+      required: true,
+    },
+  },
+  { timestamps: true }
 );
 
-module.exports = Subscription = mongoose.model('Subscription', subscriptionSchema);
-
-
+module.exports = Subscription = mongoose.model(
+  "Subscription",
+  subscriptionSchema
+);

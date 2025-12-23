@@ -1,87 +1,106 @@
-let mongoose = require('mongoose');
+let mongoose = require("mongoose");
 
-let orderSchema = new mongoose.Schema({
-    userId:{
+let orderSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    deliveryAddressId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "DeliveryAddress",
+      required: true,
+    },
+    productId: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: "Product",
         required: true,
+      },
+    ],
+
+    status: {
+      type: String,
+      enum: ["PENDING", "SHIPPED", "DELIVERED", "CANCELLED", "ACCEPTED"],
+      default: "PENDING",
     },
-    deliveryAddressId:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'DeliveryAddress',
-        required: true,
+    paymentMethod: {
+      type: String,
+      enum: ["PREPAID", "CARD", "UPI"], // Razorpay payment methods only
+      default: "PREPAID",
     },
-    productId:
-        [{
-            type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
-        required: true,
-        }],
-    
-    status:{
-        type: String,
-        enum: ['PENDING', 'SHIPPED', 'DELIVERED', 'CANCELLED','ACCEPTED'],
-        default: 'PENDING',
+    totalAmount: {
+      type: Number,
+      required: true,
     },
-    paymentMethod:{
-        type: String,
-        enum: ['CASH', 'CARD', 'UPI'],
-        default: 'CASH',
+    paymentStatus: {
+      type: String,
+      enum: ["PAID", "FAILED", "UNPAID"], // Razorpay payment statuses
+      default: "UNPAID",
     },
-    totalAmount:{
-        type: Number,
-        required: true,
+    // Razorpay payment details
+    razorpayOrderId: {
+      type: String,
+      default: null,
     },
-    paymentStatus:{
-        type: String,
-        enum: ['PAID', 'UNPAID'],
-        default: 'UNPAID'
+    razorpayPaymentId: {
+      type: String,
+      default: null,
+    },
+    razorpaySignature: {
+      type: String,
+      default: null,
+    },
+    // Shipment tracking
+    shipmentStatus: {
+      type: String,
+      enum: [
+        "NOT_CREATED",
+        "PENDING",
+        "PICKUP_SCHEDULED",
+        "PICKED_UP",
+        "IN_TRANSIT",
+        "OUT_FOR_DELIVERY",
+        "DELIVERED",
+        "CANCELLED",
+        "RTO",
+        "LOST",
+      ],
+      default: "NOT_CREATED",
     },
     // Shiprocket Integration Fields
-    trackingNumber:{
-        type: String,
-        required: false,
+    trackingNumber: {
+      type: String,
+      default: null,
     },
-    shiprocketOrderId:{
-        type: String,
-        required: false,
+    shiprocketOrderId: {
+      type: String,
+      default: null,
     },
-    shiprocketShipmentId:{
-        type: String,
-        required: false,
+    shiprocketShipmentId: {
+      type: String,
+      default: null,
     },
-    estimatedDelivery:{
-        type: Date,
-        required: false,
+    estimatedDelivery: {
+      type: Date,
+      default: null,
     },
-    shippingDetails:{
-        courierName: {
-            type: String,
-            required: false,
-        },
-        awb: {
-            type: String,
-            required: false,
-        },
-        currentStatus: {
-            type: String,
-            required: false,
-        },
-        trackingUrl: {
-            type: String,
-            required: false,
-        },
-        shipmentHistory: [{
-            status: String,
-            location: String,
-            timestamp: Date,
-            activity: String,
-        }],
+    shippingDetails: {
+      courierName: String,
+      courierId: String,
+      awb: String,
+      currentStatus: String,
+      trackingUrl: String,
+      shipmentHistory: [{
+        status: String,
+        location: String,
+        timestamp: Date,
+        activity: String,
+      }],
     },
-},
-    { timestamps: true }
-
+  },
+  { timestamps: true }
 );
 
-module.exports = Order = mongoose.model('Order', orderSchema);
-
+module.exports = Order = mongoose.model("Order", orderSchema);

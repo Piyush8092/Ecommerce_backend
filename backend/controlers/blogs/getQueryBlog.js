@@ -1,31 +1,45 @@
-let Blog = require('../../models/blogModel');
+const Blog = require("../../models/blogModel");
 
 const getQueryBlog = async (req, res) => {
-    try {
-        let query = req.query.query;
-        let page = req.query.page || 1;
-        let limit = req.query.limit || 10;
-        let skip = (page - 1) * limit;
-        let queryObj = {};
-        if (query) {
-            queryObj.heading = { $regex: query, $options: 'i' };
-            queryObj.description = { $regex: query, $options: 'i' };
-            queryObj.catagory = { $regex: query, $options: 'i' };
-        }
+  try {
+    const query = req.query.query || "";
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
 
-        let total = await Blog.countDocuments(queryObj);
-        let totalPages = Math.ceil(total / limit);
-
-        const blog = await Blog.find(queryObj).skip(skip).limit(limit).populate('userId', 'name email');
-        res.json({ message: 'Blog fetched successfully', status: 200, data: blog, success: true, error: false, total, totalPages});
-
-             }
-             catch (e) {
-        res.json({ message: 'Something went wrong', status: 500, data: e, success: false, error: true });
+    let queryObj = {};
+    if (query) {
+      queryObj.$or = [
+        { heading: { $regex: query, $options: "i" } },
+        { contentHTML: { $regex: query, $options: "i" } },
+      ];
     }
+
+    const [total, blogs] = await Promise.all([
+      Blog.countDocuments(queryObj),
+      Blog.find(queryObj)
+        .skip(skip)
+        .limit(limit)
+        .populate("userId", "name email")
+        .populate("categoryId", "name"),
+    ]);
+
+    res.status(200).json({
+      message: "Blogs fetched successfully",
+      success: true,
+      error: false,
+      data: blogs,
+      total,
+      totalPages: Math.ceil(total / limit),
+    });
+  } catch (e) {
+    res.status(500).json({
+      message: "Something went wrong",
+      success: false,
+      error: true,
+      data: e,
+    });
+  }
 };
 
 module.exports = { getQueryBlog };
-
-
-

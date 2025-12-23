@@ -1,6 +1,6 @@
- let Order = require('../../models/orderModel');
- let User = require('../../models/userModel');
- const shiprocketService = require('../../services/shiprocketService');
+let Order = require('../../models/orderModel');
+let User = require('../../models/userModel');
+const shiprocketService = require('../../services/shiprocketService');
 
 const updateOrderStatus = async (req, res) => {
     try {
@@ -79,8 +79,6 @@ const updateOrderStatus = async (req, res) => {
         console.error('Update order status error:', e);
         res.json({ message: 'Something went wrong', status: 500, data: e.message, success: false, error: true });
     }
-};
+}
 
 module.exports = { updateOrderStatus };
-
-
