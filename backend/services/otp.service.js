@@ -21,7 +21,7 @@ const sendOtpSms = async (phone, otp) => {
       route: "dlt",
       sender_id: process.env.FAST2SMS_SENDER_ID, // eg: NAKSHP
       message: process.env.FAST2SMS_TEMPLATE_ID, // DLT template ID
-      variables_values: `Nakshpath|${otp}|`,
+      variables_values: `login Nakshpath|${otp}|`,
       numbers: phone,
     },
     {

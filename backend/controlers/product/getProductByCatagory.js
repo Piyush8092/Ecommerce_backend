@@ -3,8 +3,9 @@ let Product = require("../../models/productModel");
 const getProductByCatagory = async (req, res) => {
   try {
     let categoryId = req.params.categoryId;
+    let limit = req.query.limit || 20;
 
-    const products = await Product.find({ categoryId });
+    const products = await Product.find({ categoryId }).limit(limit);
     res.json({
       message: "Product fetched successfully",
       status: 200,
