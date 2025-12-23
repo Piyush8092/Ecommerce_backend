@@ -37,6 +37,47 @@ let orderSchema = new mongoose.Schema({
         enum: ['PAID', 'UNPAID'],
         default: 'UNPAID'
     },
+    // Shiprocket Integration Fields
+    trackingNumber:{
+        type: String,
+        required: false,
+    },
+    shiprocketOrderId:{
+        type: String,
+        required: false,
+    },
+    shiprocketShipmentId:{
+        type: String,
+        required: false,
+    },
+    estimatedDelivery:{
+        type: Date,
+        required: false,
+    },
+    shippingDetails:{
+        courierName: {
+            type: String,
+            required: false,
+        },
+        awb: {
+            type: String,
+            required: false,
+        },
+        currentStatus: {
+            type: String,
+            required: false,
+        },
+        trackingUrl: {
+            type: String,
+            required: false,
+        },
+        shipmentHistory: [{
+            status: String,
+            location: String,
+            timestamp: Date,
+            activity: String,
+        }],
+    },
 },
     { timestamps: true }
 

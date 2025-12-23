@@ -89,7 +89,14 @@ const { updateGetInTouch } = require('../controlers/getInTouchAndSocalLink/updat
 const { createCoupon } = require('../controlers/coupon/createCoupon');
 const { getCouponByCode } = require('../controlers/coupon/getCouponByCode');
 const { UsedCoupon } = require('../controlers/coupon/UsedCoupon');
- 
+
+// Shiprocket Integration
+const { createShipment } = require('../controlers/shiprocket/createShipment');
+const { getOrderTracking } = require('../controlers/shiprocket/getTracking');
+const { generateAWB } = require('../controlers/shiprocket/generateAWB');
+const { generateShippingLabel } = require('../controlers/shiprocket/generateLabel');
+const { handleShiprocketWebhook } = require('../controlers/shiprocket/webhookHandler');
+
 
  cookieParser();
 
@@ -236,6 +243,13 @@ router.post('/createCoupon', authGuard, createCoupon);
 router.get('/getCouponByCode',authGuard, getCouponByCode);
 // pass coupon code in body update user coupon used
 router.put('/UsedCoupon', authGuard, UsedCoupon);
+
+// Shiprocket routes
+router.post('/createShipment/:orderId', authGuard, createShipment);
+router.get('/getOrderTracking/:orderId', authGuard, getOrderTracking);
+router.post('/generateAWB/:orderId', authGuard, generateAWB);
+router.post('/generateShippingLabel/:orderId', authGuard, generateShippingLabel);
+router.post('/shiprocket/webhook', handleShiprocketWebhook); // Public endpoint for Shiprocket webhooks
 
 
 module.exports = router;
