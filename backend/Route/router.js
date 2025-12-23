@@ -102,7 +102,6 @@ const { deletePayment } = require('../controlers/payment/deletePayment');
 const { getProductByCatagory } = require('../controlers/product/getProductByCatagory');
 const { getNewLaunchProduct } = require('../controlers/product/getNewLanchProduct');
 const { getTopSellingProduct } = require('../controlers/product/getTopSellingProduct');
-const { getPriceRange } = require('../controlers/product/getPriceRange');
 const { updateUserSelf } = require('../controlers/users/updateUserSelf');
 const { createWish } = require('../controlers/wishlist/createWish');
 const { getAllWishList } = require('../controlers/wishlist/getAllWishList');
@@ -193,21 +192,6 @@ const {
 } = require("../controlers/payment/verifyRazorpayPayment");
 const { getRazorpayKey } = require("../controlers/payment/getRazorpayKey");
 
-// Shiprocket shipment controllers
-const { createShipment } = require("../controlers/shipment/createShipment");
-const { getShipment } = require("../controlers/shipment/getShipment");
-const {
-  getShipmentTracking,
-} = require("../controlers/shipment/getShipmentTracking");
-const {
-  shiprocketWebhook,
-} = require("../controlers/shipment/shiprocketWebhook");
-const {
-  generateShipmentLabel,
-} = require("../controlers/shipment/generateShipmentLabel");
-const {
-  getAvailableCouriers,
-} = require("../controlers/shipment/getAvailableCouriers");
 const { queryCategory } = require("../controlers/category/queryCategory");
 const {
   getAllCategoryNames,
@@ -405,14 +389,6 @@ router.delete("/deletePayment/:id", authGuard, deletePayment);
 router.get("/razorpay/key", getRazorpayKey);
 router.post("/razorpay/create-order", authGuard, createRazorpayOrder);
 router.post("/razorpay/verify-payment", authGuard, verifyRazorpayPayment);
-
-// Shiprocket shipment routes
-router.post("/shipments/create/:orderId", authGuard, createShipment);
-router.get("/shipments/:orderId", authGuard, getShipment);
-router.get("/shipments/:orderId/tracking", authGuard, getShipmentTracking);
-router.get("/shipments/:orderId/couriers", authGuard, getAvailableCouriers);
-router.post("/shipments/:orderId/label", authGuard, generateShipmentLabel);
-router.post("/shipments/webhook", shiprocketWebhook); // No auth for webhook
 
 // subscription route
 router.post("/createSubscription", authGuard, createSubscription);
