@@ -98,7 +98,7 @@ class ShiprocketService {
 
             return response.data;
         } catch (error) {
-            console.error('Shiprocket create order error:', error.response?.data || error.message);
+            console.error('Shiprocket create order error:', error.response?.data || error.message || error);
             throw new Error(error.response?.data?.message || 'Failed to create order in Shiprocket');
         }
     }

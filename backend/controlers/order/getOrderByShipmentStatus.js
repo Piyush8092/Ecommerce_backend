@@ -1,28 +1,32 @@
 const Order = require("../../models/orderModel");
 
-const getAllShiftedOrder = async (req, res) => {
+const getOrderByShipmentStatus = async (req, res) => {
   try {
+    const shipmentStatus = req.query.shipmentStatus.toUpperCase(); // convert shipment status to uppercase for consistency
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
-    const role = req.user.role.toUpperCase();
-    const userId = req.user._id;
+    const role = req.user.role.toUpperCase(); // convert role to uppercase for consistency
 
-    // roles that can see all shipped orders
+    // roles that can see all orders by shipment status
     const elevatedRoles = ["ADMIN", "MANAGER"];
 
-    // build filter condition
-    const filter = elevatedRoles.includes(role)
-      ? { status: "SHIPPED" }
-      : { status: "SHIPPED", userId };
+    if (!elevatedRoles.includes(role)) {
+      return res.status(401).json({
+        message: "Unauthorized",
+        status: 401,
+        success: false,
+        error: true,
+      });
+    }
 
     // count for pagination
-    const total = await Order.countDocuments(filter);
+    const total = await Order.countDocuments({ shipmentStatus });
     const totalPages = Math.ceil(total / limit);
 
     // fetch orders
-    const orders = await Order.find(filter)
+    const orders = await Order.find({ shipmentStatus })
       .skip(skip)
       .limit(limit)
       .populate("userId", "name email phone")
@@ -51,4 +55,4 @@ const getAllShiftedOrder = async (req, res) => {
   }
 };
 
-module.exports = { getAllShiftedOrder };
+module.exports = { getOrderByShipmentStatus };
