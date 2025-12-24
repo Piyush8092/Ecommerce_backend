@@ -69,6 +69,36 @@ let orderSchema = new mongoose.Schema(
       ],
       default: "NOT_CREATED",
     },
+    // Shiprocket Integration Fields
+    trackingNumber: {
+      type: String,
+      default: null,
+    },
+    shiprocketOrderId: {
+      type: String,
+      default: null,
+    },
+    shiprocketShipmentId: {
+      type: String,
+      default: null,
+    },
+    estimatedDelivery: {
+      type: Date,
+      default: null,
+    },
+    shippingDetails: {
+      courierName: String,
+      courierId: String,
+      awb: String,
+      currentStatus: String,
+      trackingUrl: String,
+      shipmentHistory: [{
+        status: String,
+        location: String,
+        timestamp: Date,
+        activity: String,
+      }],
+    },
   },
   { timestamps: true }
 );
