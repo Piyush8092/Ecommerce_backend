@@ -3,7 +3,7 @@ let Cart = require("../../models/cartModel");
 const createCart = async (req, res) => {
   try {
     let userId = req.user._id;
-    let { productId, quantity } = req.body;
+    let { productId, quantity, size, color } = req.body;
     if (!productId || !quantity) {
       return res.status(400).json({ message: "All fields are required" });
     }
@@ -11,9 +11,10 @@ const createCart = async (req, res) => {
     // Create new cart
     const newCart = new Cart({
       userId,
-
       productId,
       quantity,
+      size,
+      color,
     });
 
     const savedCart = await newCart.save();
