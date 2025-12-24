@@ -1,36 +1,50 @@
-let Order = require("../../models/orderModel");
+const Order = require("../../models/orderModel");
 
 const getAllPendingOrder = async (req, res) => {
   try {
-    let page = req.query.page || 1;
-    let limit = req.query.limit || 10;
-    let skip = (page - 1) * limit;
-    let total = await Order.countDocuments({ status: "PENDING" });
-    let totalPages = Math.ceil(total / limit);
-    if (req.user.role !== "ADMIN" && req.user.role !== "MANAGER") {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-    const order = await Order.find({ status: "PENDING" })
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const role = req.user.role.toUpperCase(); // convert role to uppercase for consistency
+    const userId = req.user._id;
+
+    // roles that can see all pending orders
+    const elevatedRoles = ["ADMIN", "MANAGER"];
+
+    // build filter condition
+    const filter = elevatedRoles.includes(role)
+      ? { status: "PENDING" }
+      : { status: "PENDING", userId };
+
+    // count for pagination
+    const total = await Order.countDocuments(filter);
+    const totalPages = Math.ceil(total / limit);
+
+    // fetch orders
+    const orders = await Order.find(filter)
       .skip(skip)
       .limit(limit)
-      .populate("userId", "name email")
-      .populate("deliveryAddressId", "name email")
-      .populate("productId", "name price");
+      .populate("userId", "name email phone")
+      .populate("deliveryAddressId")
+      .populate("productId", "name price image")
+      .sort({ createdAt: -1 });
 
-    res.json({
-      message: "Order fetched successfully",
+    res.status(200).json({
+      message: "Orders fetched successfully",
       status: 200,
-      data: order,
+      data: orders,
       success: true,
       error: false,
       total,
       totalPages,
     });
   } catch (e) {
-    res.json({
+    console.error(e);
+    res.status(500).json({
       message: "Something went wrong",
       status: 500,
-      data: e,
+      data: e.message,
       success: false,
       error: true,
     });

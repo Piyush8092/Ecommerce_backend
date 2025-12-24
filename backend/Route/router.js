@@ -199,6 +199,9 @@ const {
 const { sendOtp } = require("../controlers/auth/sendOtp");
 const { verifyOtp } = require("../controlers/auth/verifyOtp");
 const { completeProfile } = require("../controlers/auth/completeProfile");
+const { getAllorderAdminAndMannegerView } = require("../controlers/order/getAllorderAdminAndMannegerView");
+const { getOrderByPaymentStatus } = require("../controlers/order/getOrderByPaymentStatus");
+const { getOrderByShipmentStatus } = require("../controlers/order/getOrderByShipmentStatus");
 
 cookieParser();
 
@@ -342,6 +345,9 @@ router.get("/getAllPendingOrder", authGuard, getAllPendingOrder);
 router.get("/getAllAcceptedOrder", authGuard, getAllAcceptedOrder);
 router.get("/getAllShiftedOrder", authGuard, getAllShiftedOrder);
 // router.get('/getAllDeliveredOrder', authGuard, getAllDeliveredOrder);
+router.get("/getOrderByPaymentStatus", authGuard, getOrderByPaymentStatus); 
+router.get("/getOrderByShipmentStatus", authGuard, getOrderByShipmentStatus);
+router.get("/getAllorderAdminAndMannegerView", authGuard, getAllorderAdminAndMannegerView);
 router.get("/getAllCancelOrder", authGuard, getAllCancelOrder);
 router.put("/updateOrderStatusByManneger/:id", authGuard, updateOrderStatus);
 router.put(
