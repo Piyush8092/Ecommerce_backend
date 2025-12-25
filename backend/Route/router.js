@@ -81,57 +81,99 @@ const {
   getAllShiftedOrder,
 } = require("../controlers/order/getAllshiftedOrder");
 // const { getAllDeliveredOrder } = require('../controlers/order/getAllDeliveredOrder');
-const { getAllCancelOrder } = require('../controlers/order/getAllCancelOrder');
-const { updateOrderStatus } = require('../controlers/order/UpdateOrderStatusMannegerAndAdminAndLoginUser');
-const { updateOrderStatusEmploye } = require('../controlers/order/updateOrderStatusEmploye');
-const { createBlog } = require('../controlers/blogs/createBlog');
-const { getAllBlog } = require('../controlers/blogs/getAllBlog');
-const { getSpecificBlog } = require('../controlers/blogs/getSpecificBlog');
-const { updateBlog } = require('../controlers/blogs/updateBlog');
-const { deleteBlog } = require('../controlers/blogs/deleteBlogs');
-const { getQueryBlog } = require('../controlers/blogs/getQueryBlog');
-const { updateOrder } = require('../controlers/order/updateOrder');
-const { getSpecificCarsole } = require('../controlers/carsole/getSpecificCarsole');
-const { createPayment } = require('../controlers/payment/createPayment');
-const { getAllPaymentAdminView } = require('../controlers/payment/getAllPaymentAdminView');
-const { getAllFaildPayment } = require('../controlers/payment/getAllFaildPayment');
-const { getAllSuccessPayment } = require('../controlers/payment/getAllSuccessPayment');
-const { getSpecificPayment } = require('../controlers/payment/getSpecificPayment');
-const { updatePayment } = require('../controlers/payment/updatePayment');
-const { deletePayment } = require('../controlers/payment/deletePayment');
-const { getProductByCatagory } = require('../controlers/product/getProductByCatagory');
-const { getNewLaunchProduct } = require('../controlers/product/getNewLanchProduct');
-const { getTopSellingProduct } = require('../controlers/product/getTopSellingProduct');
-const { updateUserSelf } = require('../controlers/users/updateUserSelf');
-const { createWish } = require('../controlers/wishlist/createWish');
-const { getAllWishList } = require('../controlers/wishlist/getAllWishList');
-const { deleteFromWishList } = require('../controlers/wishlist/deleteFromWishList');
-const { getProductNameAndImageByCatagory } = require('../controlers/product/getProductNameAndImageByCatagory');
-const { createSubscription } = require('../controlers/subscription/createSubscription');
-const { getAllSubscription } = require('../controlers/subscription/getAllSubscription');
-  const { createPrivacyPolicy } = require('../controlers/privacy/privacyCreate');
-  const { getPrivacyPolicy } = require('../controlers/privacy/privacyGet');
-  const { getSpecificPrivacyPolicy } = require('../controlers/privacy/getSpecificPrivecy');
-  const { editPrivacyPolicy } = require('../controlers/privacy/privecyEdit');
-  const { deletePrivacyPolicy } = require('../controlers/privacy/privecyDelete');
-  const { createTermsAndConditions } = require('../controlers/term/termCreate');
-  const { getTermsAndConditions } = require('../controlers/term/termGet');
-  const { getSpecificTermsAndConditions } = require('../controlers/term/getSpecificTerm');
-  const { editTermsAndConditions } = require('../controlers/term/termEdit');
-  const { deleteTermsAndConditions } = require('../controlers/term/termDelete');
-const { createGetInTouch } = require('../controlers/getInTouchAndSocalLink/createGetInTouch');
-const { getGetInTouch } = require('../controlers/getInTouchAndSocalLink/getGetInTouch');
-const { updateGetInTouch } = require('../controlers/getInTouchAndSocalLink/updateGetInTouch');
-const { createCoupon } = require('../controlers/coupon/createCoupon');
-const { getCouponByCode } = require('../controlers/coupon/getCouponByCode');
-const { UsedCoupon } = require('../controlers/coupon/UsedCoupon');
+const { getAllCancelOrder } = require("../controlers/order/getAllCancelOrder");
+const {
+  updateOrderStatus,
+} = require("../controlers/order/UpdateOrderStatusMannegerAndAdminAndLoginUser");
+const {
+  updateOrderStatusEmploye,
+} = require("../controlers/order/updateOrderStatusEmploye");
+const { createBlog } = require("../controlers/blogs/createBlog");
+const { getAllBlog } = require("../controlers/blogs/getAllBlog");
+const { getSpecificBlog } = require("../controlers/blogs/getSpecificBlog");
+const { updateBlog } = require("../controlers/blogs/updateBlog");
+const { deleteBlog } = require("../controlers/blogs/deleteBlogs");
+const { getQueryBlog } = require("../controlers/blogs/getQueryBlog");
+const { updateOrder } = require("../controlers/order/updateOrder");
+const {
+  getSpecificCarsole,
+} = require("../controlers/carsole/getSpecificCarsole");
+const { createPayment } = require("../controlers/payment/createPayment");
+const {
+  getAllPaymentAdminView,
+} = require("../controlers/payment/getAllPaymentAdminView");
+const {
+  getAllFaildPayment,
+} = require("../controlers/payment/getAllFaildPayment");
+const {
+  getAllSuccessPayment,
+} = require("../controlers/payment/getAllSuccessPayment");
+const {
+  getSpecificPayment,
+} = require("../controlers/payment/getSpecificPayment");
+const { updatePayment } = require("../controlers/payment/updatePayment");
+const { deletePayment } = require("../controlers/payment/deletePayment");
+const {
+  getProductByCatagory,
+} = require("../controlers/product/getProductByCatagory");
+const {
+  getNewLaunchProduct,
+} = require("../controlers/product/getNewLanchProduct");
+const {
+  getTopSellingProduct,
+} = require("../controlers/product/getTopSellingProduct");
+const { updateUserSelf } = require("../controlers/users/updateUserSelf");
+const { createWish } = require("../controlers/wishlist/createWish");
+const { getAllWishList } = require("../controlers/wishlist/getAllWishList");
+const {
+  deleteFromWishList,
+} = require("../controlers/wishlist/deleteFromWishList");
+const {
+  getProductNameAndImageByCatagory,
+} = require("../controlers/product/getProductNameAndImageByCatagory");
+const {
+  createSubscription,
+} = require("../controlers/subscription/createSubscription");
+const {
+  getAllSubscription,
+} = require("../controlers/subscription/getAllSubscription");
+const { createPrivacyPolicy } = require("../controlers/privacy/privacyCreate");
+const { getPrivacyPolicy } = require("../controlers/privacy/privacyGet");
+const {
+  getSpecificPrivacyPolicy,
+} = require("../controlers/privacy/getSpecificPrivecy");
+const { editPrivacyPolicy } = require("../controlers/privacy/privecyEdit");
+const { deletePrivacyPolicy } = require("../controlers/privacy/privecyDelete");
+const { createTermsAndConditions } = require("../controlers/term/termCreate");
+const { getTermsAndConditions } = require("../controlers/term/termGet");
+const {
+  getSpecificTermsAndConditions,
+} = require("../controlers/term/getSpecificTerm");
+const { editTermsAndConditions } = require("../controlers/term/termEdit");
+const { deleteTermsAndConditions } = require("../controlers/term/termDelete");
+const {
+  createGetInTouch,
+} = require("../controlers/getInTouchAndSocalLink/createGetInTouch");
+const {
+  getGetInTouch,
+} = require("../controlers/getInTouchAndSocalLink/getGetInTouch");
+const {
+  updateGetInTouch,
+} = require("../controlers/getInTouchAndSocalLink/updateGetInTouch");
+const { createCoupon } = require("../controlers/coupon/createCoupon");
+const { getCouponByCode } = require("../controlers/coupon/getCouponByCode");
+const { UsedCoupon } = require("../controlers/coupon/UsedCoupon");
 
 // Shiprocket Integration
-const { createShipment } = require('../controlers/shiprocket/createShipment');
-const { getOrderTracking } = require('../controlers/shiprocket/getTracking');
-const { generateAWB } = require('../controlers/shiprocket/generateAWB');
-const { generateShippingLabel } = require('../controlers/shiprocket/generateLabel');
-const { handleShiprocketWebhook } = require('../controlers/shiprocket/webhookHandler');
+const { createShipment } = require("../controlers/shiprocket/createShipment");
+const { getOrderTracking } = require("../controlers/shiprocket/getTracking");
+const { generateAWB } = require("../controlers/shiprocket/generateAWB");
+const {
+  generateShippingLabel,
+} = require("../controlers/shiprocket/generateLabel");
+const {
+  handleShiprocketWebhook,
+} = require("../controlers/shiprocket/webhookHandler");
 
 const {
   createPolicyPage,
@@ -199,9 +241,22 @@ const {
 const { sendOtp } = require("../controlers/auth/sendOtp");
 const { verifyOtp } = require("../controlers/auth/verifyOtp");
 const { completeProfile } = require("../controlers/auth/completeProfile");
-const { getAllorderAdminAndMannegerView } = require("../controlers/order/getAllorderAdminAndMannegerView");
-const { getOrderByPaymentStatus } = require("../controlers/order/getOrderByPaymentStatus");
-const { getOrderByShipmentStatus } = require("../controlers/order/getOrderByShipmentStatus");
+const {
+  getAllorderAdminAndMannegerView,
+} = require("../controlers/order/getAllorderAdminAndMannegerView");
+const {
+  getOrderByPaymentStatus,
+} = require("../controlers/order/getOrderByPaymentStatus");
+const {
+  getOrderByShipmentStatus,
+} = require("../controlers/order/getOrderByShipmentStatus");
+const { queryOrder } = require("../controlers/order/queryOrder");
+const {
+  getAllProductNames,
+} = require("../controlers/product/getAllProductNames");
+const {
+  getOrderByProductId,
+} = require("../controlers/order/getOrderByProductId");
 
 cookieParser();
 
@@ -252,6 +307,7 @@ router.get(
   permit("ADMIN"),
   getTotalProductCount
 );
+router.get("/getAllProductNames", authGuard, getAllProductNames);
 // product image upload URL
 router.post("/getProductImageUploadUrl", authGuard, getProductImageUploadUrl);
 
@@ -345,9 +401,20 @@ router.get("/getAllPendingOrder", authGuard, getAllPendingOrder);
 router.get("/getAllAcceptedOrder", authGuard, getAllAcceptedOrder);
 router.get("/getAllShiftedOrder", authGuard, getAllShiftedOrder);
 // router.get('/getAllDeliveredOrder', authGuard, getAllDeliveredOrder);
-router.get("/getOrderByPaymentStatus", authGuard, getOrderByPaymentStatus); 
+router.get("/getOrderByPaymentStatus", authGuard, getOrderByPaymentStatus);
 router.get("/getOrderByShipmentStatus", authGuard, getOrderByShipmentStatus);
-router.get("/getAllorderAdminAndMannegerView", authGuard, getAllorderAdminAndMannegerView);
+router.get(
+  "/getOrderByProductId/:productId",
+  authGuard,
+  permit("ADMIN", "MANAGER"),
+  getOrderByProductId
+); // for admin dashboard and manager dashboard
+router.get("/queryOrder", queryOrder); // for admin dashboard
+router.get(
+  "/getAllorderAdminAndMannegerView",
+  authGuard,
+  getAllorderAdminAndMannegerView
+);
 router.get("/getAllCancelOrder", authGuard, getAllCancelOrder);
 router.put("/updateOrderStatusByManneger/:id", authGuard, updateOrderStatus);
 router.put(
@@ -461,10 +528,14 @@ router.get("/getCouponByCode", authGuard, getCouponByCode);
 router.put("/UsedCoupon", authGuard, UsedCoupon);
 
 // Shiprocket routes
-router.post('/createShipment/:orderId', authGuard, createShipment);
-router.get('/getOrderTracking/:orderId', authGuard, getOrderTracking);
-router.post('/generateAWB/:orderId', authGuard, generateAWB);
-router.post('/generateShippingLabel/:orderId', authGuard, generateShippingLabel);
-router.post('/shiprocket/webhook', handleShiprocketWebhook); // Public endpoint for Shiprocket webhooks
+router.post("/createShipment/:orderId", authGuard, createShipment);
+router.get("/getOrderTracking/:orderId", authGuard, getOrderTracking);
+router.post("/generateAWB/:orderId", authGuard, generateAWB);
+router.post(
+  "/generateShippingLabel/:orderId",
+  authGuard,
+  generateShippingLabel
+);
+router.post("/shiprocket/webhook", handleShiprocketWebhook); // Public endpoint for Shiprocket webhooks
 
 module.exports = router;
