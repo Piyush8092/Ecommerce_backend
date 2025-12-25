@@ -15,9 +15,9 @@ const getAllorderAdminAndMannegerView = async (req, res) => {
     const order = await Order.find()
       .skip(skip)
       .limit(limit)
-      .populate("userId", "name email")
-      .populate("deliveryAddressId", "name email")
-      .populate("productId", "name price");
+      .populate("userId", "name email phone")
+      .populate("deliveryAddressId")
+      .populate("productId", "name price image");
     res.json({
       message: "Order fetched successfully",
       status: 200,
