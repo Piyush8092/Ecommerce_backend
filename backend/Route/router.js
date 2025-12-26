@@ -1,6 +1,7 @@
 let router = require("express").Router();
 let cookieParser = require("cookie-parser");
 let authGuard = require("../middleware/auth");
+const optionalAuth = require("../middleware/optionalAuth");
 const { SignupRout } = require("../controlers/auth/signup");
 const { LogoutRout } = require("../controlers/auth/logout");
 const { createCarsole } = require("../controlers/carsole/createCarsole");
@@ -20,6 +21,16 @@ const { createProductFAQ } = require("../controlers/product/createProductFAQ");
 const { getSpacificFAQ } = require("../controlers/product/getSpacificFAQ");
 const { updateProductFAQ } = require("../controlers/product/updateProductFAQ");
 const { deleteProductFAQ } = require("../controlers/product/deleteFAQ");
+const createReview = require("../controlers/review/createReview");
+const getProductReviews = require("../controlers/review/getProductReviews");
+const getMyProductReview = require("../controlers/review/getMyProductReview");
+const getFeaturedReviews = require("../controlers/review/getFeaturedReviews");
+const updateReview = require("../controlers/review/updateReview");
+const deleteReview = require("../controlers/review/deleteReview");
+const queryReview = require("../controlers/review/queryReview");
+const toggleFeaturedReview = require("../controlers/review/toggleFeaturedReview");
+const getReviewImageUploadUrl = require("../controlers/review/getReviewImageUploadUrl");
+const getUserReviews = require("../controlers/review/getUserReviews");
 const { adminAllUserView } = require("../controlers/users/adminAllUserView");
 const {
   AdminSpecificUserView,
@@ -316,6 +327,18 @@ router.post("/createProductFAQ/:id", authGuard, createProductFAQ);
 router.get("/getSpacificFAQ/:id", getSpacificFAQ);
 router.put("/updateProductFAQ/:id/:faqId", authGuard, updateProductFAQ);
 router.delete("/deleteProductFAQ/:id/:faqId", authGuard, deleteProductFAQ);
+
+// product review
+router.post("/createReview", authGuard, createReview);
+router.get("/getProductReviews/:id", optionalAuth, getProductReviews);
+router.get("/getMyProductReview", authGuard, getMyProductReview);
+router.get("/getFeaturedReviews", getFeaturedReviews);
+router.put("/updateReview/:id", authGuard, updateReview);
+router.delete("/deleteReview/:id", authGuard, deleteReview);
+router.get("/queryReview", authGuard, permit("ADMIN"), queryReview);
+router.patch("/toggleFeaturedReview/:id", authGuard, permit("ADMIN"), toggleFeaturedReview);
+router.post("/getReviewImageUploadUrl", authGuard, getReviewImageUploadUrl);
+router.get("/getUserReviews", authGuard, getUserReviews);
 
 // category
 router.post("/createCategory", authGuard, permit("ADMIN"), createCategory);
