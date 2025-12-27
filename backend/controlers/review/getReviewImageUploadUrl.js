@@ -1,5 +1,19 @@
 const { generateUploadUrl } = require("../../services/s3.service");
 
+const ALLOWED_MIME_TYPES = [
+  // Images
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/heic",
+
+  // Videos
+  "video/mp4",
+  "video/webm",
+  "video/quicktime",
+  "video/x-matroska",
+];
+
 /**
  * Generate pre-signed URL for review image upload
  * Requires authentication
@@ -14,14 +28,13 @@ const getReviewImageUploadUrl = async (req, res) => {
       return res.status(400).json({ message: "User ID is required" });
     }
 
-    if (!fileType || !fileType.startsWith("image/")) {
+    if (!fileType || !ALLOWED_MIME_TYPES.includes(fileType)) {
       return res
         .status(400)
-        .json({ message: "Invalid file type. Only images are allowed." });
+        .json({
+          message: "Invalid file type. Only images and videos are allowed.",
+        });
     }
-
-    // Validate file size limit (5MB)
-    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
     const { uploadUrl, key } = await generateUploadUrl({
       folder: "reviews",
@@ -33,7 +46,6 @@ const getReviewImageUploadUrl = async (req, res) => {
       success: true,
       uploadUrl,
       key,
-      maxFileSize: MAX_FILE_SIZE,
     });
   } catch (error) {
     console.error("Error generating review image upload URL:", error);

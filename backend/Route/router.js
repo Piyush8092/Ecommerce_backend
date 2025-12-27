@@ -268,6 +268,7 @@ const {
 const {
   getOrderByProductId,
 } = require("../controlers/order/getOrderByProductId");
+const { canUserReviewProduct } = require("../controlers/review/canUserReviewProduct");
 
 cookieParser();
 
@@ -339,6 +340,7 @@ router.get("/queryReview", authGuard, permit("ADMIN"), queryReview);
 router.patch("/toggleFeaturedReview/:id", authGuard, permit("ADMIN"), toggleFeaturedReview);
 router.post("/getReviewImageUploadUrl", authGuard, getReviewImageUploadUrl);
 router.get("/getUserReviews", authGuard, getUserReviews);
+router.get("/canUserReviewProduct/:productId", authGuard, canUserReviewProduct);
 
 // category
 router.post("/createCategory", authGuard, permit("ADMIN"), createCategory);
