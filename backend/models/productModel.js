@@ -39,28 +39,17 @@ let productSchema = new mongoose.Schema(
       required: true,
       default: 1,
     },
-
-    comments: [
-      {
-        comment: {
-          type: String,
-          required: false,
-        },
-        rating: {
-          type: Number,
-          required: false,
-        },
-        // reviews:{
-        //     type: String,
-        //     required: false,
-        // },
-        userId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
-          required: true,
-        },
-      },
-    ],
+    avgRating: {
+      type: Number,
+      min: 1,
+      max: 5,
+      default: null,
+    },
+    totalReviews: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
     Availability: {
       type: String,
       enum: ["AVAILABLE", "OUT_OF_STOCK"],

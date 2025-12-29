@@ -104,4 +104,9 @@ ProductReviewSchema.index({ isFeatured: 1, status: 1, updatedAt: -1 });
 // User profile / edit
 ProductReviewSchema.index({ userId: 1, createdAt: -1 });
 
+ProductReviewSchema.index(
+  { productId: 1, rating: 1 },
+  { partialFilterExpression: { status: "ACTIVE", rating: { $gte: 1 } } }
+);
+
 module.exports = mongoose.model("ProductReview", ProductReviewSchema);

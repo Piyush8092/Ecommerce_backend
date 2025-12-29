@@ -3,10 +3,7 @@ let Product = require("../../models/productModel");
 const getSpecificProduct = async (req, res) => {
   try {
     let id = req.params.id;
-    const product = await Product.findById(id).populate(
-      "comments.userId",
-      "name email"
-    );
+    const product = await Product.findById(id);
     res.json({
       message: "Product fetched successfully",
       status: 200,
