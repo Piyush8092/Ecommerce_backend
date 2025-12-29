@@ -15,7 +15,6 @@ const {
 } = require("../controlers/product/getSpecificProduct");
 const { updateProduct } = require("../controlers/product/updateProduct");
 const { deleteProduct } = require("../controlers/product/deleteProduct");
-const { createComments } = require("../controlers/product/craeteComments");
 const { queryProduct } = require("../controlers/product/queryProduct");
 const { createProductFAQ } = require("../controlers/product/createProductFAQ");
 const { getSpacificFAQ } = require("../controlers/product/getSpacificFAQ");
@@ -268,7 +267,10 @@ const {
 const {
   getOrderByProductId,
 } = require("../controlers/order/getOrderByProductId");
-const { canUserReviewProduct } = require("../controlers/review/canUserReviewProduct");
+const {
+  canUserReviewProduct,
+} = require("../controlers/review/canUserReviewProduct");
+const adminDeleteReview = require("../controlers/review/adminDeleteReview");
 
 cookieParser();
 
@@ -300,7 +302,6 @@ router.get("/getAllProduct", getAllProduct);
 router.get("/getSpecificProduct/:id", getSpecificProduct);
 router.put("/updateProduct/:id", authGuard, updateProduct);
 router.delete("/deleteProduct/:id", authGuard, deleteProduct);
-router.post("/createComments/:id", authGuard, createComments);
 router.get("/queryProduct", productQueryBuilder, queryProduct);
 router.get("/getProductSearchFilters", getProductSearchFilters);
 router.get(
@@ -336,8 +337,19 @@ router.get("/getMyProductReview", authGuard, getMyProductReview);
 router.get("/getFeaturedReviews", getFeaturedReviews);
 router.put("/updateReview/:id", authGuard, updateReview);
 router.delete("/deleteReview/:id", authGuard, deleteReview);
+router.delete(
+  "/adminDeleteReview/:id",
+  authGuard,
+  permit("ADMIN"),
+  adminDeleteReview
+);
 router.get("/queryReview", authGuard, permit("ADMIN"), queryReview);
-router.patch("/toggleFeaturedReview/:id", authGuard, permit("ADMIN"), toggleFeaturedReview);
+router.patch(
+  "/toggleFeaturedReview/:id",
+  authGuard,
+  permit("ADMIN"),
+  toggleFeaturedReview
+);
 router.post("/getReviewImageUploadUrl", authGuard, getReviewImageUploadUrl);
 router.get("/getUserReviews", authGuard, getUserReviews);
 router.get("/canUserReviewProduct/:productId", authGuard, canUserReviewProduct);

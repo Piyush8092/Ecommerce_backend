@@ -1,4 +1,3 @@
-let Carsole = require("../../models/CarsoleModel");
 let Product = require("../../models/productModel");
 
 const getAllProduct = async (req, res) => {
@@ -9,33 +8,15 @@ const getAllProduct = async (req, res) => {
 
     let total = await Product.countDocuments();
     let totalPages = Math.ceil(total / limit);
-    let products = await Product.find().skip(skip).limit(limit).populate("categoryId", "name");
-
-    // Calculate average rating for each product
-    let productsWithRating = products.map((product) => {
-      let productObj = product.toObject();
-
-      // Calculate average rating from comments
-      if (productObj.comments && productObj.comments.length > 0) {
-        let totalRating = productObj.comments.reduce((sum, comment) => {
-          return sum + (comment.rating || 0);
-        }, 0);
-        productObj.averageRating = (
-          totalRating / productObj.comments.length
-        ).toFixed(2);
-        productObj.totalReviews = productObj.comments.length;
-      } else {
-        productObj.averageRating = 0;
-        productObj.totalReviews = 0;
-      }
-
-      return productObj;
-    });
+    let products = await Product.find()
+      .skip(skip)
+      .limit(limit)
+      .populate("categoryId", "name");
 
     res.json({
       message: "Product fetched successfully",
       status: 200,
-      data: productsWithRating,
+      data: products,
       success: true,
       error: false,
       total,

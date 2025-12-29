@@ -1,5 +1,6 @@
 const ProductReview = require("../../models/productReview");
 const Order = require("../../models/orderModel");
+const updateProductRating = require("../../services/updateProductRating.service");
 
 const createReview = async (req, res) => {
   try {
@@ -29,6 +30,8 @@ const createReview = async (req, res) => {
       message,
       media,
     });
+
+    await updateProductRating(productId);
 
     res.status(201).json({
       success: true,
