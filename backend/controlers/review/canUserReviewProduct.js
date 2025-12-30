@@ -1,4 +1,5 @@
 const Order = require("../../models/orderModel");
+const ProductReview = require("../../models/productReview");
 
 const canUserReviewProduct = async (req, res) => {
   try {
@@ -24,6 +25,19 @@ const canUserReviewProduct = async (req, res) => {
         success: true,
         canReview: false,
         reason: "NOT_DELIVERED_OR_NOT_PURCHASED",
+      });
+    }
+
+    const existingReview = await ProductReview.findOne({
+      productId: productId,
+      userId: userId,
+    });
+
+    if (existingReview) {
+      return res.status(200).json({
+        success: true,
+        canReview: false,
+        reason: "error while checking review eligibility",
       });
     }
 

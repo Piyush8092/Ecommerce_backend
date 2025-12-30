@@ -52,7 +52,7 @@ const ProductReviewSchema = new Schema(
     // Visibility & moderation
     status: {
       type: String,
-      enum: ["ACTIVE", "DELETED"],
+      enum: ["ACTIVE", "BLOCKED"],
       default: "ACTIVE",
       index: true,
     },

@@ -1,12 +1,12 @@
 const ProductReview = require("../../models/productReview");
 
-const adminDeleteReview = async (req, res) => {
+const adminUpdateReviewStatus = async (req, res) => {
   try {
     const reviewId = req.params.id;
+    const { status } = req.body;
 
     const review = await ProductReview.findOne({
       _id: reviewId,
-      status: "ACTIVE",
     });
 
     if (!review) {
@@ -16,13 +16,13 @@ const adminDeleteReview = async (req, res) => {
       });
     }
 
-    // Soft delete the review by setting status to DELETED
-    review.status = "DELETED";
+    // Update the review status to the provided value
+    review.status = status.toUpperCase();
     await review.save();
 
     res.status(200).json({
       success: true,
-      message: "Review deleted successfully",
+      message: "Review status updated successfully",
     });
   } catch (err) {
     res.status(500).json({
@@ -32,4 +32,4 @@ const adminDeleteReview = async (req, res) => {
   }
 };
 
-module.exports = adminDeleteReview;
+module.exports = adminUpdateReviewStatus;
