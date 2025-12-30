@@ -270,7 +270,8 @@ const {
 const {
   canUserReviewProduct,
 } = require("../controlers/review/canUserReviewProduct");
-const adminDeleteReview = require("../controlers/review/adminDeleteReview");
+const adminUpdateReviewStatus = require("../controlers/review/adminUpdateReviewStatus");
+const getAllReviews = require("../controlers/review/getAllReviews");
 
 cookieParser();
 
@@ -337,11 +338,11 @@ router.get("/getMyProductReview", authGuard, getMyProductReview);
 router.get("/getFeaturedReviews", getFeaturedReviews);
 router.put("/updateReview/:id", authGuard, updateReview);
 router.delete("/deleteReview/:id", authGuard, deleteReview);
-router.delete(
-  "/adminDeleteReview/:id",
+router.patch(
+  "/adminUpdateReviewStatus/:id",
   authGuard,
   permit("ADMIN"),
-  adminDeleteReview
+  adminUpdateReviewStatus
 );
 router.get("/queryReview", authGuard, permit("ADMIN"), queryReview);
 router.patch(
@@ -353,6 +354,7 @@ router.patch(
 router.post("/getReviewImageUploadUrl", authGuard, getReviewImageUploadUrl);
 router.get("/getUserReviews", authGuard, getUserReviews);
 router.get("/canUserReviewProduct/:productId", authGuard, canUserReviewProduct);
+router.get("/getAllReviews", authGuard, permit("ADMIN"), getAllReviews);
 
 // category
 router.post("/createCategory", authGuard, permit("ADMIN"), createCategory);
