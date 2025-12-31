@@ -144,20 +144,6 @@ const {
 const {
   getAllSubscription,
 } = require("../controlers/subscription/getAllSubscription");
-const { createPrivacyPolicy } = require("../controlers/privacy/privacyCreate");
-const { getPrivacyPolicy } = require("../controlers/privacy/privacyGet");
-const {
-  getSpecificPrivacyPolicy,
-} = require("../controlers/privacy/getSpecificPrivecy");
-const { editPrivacyPolicy } = require("../controlers/privacy/privecyEdit");
-const { deletePrivacyPolicy } = require("../controlers/privacy/privecyDelete");
-const { createTermsAndConditions } = require("../controlers/term/termCreate");
-const { getTermsAndConditions } = require("../controlers/term/termGet");
-const {
-  getSpecificTermsAndConditions,
-} = require("../controlers/term/getSpecificTerm");
-const { editTermsAndConditions } = require("../controlers/term/termEdit");
-const { deleteTermsAndConditions } = require("../controlers/term/termDelete");
 const {
   createGetInTouch,
 } = require("../controlers/getInTouchAndSocalLink/createGetInTouch");
@@ -506,24 +492,6 @@ router.delete(
   authGuard,
   permit("ADMIN"),
   deleteSubscription
-);
-
-// privacy policy route
-router.post("/createPrivacyPolicy", authGuard, createPrivacyPolicy);
-router.get("/getPrivacyPolicy", getPrivacyPolicy);
-router.get("/getSpecificPrivacyPolicy/:id", getSpecificPrivacyPolicy);
-router.put("/editPrivacyPolicy/:id", authGuard, editPrivacyPolicy);
-router.delete("/deletePrivacyPolicy/:id", authGuard, deletePrivacyPolicy);
-
-// terms and conditions route
-router.post("/createTermsAndConditions", authGuard, createTermsAndConditions);
-router.get("/getTermsAndConditions", getTermsAndConditions);
-router.get("/getSpecificTermsAndConditions/:id", getSpecificTermsAndConditions);
-router.put("/editTermsAndConditions/:id", authGuard, editTermsAndConditions);
-router.delete(
-  "/deleteTermsAndConditions/:id",
-  authGuard,
-  deleteTermsAndConditions
 );
 
 // policy page route
