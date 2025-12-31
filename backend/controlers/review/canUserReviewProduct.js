@@ -33,7 +33,7 @@ const canUserReviewProduct = async (req, res) => {
       userId: userId,
     });
 
-    if (existingReview) {
+    if (!!existingReview) {
       return res.status(200).json({
         success: true,
         canReview: false,

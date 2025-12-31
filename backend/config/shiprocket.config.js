@@ -44,7 +44,7 @@ const shiprocketConfig = {
     length: 10, // cm
     breadth: 10, // cm
     height: 10, // cm
-    weight: 0.5, // kg
+    weight: 0.1, // kg
   },
   
   // Webhook configuration

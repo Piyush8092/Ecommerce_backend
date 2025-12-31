@@ -124,8 +124,8 @@ const {
 const { updatePayment } = require("../controlers/payment/updatePayment");
 const { deletePayment } = require("../controlers/payment/deletePayment");
 const {
-  getProductByCatagory,
-} = require("../controlers/product/getProductByCatagory");
+  getProductByCategory,
+} = require("../controlers/product/getProductByCategory");
 const {
   getNewLaunchProduct,
 } = require("../controlers/product/getNewLanchProduct");
@@ -138,9 +138,6 @@ const { getAllWishList } = require("../controlers/wishlist/getAllWishList");
 const {
   deleteFromWishList,
 } = require("../controlers/wishlist/deleteFromWishList");
-const {
-  getProductNameAndImageByCatagory,
-} = require("../controlers/product/getProductNameAndImageByCatagory");
 const {
   createSubscription,
 } = require("../controlers/subscription/createSubscription");
@@ -272,6 +269,9 @@ const {
 } = require("../controlers/review/canUserReviewProduct");
 const adminUpdateReviewStatus = require("../controlers/review/adminUpdateReviewStatus");
 const getAllReviews = require("../controlers/review/getAllReviews");
+const {
+  checkPincodeDelivery,
+} = require("../controlers/shiprocket/checkPincodeDelivery");
 
 cookieParser();
 
@@ -305,11 +305,7 @@ router.put("/updateProduct/:id", authGuard, updateProduct);
 router.delete("/deleteProduct/:id", authGuard, deleteProduct);
 router.get("/queryProduct", productQueryBuilder, queryProduct);
 router.get("/getProductSearchFilters", getProductSearchFilters);
-router.get(
-  "/getProductNameAndImageByCatagory",
-  getProductNameAndImageByCatagory
-);
-router.get("/getProductByCatagory/:categoryId", getProductByCatagory);
+router.get("/getProductByCategory/:categoryId", getProductByCategory);
 // new lonch product by dataa
 router.get("/new-launch-product", getNewLaunchProduct);
 // top seling product // by admin => // admin will manage top selling product {topSelling: true}
@@ -576,5 +572,6 @@ router.post(
   generateShippingLabel
 );
 router.post("/shiprocket/webhook", handleShiprocketWebhook); // Public endpoint for Shiprocket webhooks
+router.post("/shiprocket/checkPincodeDelivery", checkPincodeDelivery); // Public endpoint for Shiprocket webhooks
 
 module.exports = router;

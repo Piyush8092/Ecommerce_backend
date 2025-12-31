@@ -1,6 +1,6 @@
 let Product = require("../../models/productModel");
 
-const getProductByCatagory = async (req, res) => {
+const getProductByCategory = async (req, res) => {
   try {
     let categoryId = req.params.categoryId;
     let limit = req.query.limit || 20;
@@ -24,4 +24,4 @@ const getProductByCatagory = async (req, res) => {
   }
 };
 
-module.exports = { getProductByCatagory };
+module.exports = { getProductByCategory };
