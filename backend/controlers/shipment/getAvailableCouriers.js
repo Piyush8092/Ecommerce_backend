@@ -33,7 +33,7 @@ const getAvailableCouriers = async (req, res) => {
 
     // Get available couriers
     const couriersResult = await shiprocketService.getAvailableCouriers({
-      pickupPostcode: pickupPostcode || "110001", // Default pickup postcode
+      pickupPostcode: pickupPostcode || "122001", // Default pickup postcode
       deliveryPostcode: order.deliveryAddressId.zip,
       weight: 0.5, // Default weight in kg
       cod: order.paymentMethod === "COD" ? 1 : 0,

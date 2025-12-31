@@ -124,8 +124,8 @@ const {
 const { updatePayment } = require("../controlers/payment/updatePayment");
 const { deletePayment } = require("../controlers/payment/deletePayment");
 const {
-  getProductByCatagory,
-} = require("../controlers/product/getProductByCatagory");
+  getProductByCategory,
+} = require("../controlers/product/getProductByCategory");
 const {
   getNewLaunchProduct,
 } = require("../controlers/product/getNewLanchProduct");
@@ -139,28 +139,11 @@ const {
   deleteFromWishList,
 } = require("../controlers/wishlist/deleteFromWishList");
 const {
-  getProductNameAndImageByCatagory,
-} = require("../controlers/product/getProductNameAndImageByCatagory");
-const {
   createSubscription,
 } = require("../controlers/subscription/createSubscription");
 const {
   getAllSubscription,
 } = require("../controlers/subscription/getAllSubscription");
-const { createPrivacyPolicy } = require("../controlers/privacy/privacyCreate");
-const { getPrivacyPolicy } = require("../controlers/privacy/privacyGet");
-const {
-  getSpecificPrivacyPolicy,
-} = require("../controlers/privacy/getSpecificPrivecy");
-const { editPrivacyPolicy } = require("../controlers/privacy/privecyEdit");
-const { deletePrivacyPolicy } = require("../controlers/privacy/privecyDelete");
-const { createTermsAndConditions } = require("../controlers/term/termCreate");
-const { getTermsAndConditions } = require("../controlers/term/termGet");
-const {
-  getSpecificTermsAndConditions,
-} = require("../controlers/term/getSpecificTerm");
-const { editTermsAndConditions } = require("../controlers/term/termEdit");
-const { deleteTermsAndConditions } = require("../controlers/term/termDelete");
 const {
   createGetInTouch,
 } = require("../controlers/getInTouchAndSocalLink/createGetInTouch");
@@ -272,6 +255,9 @@ const {
 } = require("../controlers/review/canUserReviewProduct");
 const adminUpdateReviewStatus = require("../controlers/review/adminUpdateReviewStatus");
 const getAllReviews = require("../controlers/review/getAllReviews");
+const {
+  checkPincodeDelivery,
+} = require("../controlers/shiprocket/checkPincodeDelivery");
 
 cookieParser();
 
@@ -305,11 +291,7 @@ router.put("/updateProduct/:id", authGuard, updateProduct);
 router.delete("/deleteProduct/:id", authGuard, deleteProduct);
 router.get("/queryProduct", productQueryBuilder, queryProduct);
 router.get("/getProductSearchFilters", getProductSearchFilters);
-router.get(
-  "/getProductNameAndImageByCatagory",
-  getProductNameAndImageByCatagory
-);
-router.get("/getProductByCatagory/:categoryId", getProductByCatagory);
+router.get("/getProductByCategory/:categoryId", getProductByCategory);
 // new lonch product by dataa
 router.get("/new-launch-product", getNewLaunchProduct);
 // top seling product // by admin => // admin will manage top selling product {topSelling: true}
@@ -512,24 +494,6 @@ router.delete(
   deleteSubscription
 );
 
-// privacy policy route
-router.post("/createPrivacyPolicy", authGuard, createPrivacyPolicy);
-router.get("/getPrivacyPolicy", getPrivacyPolicy);
-router.get("/getSpecificPrivacyPolicy/:id", getSpecificPrivacyPolicy);
-router.put("/editPrivacyPolicy/:id", authGuard, editPrivacyPolicy);
-router.delete("/deletePrivacyPolicy/:id", authGuard, deletePrivacyPolicy);
-
-// terms and conditions route
-router.post("/createTermsAndConditions", authGuard, createTermsAndConditions);
-router.get("/getTermsAndConditions", getTermsAndConditions);
-router.get("/getSpecificTermsAndConditions/:id", getSpecificTermsAndConditions);
-router.put("/editTermsAndConditions/:id", authGuard, editTermsAndConditions);
-router.delete(
-  "/deleteTermsAndConditions/:id",
-  authGuard,
-  deleteTermsAndConditions
-);
-
 // policy page route
 router.post("/createPolicyPage", authGuard, permit("ADMIN"), createPolicyPage);
 router.get("/getAllPolicyPages", getAllPolicyPages);
@@ -576,5 +540,6 @@ router.post(
   generateShippingLabel
 );
 router.post("/shiprocket/webhook", handleShiprocketWebhook); // Public endpoint for Shiprocket webhooks
+router.post("/shiprocket/checkPincodeDelivery", checkPincodeDelivery); // Public endpoint for Shiprocket webhooks
 
 module.exports = router;
