@@ -3,24 +3,25 @@ const User = require("../../models/userModel");
 
 const SignupRout = async (req, res) => {
   try {
-    const { name, email } = req.body;
+    const { name, email, image, phone, role, isVerified } = req.body;
+
+    console.log("Signup data:", req.body);
 
     // Validate required fields
-    if (!name || !email) {
-      return res
-        .status(400)
-        .json({ message: "Name, email, and password are required." });
+    if (!name || !email || !image || !phone || !role) {
+      return res.status(400).json({ message: "All fields are required." });
     }
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
+      if (existingUser.status === "BLOCKED")
+        return res.status(403).json({ message: "User is blocked" });
+      
       // Generate JWT
-      const token = jwt.sign(
-        { id: existingUser._id },
-        process.env.JWT_SECRET,
-        { expiresIn: "7d" }
-      );
+      const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, {
+        expiresIn: "7d",
+      });
 
       // Set cookie
       res.cookie("jwt", token, {
@@ -36,6 +37,7 @@ const SignupRout = async (req, res) => {
         name: existingUser.name,
         email: existingUser.email,
         role: existingUser.role,
+        image: existingUser.image,
         token,
       };
       return res.status(200).json({
@@ -49,7 +51,10 @@ const SignupRout = async (req, res) => {
     const newUser = new User({
       name,
       email,
-      role: "GENERAL",
+      image,
+      phone,
+      role,
+      isVerified,
     });
 
     newUser.loginDeviceName.push(req.headers["user-agent"]);
@@ -57,11 +62,9 @@ const SignupRout = async (req, res) => {
     const savedUser = await newUser.save();
 
     // Generate JWT
-    const token = jwt.sign(
-      { id: savedUser._id },
-      process.env.JWT_SECRET,
-      { expiresIn: "1d" }
-    );
+    const token = jwt.sign({ id: savedUser._id }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
 
     // Set cookie
     res.cookie("jwt", token, {
@@ -77,6 +80,7 @@ const SignupRout = async (req, res) => {
       name: savedUser.name,
       email: savedUser.email,
       role: savedUser.role,
+      image: savedUser.image,
       token,
     };
 
