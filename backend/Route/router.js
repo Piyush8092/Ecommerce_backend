@@ -98,6 +98,12 @@ const {
 const {
   updateOrderStatusEmploye,
 } = require("../controlers/order/updateOrderStatusEmploye");
+const {
+  getTotalPendingOrderCount,
+} = require("../controlers/order/getTotalPendingOrderCount");
+const {
+  getTotalAcceptedOrderCount,
+} = require("../controlers/order/getTotalAcceptedOrderCount");
 const { createBlog } = require("../controlers/blogs/createBlog");
 const { getAllBlog } = require("../controlers/blogs/getAllBlog");
 const { getSpecificBlog } = require("../controlers/blogs/getSpecificBlog");
@@ -258,6 +264,13 @@ const getAllReviews = require("../controlers/review/getAllReviews");
 const {
   checkPincodeDelivery,
 } = require("../controlers/shiprocket/checkPincodeDelivery");
+const {
+  getSpecificUserOrder,
+} = require("../controlers/order/getSpecificUserOrder");
+const { getNewUsersCount } = require("../controlers/users/getNewUsersCount");
+const {
+  adminUserStatusUpdate,
+} = require("../controlers/users/adminUserStatusUpdate");
 
 cookieParser();
 
@@ -373,9 +386,16 @@ router.post(
 
 // user information
 router.get("/getTotalUserCount", authGuard, permit("ADMIN"), getTotalUserCount); // for admin dashboard
+router.get("/getNewUsersCount", authGuard, permit("ADMIN"), getNewUsersCount); // for admin dashboard
 router.get("/adminAllUserView", authGuard, adminAllUserView);
 router.get("/AdminSpecificUserView/:id", authGuard, AdminSpecificUserView);
 router.put("/AdminRoleUpdate/:id", authGuard, AdminRoleUpdate);
+router.patch(
+  "/adminUserStatusUpdate/:userId",
+  authGuard,
+  permit("ADMIN"),
+  adminUserStatusUpdate
+);
 router.delete("/deleteUser/:id", authGuard, deleteUser);
 router.get("/queryAdminUser", authGuard, queryAdminUser);
 // update user self image add and other thing add
@@ -418,6 +438,7 @@ router.delete("/deleteCart/:id", authGuard, deleteCart);
 // order
 router.post("/createOrder", authGuard, createOrder);
 router.get("/getLoginUserOrder", authGuard, getLoginUserOrder);
+router.get("/getSpecificUserOrder/:userId", authGuard, getSpecificUserOrder); // for admin dashboard and manager dashboard
 router.get("/getAllPendingOrder", authGuard, getAllPendingOrder);
 router.get("/getAllAcceptedOrder", authGuard, getAllAcceptedOrder);
 router.get("/getAllShiftedOrder", authGuard, getAllShiftedOrder);
@@ -449,6 +470,18 @@ router.get(
   authGuard,
   permit("ADMIN"),
   getTotalOrderCount
+); // for admin dashboard
+router.get(
+  "/getTotalPendingOrderCount",
+  authGuard,
+  permit("ADMIN"),
+  getTotalPendingOrderCount
+); // for admin dashboard
+router.get(
+  "/getTotalAcceptedOrderCount",
+  authGuard,
+  permit("ADMIN"),
+  getTotalAcceptedOrderCount
 ); // for admin dashboard
 
 // blog route

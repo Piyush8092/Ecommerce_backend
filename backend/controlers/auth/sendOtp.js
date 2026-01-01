@@ -1,4 +1,5 @@
 const otpService = require("../../services/otp.service");
+const User = require("../../models/userModel");
 
 /**
  * Send OTP
@@ -6,6 +7,14 @@ const otpService = require("../../services/otp.service");
 const sendOtp = async (req, res) => {
   try {
     const { phone } = req.body;
+
+    const user = await User.findOne({ phone });
+    if (user && user.status === "BLOCKED") {
+      return res.status(403).json({
+        success: false,
+        message: "User is blocked",
+      });
+    }
 
     // Validation
     const phoneRegex = /^[0-9]{10}$/;
