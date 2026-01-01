@@ -4,8 +4,14 @@ const getSpecificPayment = async (req, res) => {
   try {
     let id = req.params.id;
     const payment = await Payment.findById(id)
-      .populate("orderId", "name email")
-      .populate("userId", "name email");
+      .populate("userId", "name email phone image")
+      .populate({
+        path: "orderId",
+        populate: {
+          path: "productId",
+          select: "name image",
+        },
+      });
     res.json({
       message: "Payment fetched successfully",
       status: 200,

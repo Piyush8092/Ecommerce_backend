@@ -11,8 +11,14 @@ const getAllSuccessPayment = async (req, res) => {
     const payment = await Payment.find({ paymentStatus: "PAID" })
       .skip(skip)
       .limit(limit)
-      .populate("orderId", "name email")
-      .populate("userId", "name email");
+      .populate("userId", "name email phone image")
+      .populate({
+        path: "orderId",
+        populate: {
+          path: "productId",
+          select: "name image",
+        },
+      });
     res.json({
       message: "Payment fetched successfully",
       status: 200,

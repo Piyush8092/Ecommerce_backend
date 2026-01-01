@@ -13,7 +13,7 @@ let paymentSchema = new mongoose.Schema(
     },
     paymentMethod: {
       type: String,
-      enum: ["CASH", "CARD", "UPI"],
+      enum: ["CASH", "CARD", "UPI", "PREPAID"],
       default: "CASH",
     },
     paymentStatus: {

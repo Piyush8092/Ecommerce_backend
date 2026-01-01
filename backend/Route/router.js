@@ -129,6 +129,7 @@ const {
 } = require("../controlers/payment/getSpecificPayment");
 const { updatePayment } = require("../controlers/payment/updatePayment");
 const { deletePayment } = require("../controlers/payment/deletePayment");
+const { queryPayment } = require("../controlers/payment/queryPayment");
 const {
   getProductByCategory,
 } = require("../controlers/product/getProductByCategory");
@@ -511,6 +512,7 @@ router.get("/getAllSuccessPayment", authGuard, getAllSuccessPayment);
 router.get("/getSpecificPayment/:id", authGuard, getSpecificPayment);
 router.put("/updatePayment/:id", authGuard, updatePayment);
 router.delete("/deletePayment/:id", authGuard, deletePayment);
+router.get("/queryPayment", queryPayment); // for admin dashboard
 
 // Razorpay payment routes
 router.get("/razorpay/key", getRazorpayKey);
