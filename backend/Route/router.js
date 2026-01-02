@@ -575,6 +575,6 @@ router.post(
   generateShippingLabel
 );
 router.post("/shiprocket/webhook", handleShiprocketWebhook); // Public endpoint for Shiprocket webhooks
-router.post("/shiprocket/checkPincodeDelivery", checkPincodeDelivery); // Public endpoint for Shiprocket webhooks
+router.get("/shiprocket/checkPincodeDelivery", checkPincodeDelivery); // Public endpoint for Shiprocket webhooks
 
 module.exports = router;
