@@ -5,19 +5,12 @@ const SignupRout = async (req, res) => {
   try {
     const { name, email, image, phone, role, isVerified } = req.body;
 
-    console.log("Signup data:", req.body);
-
-    // Validate required fields
-    if (!name || !email || !image || !phone || !role) {
-      return res.status(400).json({ message: "All fields are required." });
-    }
-
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       if (existingUser.status === "BLOCKED")
         return res.status(403).json({ message: "User is blocked" });
-      
+
       // Generate JWT
       const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, {
         expiresIn: "7d",
@@ -45,6 +38,11 @@ const SignupRout = async (req, res) => {
         message: "User already exists.",
         success: true,
       });
+    }
+
+    // Validate required fields
+    if (!name || !email || !image || !phone || !role) {
+      return res.status(400).json({ message: "All fields are required." });
     }
 
     // Create new user
