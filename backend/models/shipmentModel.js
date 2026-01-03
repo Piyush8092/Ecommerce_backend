@@ -72,7 +72,7 @@ const shipmentSchema = new mongoose.Schema(
         "RTO_INITIATED",
         "RTO_DELIVERED",
         "LOST",
-        "DAMAGED"
+        "DAMAGED",
       ],
       default: "PENDING",
     },
@@ -121,17 +121,17 @@ const shipmentSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
-    
+
     // Error tracking
     lastError: {
       type: String,
       default: null,
     },
   },
-  { 
+  {
     timestamps: true,
     toJSON: { virtuals: true },
-    toObject: { virtuals: true }
+    toObject: { virtuals: true },
   }
 );
 
@@ -149,4 +149,3 @@ shipmentSchema.virtual("isActive").get(function () {
 });
 
 module.exports = mongoose.model("Shipment", shipmentSchema);
-

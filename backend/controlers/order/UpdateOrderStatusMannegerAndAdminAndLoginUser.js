@@ -1,6 +1,6 @@
 let Order = require('../../models/orderModel');
 let User = require('../../models/userModel');
-const shiprocketService = require('../../services/shiprocketService');
+const shiprocketService = require('../../services/shiprocket.service');
 
 const updateOrderStatus = async (req, res) => {
     try {

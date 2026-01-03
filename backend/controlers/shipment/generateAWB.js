@@ -1,5 +1,5 @@
 const Order = require('../../models/orderModel');
-const shiprocketService = require('../../services/shiprocketService');
+const shiprocketService = require('../../services/shiprocket.service');
 
 /**
  * Generate AWB (Air Waybill) for shipment
