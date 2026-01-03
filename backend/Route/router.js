@@ -164,17 +164,6 @@ const { createCoupon } = require("../controlers/coupon/createCoupon");
 const { getCouponByCode } = require("../controlers/coupon/getCouponByCode");
 const { UsedCoupon } = require("../controlers/coupon/UsedCoupon");
 
-// Shiprocket Integration
-const { createShipment } = require("../controlers/shiprocket/createShipment");
-const { getOrderTracking } = require("../controlers/shiprocket/getTracking");
-const { generateAWB } = require("../controlers/shiprocket/generateAWB");
-const {
-  generateShippingLabel,
-} = require("../controlers/shiprocket/generateLabel");
-const {
-  handleShiprocketWebhook,
-} = require("../controlers/shiprocket/webhookHandler");
-
 const {
   createPolicyPage,
 } = require("../controlers/policyPage/createPolicyPage");
@@ -234,6 +223,25 @@ const {
 } = require("../controlers/payment/verifyRazorpayPayment");
 const { getRazorpayKey } = require("../controlers/payment/getRazorpayKey");
 
+// Shiprocket shipment controllers
+const { createShipment } = require("../controlers/shipment/createShipment");
+const { getShipment } = require("../controlers/shipment/getShipment");
+const {
+  getShipmentTracking,
+} = require("../controlers/shipment/getShipmentTracking");
+const {
+  shiprocketWebhook,
+} = require("../controlers/shipment/shiprocketWebhook");
+const {
+  generateShipmentLabel,
+} = require("../controlers/shipment/generateShipmentLabel");
+const {
+  getAvailableCouriers,
+} = require("../controlers/shipment/getAvailableCouriers");
+const {
+  checkPincodeDelivery,
+} = require("../controlers/shipment/checkPincodeDelivery");
+
 const { queryCategory } = require("../controlers/category/queryCategory");
 const {
   getAllCategoryNames,
@@ -262,9 +270,7 @@ const {
 } = require("../controlers/review/canUserReviewProduct");
 const adminUpdateReviewStatus = require("../controlers/review/adminUpdateReviewStatus");
 const getAllReviews = require("../controlers/review/getAllReviews");
-const {
-  checkPincodeDelivery,
-} = require("../controlers/shiprocket/checkPincodeDelivery");
+
 const {
   getSpecificUserOrder,
 } = require("../controlers/order/getSpecificUserOrder");
@@ -565,16 +571,13 @@ router.get("/getCouponByCode", authGuard, getCouponByCode);
 // pass coupon code in body update user coupon used
 router.put("/UsedCoupon", authGuard, UsedCoupon);
 
-// Shiprocket routes
-router.post("/createShipment/:orderId", authGuard, createShipment);
-router.get("/getOrderTracking/:orderId", authGuard, getOrderTracking);
-router.post("/generateAWB/:orderId", authGuard, generateAWB);
-router.post(
-  "/generateShippingLabel/:orderId",
-  authGuard,
-  generateShippingLabel
-);
-router.post("/shiprocket/webhook", handleShiprocketWebhook); // Public endpoint for Shiprocket webhooks
-router.post("/shiprocket/checkPincodeDelivery", checkPincodeDelivery); // Public endpoint for Shiprocket webhooks
+// Shiprocket shipment routes
+router.get("/shipments/checkPincodeDelivery", checkPincodeDelivery); // Public endpoint for Shiprocket webhooks (no auth)
+router.post("/shipments/webhook", shiprocketWebhook); // Public endpoint for Shiprocket webhooks
+router.post("/shipments/:orderId", authGuard, createShipment); // ADMIN/MANAGER only (create shipment)
+router.get("/shipments/:orderId", authGuard, getShipment);
+router.get("/shipments/:orderId/tracking", authGuard, getShipmentTracking);
+router.post("/shipments/:orderId/label", authGuard, generateShipmentLabel);
+router.get("/shipments/:orderId/couriers", authGuard, getAvailableCouriers);
 
 module.exports = router;
