@@ -20,20 +20,6 @@ const getShipment = async (req, res) => {
       });
     }
 
-    // Check authorization - user can only view their own orders unless ADMIN/MANAGER
-    if (
-      req.user.role !== "ADMIN" &&
-      req.user.role !== "MANAGER" &&
-      order.userId.toString() !== req.user._id.toString()
-    ) {
-      return res.status(403).json({
-        message: "Unauthorized to view this shipment",
-        status: 403,
-        success: false,
-        error: true,
-      });
-    }
-
     // Find shipment
     const shipment = await Shipment.findOne({ orderId }).populate("orderId");
 

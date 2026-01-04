@@ -58,6 +58,7 @@ let orderSchema = new mongoose.Schema(
       enum: [
         "NOT_CREATED",
         "PENDING",
+        "AWB_GENERATED",
         "PICKUP_SCHEDULED",
         "PICKED_UP",
         "IN_TRANSIT",

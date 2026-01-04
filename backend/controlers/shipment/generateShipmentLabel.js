@@ -3,21 +3,11 @@ const Shipment = require("../../models/shipmentModel");
 
 /**
  * Generate Shipment Label
- * Generates shipping label for a shipment (ADMIN/MANAGER only)
+ * Generates shipping label for a shipment
  */
 const generateShipmentLabel = async (req, res) => {
   try {
     const { orderId } = req.params;
-
-    // Check if user is ADMIN or MANAGER
-    if (req.user.role !== "ADMIN" && req.user.role !== "MANAGER") {
-      return res.status(403).json({
-        message: "Unauthorized. Only ADMIN or MANAGER can generate labels",
-        status: 403,
-        success: false,
-        error: true,
-      });
-    }
 
     // Find shipment
     const shipment = await Shipment.findOne({ orderId });

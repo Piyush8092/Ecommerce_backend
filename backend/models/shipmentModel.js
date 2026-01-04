@@ -63,6 +63,7 @@ const shipmentSchema = new mongoose.Schema(
       type: String,
       enum: [
         "PENDING",
+        "AWB_GENERATED",
         "PICKUP_SCHEDULED",
         "PICKED_UP",
         "IN_TRANSIT",
@@ -127,7 +128,16 @@ const shipmentSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+
+    cancelledAt: {
+      type: Date,
+      default: null,
+    },
+
+    manifestGeneratedAt: { type: Date, default: null },
+    lastSyncedAt: { type: Date, default: null },
   },
+
   {
     timestamps: true,
     toJSON: { virtuals: true },

@@ -201,6 +201,40 @@ class ShiprocketService {
   }
 
   /**
+   * Request pickup for multiple shipments
+   * @param {Array<string>} shipmentIds
+   */
+  async requestPickupBulk(shipmentIds) {
+    try {
+      const client = await this.getAuthenticatedClient();
+
+      const payload = {
+        shipment_id: shipmentIds,
+      };
+
+      const response = await client.post("/courier/generate/pickup", payload);
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      console.error(
+        "Shiprocket Pickup Request Error:",
+        error.response?.data || error.message
+      );
+
+      return {
+        success: false,
+        error:
+          error.response?.data?.message ||
+          error.message ||
+          "Failed to request pickup",
+      };
+    }
+  }
+
+  /**
    * Get Shipment Tracking
    * @param {Number} shipmentId - Shiprocket shipment ID
    * @returns {Promise<Object>} Tracking information
@@ -337,9 +371,57 @@ class ShiprocketService {
     }
   }
 
+  /** Generate Batch Manifest */
+  async generateBatchManifest(awbs) {
+    try {
+      const client = await this.getAuthenticatedClient();
+
+      const response = await client.post("/manifests/generate", {
+        awbs: Array.isArray(awbs) ? awbs : [awbs],
+      });
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data || error.message,
+      };
+    }
+  }
+
+  /**
+   * Track Multiple Shipments by AWB
+   */
+  async trackMultipleShipments(awbNumbers) {
+    try {
+      const client = await this.getAuthenticatedClient();
+
+      const response = await client.post("/courier/track/awbs", { awbNumbers });
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      console.error(
+        "Shiprocket Track Multiple Error:",
+        error.response?.data || error.message
+      );
+
+      return {
+        success: false,
+        error: error.response?.data?.message || "Failed to track shipments",
+      };
+    }
+  }
+
   /**
    * Cancel Shipment
-   * @param {Array} awbs - Array of AWB numbers to cancel
+   * Cancel Shipment by AWBs or Order ID (Admin only) (Shiprocket API)
+   * @param {Array} awbs - Array of AWB numbers or Order ID to cancel (Admin only) (Shiprocket API)
    * @returns {Promise<Object>} Cancellation response
    */
   async cancelShipment(awbs) {
@@ -370,6 +452,32 @@ class ShiprocketService {
           error.response?.data?.message ||
           error.message ||
           "Failed to cancel shipment",
+      };
+    }
+  }
+
+  /** Cancel Order */
+  async cancelOrder(orderId) {
+    try {
+      const client = await this.getAuthenticatedClient();
+
+      const response = await client.post(`/orders/cancel/${orderId}`);
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      console.error(
+        "Shiprocket Cancel Order Error:",
+        error.response?.data || error.message
+      );
+      return {
+        success: false,
+        error:
+          error.response?.data?.message ||
+          error.message ||
+          "Failed to cancel order",
       };
     }
   }

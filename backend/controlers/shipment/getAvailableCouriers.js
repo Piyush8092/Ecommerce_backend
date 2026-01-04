@@ -3,22 +3,12 @@ const Order = require("../../models/orderModel");
 
 /**
  * Get Available Couriers
- * Fetches available courier services for an order (ADMIN/MANAGER only)
+ * Fetches available courier services for an order
  */
 const getAvailableCouriers = async (req, res) => {
   try {
     const { orderId } = req.params;
     const { pickupPostcode } = req.query;
-
-    // Check if user is ADMIN or MANAGER
-    if (req.user.role !== "ADMIN" && req.user.role !== "MANAGER") {
-      return res.status(403).json({
-        message: "Unauthorized. Only ADMIN or MANAGER can view couriers",
-        status: 403,
-        success: false,
-        error: true,
-      });
-    }
 
     // Find the order
     const order = await Order.findById(orderId).populate("deliveryAddressId");

@@ -278,6 +278,26 @@ const { getNewUsersCount } = require("../controlers/users/getNewUsersCount");
 const {
   adminUserStatusUpdate,
 } = require("../controlers/users/adminUserStatusUpdate");
+const { cancelShipment } = require("../controlers/shipment/cancelShipment");
+const { requestPickup } = require("../controlers/shipment/requestPickup");
+const {
+  generateBatchManifest,
+} = require("../controlers/shipment/generateBatchManifest");
+const {
+  trackMultipleShipments,
+} = require("../controlers/shipment/trackMultipleShipments");
+const {
+  generateShipmentInvoice,
+} = require("../controlers/shipment/generateShipmentInvoice");
+const {
+  syncShipmentStatus,
+} = require("../controlers/shipment/syncShipmentStatus");
+const {
+  requestPickupBulk,
+} = require("../controlers/shipment/requestPickupBulk");
+const { cancelBulk } = require("../controlers/shipment/cancelBulk");
+const { generateAWB } = require("../controlers/shipment/generateAWB");
+const { getAllShipments } = require("../controlers/shipment/getAllShipments");
 
 cookieParser();
 
@@ -574,10 +594,90 @@ router.put("/UsedCoupon", authGuard, UsedCoupon);
 // Shiprocket shipment routes
 router.get("/shipments/checkPincodeDelivery", checkPincodeDelivery); // Public endpoint for Shiprocket webhooks (no auth)
 router.post("/shipments/webhook", shiprocketWebhook); // Public endpoint for Shiprocket webhooks
-router.post("/shipments/:orderId", authGuard, createShipment); // ADMIN/MANAGER only (create shipment)
-router.get("/shipments/:orderId", authGuard, getShipment);
-router.get("/shipments/:orderId/tracking", authGuard, getShipmentTracking);
-router.post("/shipments/:orderId/label", authGuard, generateShipmentLabel);
-router.get("/shipments/:orderId/couriers", authGuard, getAvailableCouriers);
+router.post(
+  "/shipments/:orderId/generate-awb",
+  authGuard,
+  permit("ADMIN", "MANAGER", "EMPLOYEE"),
+  generateAWB
+);
+router.post(
+  "/shipments/track-multiple",
+  authGuard,
+  permit("ADMIN", "MANAGER", "EMPLOYEE"),
+  trackMultipleShipments
+);
+router.post(
+  "/shipments/generate-batch-manifest",
+  authGuard,
+  permit("ADMIN", "MANAGER", "EMPLOYEE"),
+  generateBatchManifest
+);
+router.post(
+  "/shipments/cancel-bulk",
+  authGuard,
+  permit("ADMIN", "MANAGER", "EMPLOYEE"),
+  cancelBulk
+);
+router.get(
+  "/getAllShipments",
+  authGuard,
+  permit("ADMIN", "MANAGER", "EMPLOYEE"),
+  getAllShipments
+);
+router.post(
+  "/shipments/:orderId",
+  authGuard,
+  permit("ADMIN", "MANAGER", "EMPLOYEE"),
+  createShipment
+);
+router.get(
+  "/shipments/:orderId",
+  authGuard,
+  permit("ADMIN", "MANAGER", "EMPLOYEE"),
+  getShipment
+);
+router.get(
+  "/shipments/:orderId/tracking",
+  authGuard,
+  permit("ADMIN", "MANAGER", "EMPLOYEE"),
+  getShipmentTracking
+);
+router.post(
+  "/shipments/:orderId/label",
+  authGuard,
+  permit("ADMIN", "MANAGER", "EMPLOYEE"),
+  generateShipmentLabel
+);
+router.post(
+  "/shipments/:orderId/invoice",
+  authGuard,
+  permit("ADMIN", "MANAGER", "EMPLOYEE"),
+  generateShipmentInvoice
+);
+router.get(
+  "/shipments/:orderId/couriers",
+  authGuard,
+  permit("ADMIN", "MANAGER", "EMPLOYEE"),
+  getAvailableCouriers
+);
+router.post(
+  "/shipments/:orderId/cancel",
+  authGuard,
+  permit("ADMIN", "MANAGER", "EMPLOYEE"),
+  cancelShipment
+);
+router.post(
+  "/shipments/:orderId/pickup",
+  authGuard,
+  permit("ADMIN", "MANAGER", "EMPLOYEE"),
+  requestPickup
+);
+router.get("/shipments/:orderId/sync", authGuard, syncShipmentStatus);
+router.post(
+  "/shipments/pickup-bulk",
+  authGuard,
+  permit("ADMIN", "MANAGER", "EMPLOYEE"),
+  requestPickupBulk
+);
 
 module.exports = router;
