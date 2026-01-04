@@ -4,22 +4,12 @@ const Shipment = require("../../models/shipmentModel");
 
 /**
  * Create Shipment
- * Creates a shipment in Shiprocket for an order (ADMIN/MANAGER only)
+ * Creates a shipment in Shiprocket for an order
  */
 const createShipment = async (req, res) => {
   try {
     const { orderId } = req.params;
     const { courierId, pickupLocation } = req.body;
-
-    // Check if user is ADMIN or MANAGER
-    if (req.user.role !== "ADMIN" && req.user.role !== "MANAGER") {
-      return res.status(403).json({
-        message: "Unauthorized. Only ADMIN or MANAGER can create shipments",
-        status: 403,
-        success: false,
-        error: true,
-      });
-    }
 
     // Find the order
     const order = await Order.findById(orderId)

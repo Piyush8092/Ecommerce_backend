@@ -21,20 +21,6 @@ const getShipmentTracking = async (req, res) => {
       });
     }
 
-    // Check authorization
-    if (
-      req.user.role !== "ADMIN" &&
-      req.user.role !== "MANAGER" &&
-      order.userId.toString() !== req.user._id.toString()
-    ) {
-      return res.status(403).json({
-        message: "Unauthorized to view this tracking information",
-        status: 403,
-        success: false,
-        error: true,
-      });
-    }
-
     // Find shipment
     const shipment = await Shipment.findOne({ orderId });
     if (!shipment || !shipment.shiprocketShipmentId) {
