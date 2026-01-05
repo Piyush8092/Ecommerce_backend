@@ -25,6 +25,15 @@ let orderSchema = new mongoose.Schema(
       enum: ["PENDING", "SHIPPED", "DELIVERED", "CANCELLED", "ACCEPTED"],
       default: "PENDING",
     },
+    cancelReason: {
+      type: String,
+      default: null,
+    },
+    refundAmount: {
+      type: Number,
+      default: null,
+    },
+    // Payment details
     paymentMethod: {
       type: String,
       enum: ["PREPAID", "CARD", "UPI"], // Razorpay payment methods only
@@ -36,7 +45,7 @@ let orderSchema = new mongoose.Schema(
     },
     paymentStatus: {
       type: String,
-      enum: ["PAID", "FAILED", "UNPAID"], // Razorpay payment statuses
+      enum: ["PAID", "FAILED", "UNPAID", "REFUND_INITIATED", "REFUNDED"], // Razorpay payment statuses
       default: "UNPAID",
     },
     // Razorpay payment details
@@ -49,6 +58,10 @@ let orderSchema = new mongoose.Schema(
       default: null,
     },
     razorpaySignature: {
+      type: String,
+      default: null,
+    },
+    razorpayRefundId: {
       type: String,
       default: null,
     },
@@ -70,6 +83,10 @@ let orderSchema = new mongoose.Schema(
         "DAMAGED",
       ],
       default: "NOT_CREATED",
+    },
+    cancelledAt: {
+      type: Date,
+      default: null,
     },
   },
   { timestamps: true }

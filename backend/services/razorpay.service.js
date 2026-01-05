@@ -10,7 +10,7 @@ class RazorpayService {
   constructor() {
     // Validate configuration on initialization
     razorpayConfig.validate();
-    
+
     // Initialize Razorpay instance
     this.razorpay = new Razorpay({
       key_id: razorpayConfig.keyId,
@@ -34,7 +34,8 @@ class RazorpayService {
       const options = {
         amount: amountInPaise,
         currency: currency,
-        receipt: receipt || `${razorpayConfig.options.receipt_prefix}${Date.now()}`,
+        receipt:
+          receipt || `${razorpayConfig.options.receipt_prefix}${Date.now()}`,
         payment_capture: razorpayConfig.options.payment_capture,
       };
 
@@ -68,7 +69,11 @@ class RazorpayService {
    * @param {String} paymentData.razorpaySignature - Razorpay signature
    * @returns {Object} Verification result
    */
-  verifyPaymentSignature({ razorpayOrderId, razorpayPaymentId, razorpaySignature }) {
+  verifyPaymentSignature({
+    razorpayOrderId,
+    razorpayPaymentId,
+    razorpaySignature,
+  }) {
     try {
       // Create expected signature
       const text = `${razorpayOrderId}|${razorpayPaymentId}`;
@@ -83,7 +88,9 @@ class RazorpayService {
       return {
         success: true,
         isValid,
-        message: isValid ? "Payment verified successfully" : "Invalid payment signature",
+        message: isValid
+          ? "Payment verified successfully"
+          : "Invalid payment signature",
       };
     } catch (error) {
       console.error("Razorpay Verify Signature Error:", error);
@@ -103,7 +110,7 @@ class RazorpayService {
   async fetchPayment(paymentId) {
     try {
       const payment = await this.razorpay.payments.fetch(paymentId);
-      
+
       return {
         success: true,
         data: {
@@ -132,9 +139,9 @@ class RazorpayService {
    * @param {Number} amount - Amount to refund in rupees (optional, full refund if not provided)
    * @returns {Promise<Object>} Refund details
    */
-  async refundPayment(paymentId, amount = null) {
+  async refundPayment(paymentId, { amount = null, reason = null }) {
     try {
-      const options = {};
+      const options = { reason }; // Optional reason for refund
       if (amount) {
         options.amount = Math.round(amount * 100); // Convert to paise
       }
@@ -144,7 +151,7 @@ class RazorpayService {
       return {
         success: true,
         data: {
-          id: refund.id,
+          refundId: refund.id,
           paymentId: refund.payment_id,
           amount: refund.amount / 100,
           currency: refund.currency,
@@ -163,4 +170,3 @@ class RazorpayService {
 
 // Export singleton instance
 module.exports = new RazorpayService();
-

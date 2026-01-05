@@ -34,7 +34,7 @@ const checkPincodeDelivery = async (req, res) => {
     // 4. Call serviceability API
     const response = await client.get("/courier/serviceability", {
       params: {
-        pickup_postcode: shiprocketConfig.defaultPickupLocation,
+        pickup_postcode: shiprocketConfig.defaultPickupPincode,
         delivery_postcode: pincode,
         cod: codFlag,
         weight: shipmentWeight,

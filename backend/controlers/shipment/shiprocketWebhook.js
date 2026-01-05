@@ -1,5 +1,6 @@
 const Shipment = require("../../models/shipmentModel");
 const Order = require("../../models/orderModel");
+const { verifyShiprocketSignature } = require("../../utils/shiprocket");
 
 /**
  * Shiprocket Webhook Handler (Production-ready)
@@ -7,6 +8,10 @@ const Order = require("../../models/orderModel");
 const shiprocketWebhook = async (req, res) => {
   try {
     const payload = req.body;
+
+    if (!verifyShiprocketSignature(req)) {
+      return res.status(401).json({ message: "Invalid signature" });
+    }
 
     console.log("Shiprocket Webhook:", JSON.stringify(payload));
 
@@ -94,7 +99,7 @@ const shiprocketWebhook = async (req, res) => {
       });
     }
 
-    shipment.lastWebhookAt = new Date();
+    shipment.lastSyncedAt = new Date();
     await shipment.save();
 
     // Update order shipment status safely

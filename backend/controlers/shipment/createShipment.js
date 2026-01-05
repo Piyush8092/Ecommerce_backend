@@ -1,6 +1,7 @@
 const shiprocketService = require("../../services/shiprocket.service");
 const Order = require("../../models/orderModel");
 const Shipment = require("../../models/shipmentModel");
+const shiprocketConfig = require("../../config/shiprocket.config");
 
 /**
  * Create Shipment
@@ -9,18 +10,27 @@ const Shipment = require("../../models/shipmentModel");
 const createShipment = async (req, res) => {
   try {
     const { orderId } = req.params;
-    const { courierId, pickupLocation } = req.body;
+    const { courierId } = req.body;
 
     // Find the order
     const order = await Order.findById(orderId)
       .populate("userId", "name email phone")
       .populate("deliveryAddressId")
-      .populate("productId", "name price image");
+      .populate("productId", "name price image length breadth height weight");
 
     if (!order) {
       return res.status(404).json({
         message: "Order not found",
         status: 404,
+        success: false,
+        error: true,
+      });
+    }
+
+    if (order.status === "PENDING") {
+      return res.status(400).json({
+        message: "Order is pending",
+        status: 400,
         success: false,
         error: true,
       });
@@ -50,8 +60,7 @@ const createShipment = async (req, res) => {
     // Prepare Shiprocket order data
     const shiprocketOrderData = {
       orderId: order._id.toString(),
-      orderDate: order.createdAt.toISOString().split('T')[0],
-      pickupLocation: pickupLocation || "Primary",
+      orderDate: order.createdAt.toISOString().split("T")[0],
       billingCustomerName: order.deliveryAddressId.name,
       billingLastName: "",
       billingAddress: order.deliveryAddressId.Address,
@@ -65,10 +74,17 @@ const createShipment = async (req, res) => {
       orderItems: orderItems,
       paymentMethod: order.paymentMethod === "COD" ? "COD" : "Prepaid",
       subTotal: order.totalAmount,
+      length: order.productId[0].length,
+      breadth: order.productId[0].breadth,
+      height: order.productId[0].height,
+      weight: order.productId[0].weight,
     };
 
+    console.log("shiprocketOrderData", shiprocketOrderData);
+
     // Create order in Shiprocket
-    const shiprocketResult = await shiprocketService.createOrder(shiprocketOrderData);
+    const shiprocketResult =
+      await shiprocketService.createOrder(shiprocketOrderData);
 
     if (!shiprocketResult.success) {
       return res.status(500).json({
@@ -86,6 +102,7 @@ const createShipment = async (req, res) => {
       shiprocketOrderId: shiprocketResult.data.order_id,
       shiprocketShipmentId: shiprocketResult.data.shipment_id,
       shipmentStatus: "PENDING",
+      pickupLocation: shiprocketConfig.defaultPickupLocation,
     });
 
     // If courier ID is provided, generate AWB
@@ -129,4 +146,3 @@ const createShipment = async (req, res) => {
 };
 
 module.exports = { createShipment };
-

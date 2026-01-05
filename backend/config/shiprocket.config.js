@@ -37,8 +37,8 @@ const shiprocketConfig = {
     expiresAt: null,
   },
 
-  // Default pickup location (to be configured per business)
-  defaultPickupLocation: 122001,
+  defaultPickupLocation: "Primary", // Default pickup location
+  defaultPickupPincode: "122001", // Default pickup pincode
 
   // Shipment options
   options: {
