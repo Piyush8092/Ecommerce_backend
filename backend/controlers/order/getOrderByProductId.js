@@ -23,7 +23,7 @@ const getOrderByProductId = async (req, res) => {
       .limit(limitNumber)
       .populate("userId", "name email phone")
       .populate("deliveryAddressId")
-      .populate("productId", "name price image")
+      .populate("productId", "name price image length breadth height weight")
       .sort({ createdAt: -1 });
 
     const total = await Order.countDocuments({ productId });

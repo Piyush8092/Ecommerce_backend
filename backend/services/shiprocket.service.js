@@ -88,8 +88,7 @@ class ShiprocketService {
         order_id: orderData.orderId,
         order_date:
           orderData.orderDate || new Date().toISOString().split("T")[0],
-        pickup_location:
-          orderData.pickupLocation || shiprocketConfig.defaultPickupLocation,
+        pickup_location: shiprocketConfig.defaultPickupLocation,
         billing_customer_name: orderData.billingCustomerName,
         billing_last_name: orderData.billingLastName || "",
         billing_address: orderData.billingAddress,
@@ -108,6 +107,8 @@ class ShiprocketService {
         height: orderData.height || shiprocketConfig.options.height,
         weight: orderData.weight || shiprocketConfig.options.weight,
       };
+
+      console.log("Shiprocket Order Payload:", payload);
 
       const response = await client.post("/orders/create/adhoc", payload);
 
@@ -196,6 +197,35 @@ class ShiprocketService {
           error.response?.data?.message ||
           error.message ||
           "Failed to request pickup",
+      };
+    }
+  }
+
+  async cancelPickup(awb) {
+    try {
+      const client = await this.getAuthenticatedClient();
+
+      const payload = {
+        awb: awb,
+      };
+
+      const response = await client.post("/courier/cancel/pickup", payload);
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      console.error(
+        "Shiprocket Cancel Pickup Error:",
+        error.response?.data || error.message
+      );
+      return {
+        success: false,
+        error:
+          error.response?.data?.message ||
+          error.message ||
+          "Failed to cancel pickup",
       };
     }
   }

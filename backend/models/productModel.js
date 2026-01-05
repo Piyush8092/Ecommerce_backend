@@ -69,6 +69,10 @@ let productSchema = new mongoose.Schema(
     ],
     colors: [String],
     sizes: [String],
+    length: { type: Number, default: 10 }, // cm
+    breadth: { type: Number, default: 10 }, // cm
+    height: { type: Number, default: 10 }, // cm
+    weight: { type: Number, default: 0.1 }, // kg
     allowCustomColor: { type: Boolean, default: false },
     allowCustomSize: { type: Boolean, default: false },
     // admin will manage top selling product

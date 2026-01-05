@@ -7,10 +7,10 @@ const Shipment = require("../../models/shipmentModel");
  */
 const generateShipmentInvoice = async (req, res) => {
   try {
-    const { orderId } = req.params;
+    const { shipmentId } = req.params;
 
-    // Find shipment in database
-    const shipment = await Shipment.findOne({ orderId });
+    // Find shipment in database by ID
+    const shipment = await Shipment.findById(shipmentId);
     if (!shipment || !shipment.shiprocketShipmentId) {
       return res.status(404).json({
         message: "Shipment not found or not created in Shiprocket",
@@ -77,7 +77,7 @@ const generateShipmentInvoice = async (req, res) => {
     });
   } catch (error) {
     console.error("Generate Shipment Invoice Error:", {
-      orderId: req.params.orderId,
+      shipmentId: req.params.shipmentId,
       error: error.message,
     });
 

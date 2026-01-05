@@ -57,7 +57,7 @@ const createOrder = async (req, res) => {
     const populatedOrder = await Order.findById(savedOrder._id)
       .populate("userId", "name email phone")
       .populate("deliveryAddressId")
-      .populate("productId", "name price image");
+      .populate("productId", "name price image length breadth height weight");
 
     res.json({
       message: "Order created successfully",

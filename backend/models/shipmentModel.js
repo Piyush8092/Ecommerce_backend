@@ -64,8 +64,10 @@ const shipmentSchema = new mongoose.Schema(
       enum: [
         "PENDING",
         "AWB_GENERATED",
+        "PICKUP_NOT_SCHEDULED",
         "PICKUP_SCHEDULED",
         "PICKED_UP",
+        "PICKED_UP_FAILED",
         "IN_TRANSIT",
         "OUT_FOR_DELIVERY",
         "DELIVERED",
@@ -77,8 +79,9 @@ const shipmentSchema = new mongoose.Schema(
       ],
       default: "PENDING",
     },
-
-    // Pickup Details
+    pickupRetryCount: { type: Number, default: 0 },
+    pickupFailureReason: { type: String, default: null },
+    lastPickupActionAt: Date,
     pickupScheduledDate: {
       type: Date,
       default: null,
@@ -86,6 +89,10 @@ const shipmentSchema = new mongoose.Schema(
     pickupTokenNumber: {
       type: String,
       default: null,
+    },
+    pickupLocation: {
+      type: String,
+      default: "Primary", // Default pickup location
     },
 
     // Delivery Details

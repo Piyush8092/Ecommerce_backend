@@ -1,3 +1,4 @@
+const express = require("express");
 let router = require("express").Router();
 let cookieParser = require("cookie-parser");
 let authGuard = require("../middleware/auth");
@@ -298,6 +299,9 @@ const {
 const { cancelBulk } = require("../controlers/shipment/cancelBulk");
 const { generateAWB } = require("../controlers/shipment/generateAWB");
 const { getAllShipments } = require("../controlers/shipment/getAllShipments");
+const { cancelOrder } = require("../controlers/order/cancelOrder");
+const { cancelPickup } = require("../controlers/shipment/cancelPickup");
+const { retryPickup } = require("../controlers/shipment/retryPickup");
 
 cookieParser();
 
@@ -492,6 +496,12 @@ router.put(
   updateOrderStatusEmploye
 );
 router.put("/updateOrder/:id", authGuard, updateOrder);
+router.post(
+  "/cancelOrder/:orderId",
+  authGuard,
+  permit("ADMIN", "MANAGER", "EMPLOYEE"),
+  cancelOrder
+);
 router.get(
   "/getTotalOrderCount",
   authGuard,
@@ -593,7 +603,11 @@ router.put("/UsedCoupon", authGuard, UsedCoupon);
 
 // Shiprocket shipment routes
 router.get("/shipments/checkPincodeDelivery", checkPincodeDelivery); // Public endpoint for Shiprocket webhooks (no auth)
-router.post("/shipments/webhook", shiprocketWebhook); // Public endpoint for Shiprocket webhooks
+router.post(
+  "/shipments/webhook",
+  express.raw({ type: "application/json" }),
+  shiprocketWebhook
+); // Public endpoint for Shiprocket webhooks
 router.post(
   "/shipments/:orderId/generate-awb",
   authGuard,
@@ -643,13 +657,13 @@ router.get(
   getShipmentTracking
 );
 router.post(
-  "/shipments/:orderId/label",
+  "/shipments/:shipmentId/label",
   authGuard,
   permit("ADMIN", "MANAGER", "EMPLOYEE"),
   generateShipmentLabel
 );
 router.post(
-  "/shipments/:orderId/invoice",
+  "/shipments/:shipmentId/invoice",
   authGuard,
   permit("ADMIN", "MANAGER", "EMPLOYEE"),
   generateShipmentInvoice
@@ -671,6 +685,18 @@ router.post(
   authGuard,
   permit("ADMIN", "MANAGER", "EMPLOYEE"),
   requestPickup
+);
+router.post(
+  "/shipments/:shipmentId/cancel-pickup",
+  authGuard,
+  permit("ADMIN", "MANAGER", "EMPLOYEE"),
+  cancelPickup
+);
+router.post(
+  "/shipments/:shipmentId/retry-pickup",
+  authGuard,
+  permit("ADMIN", "MANAGER", "EMPLOYEE"),
+  retryPickup
 );
 router.get("/shipments/:orderId/sync", authGuard, syncShipmentStatus);
 router.post(

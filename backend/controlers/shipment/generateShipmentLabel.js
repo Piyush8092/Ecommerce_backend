@@ -7,14 +7,23 @@ const Shipment = require("../../models/shipmentModel");
  */
 const generateShipmentLabel = async (req, res) => {
   try {
-    const { orderId } = req.params;
+    const { shipmentId } = req.params;
 
-    // Find shipment
-    const shipment = await Shipment.findOne({ orderId });
+    // Find shipment by ID
+    const shipment = await Shipment.findById(shipmentId);
     if (!shipment || !shipment.shiprocketShipmentId) {
       return res.status(404).json({
         message: "Shipment not found",
         status: 404,
+        success: false,
+        error: true,
+      });
+    }
+
+    if (shipment.shipmentStatus === "CANCELLED") {
+      return res.status(400).json({
+        message: "Cannot generate label for cancelled shipment",
+        status: 400,
         success: false,
         error: true,
       });
@@ -64,4 +73,3 @@ const generateShipmentLabel = async (req, res) => {
 };
 
 module.exports = { generateShipmentLabel };
-
