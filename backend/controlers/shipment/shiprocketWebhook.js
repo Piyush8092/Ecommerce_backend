@@ -10,7 +10,9 @@ const shiprocketWebhook = async (req, res) => {
     const payload = req.body;
 
     if (!verifyShiprocketSignature(req)) {
-      return res.status(401).json({ message: "Invalid signature" });
+      // Log but DO NOT reject
+      console.warn("Invalid Shiprocket signature");
+      return res.status(200).send("OK");
     }
 
     console.log("Shiprocket Webhook:", JSON.stringify(payload));
