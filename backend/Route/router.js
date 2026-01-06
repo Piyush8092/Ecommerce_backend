@@ -348,7 +348,12 @@ router.get(
   permit("ADMIN"),
   getTotalProductCount
 );
-router.get("/getAllProductNames", authGuard, permit("ADMIN", "MANAGER", "EMPLOYEE"), getAllProductNames);
+router.get(
+  "/getAllProductNames",
+  authGuard,
+  permit("ADMIN", "MANAGER", "EMPLOYEE"),
+  getAllProductNames
+);
 // product image upload URL
 router.post("/getProductImageUploadUrl", authGuard, getProductImageUploadUrl);
 
@@ -556,11 +561,7 @@ router.get("/queryPayment", queryPayment); // for admin dashboard
 router.get("/razorpay/key", getRazorpayKey);
 router.post("/razorpay/create-order", authGuard, createRazorpayOrder);
 router.post("/razorpay/verify-payment", authGuard, verifyRazorpayPayment);
-router.post(
-  "/razorpay/webhook",
-  express.raw({ type: "application/json" }),
-  razorpayWebhook
-); // Razorpay webhook handler
+router.post("/razorpay/webhook", razorpayWebhook); // Razorpay webhook handler
 
 // subscription route
 router.post("/createSubscription", authGuard, createSubscription);
@@ -609,12 +610,8 @@ router.get("/getCouponByCode", authGuard, getCouponByCode);
 router.put("/UsedCoupon", authGuard, UsedCoupon);
 
 // Shiprocket shipment routes
+router.post("/shiprocket/webhook", shiprocketWebhook); // Public endpoint for Shiprocket webhooks
 router.get("/shipments/checkPincodeDelivery", checkPincodeDelivery); // Public endpoint for Shiprocket webhooks (no auth)
-router.post(
-  "/shipments/webhook",
-  express.raw({ type: "application/json" }),
-  shiprocketWebhook
-); // Public endpoint for Shiprocket webhooks
 router.post(
   "/shipments/:orderId/generate-awb",
   authGuard,
