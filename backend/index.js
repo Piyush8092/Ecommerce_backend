@@ -16,14 +16,14 @@ app.use(helmet()); // Use helmet middleware for security
 app.use(
   express.json({
     limit: "50mb",
-    verify: (req, res, buf) => {
-      if (req.originalUrl.startsWith("/webhook/shipments")) {
-        req.rawBody = buf;
-      }
-      if (req.originalUrl.startsWith("/razorpay/webhook")) {
-        req.rawBody = buf;
-      }
-    },
+    // verify: (req, res, buf) => {
+    //   if (req.originalUrl.startsWith("/webhook/shipments")) {
+    //     req.rawBody = buf;
+    //   }
+    //   if (req.originalUrl.startsWith("/razorpay/webhook")) {
+    //     req.rawBody = buf;
+    //   }
+    // },
   })
 );
 app.use(express.urlencoded({ limit: "50mb", extended: true }));

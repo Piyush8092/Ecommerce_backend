@@ -2,9 +2,6 @@ const Shipment = require("../../models/shipmentModel");
 const Order = require("../../models/orderModel");
 const { verifyShiprocketSignature } = require("../../utils/shiprocket");
 
-/**
- * Shiprocket Webhook Handler (Production-ready)
- */
 const shiprocketWebhook = async (req, res) => {
   try {
     const payload = req.body;
@@ -15,7 +12,7 @@ const shiprocketWebhook = async (req, res) => {
       return res.status(200).send("OK");
     }
 
-    console.log("Shiprocket Webhook:", JSON.stringify(payload));
+    console.log("Shiprocket Webhook:",payload);
 
     const {
       awb,
