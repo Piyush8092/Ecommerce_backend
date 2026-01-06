@@ -12,9 +12,18 @@ const SignupRout = async (req, res) => {
         return res.status(403).json({ message: "User is blocked" });
 
       // Generate JWT
-      const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, {
-        expiresIn: "7d",
-      });
+      const token = jwt.sign(
+        {
+          id: existingUser._id,
+          role: existingUser.role,
+          email: existingUser.email,
+          name: existingUser.name,
+        },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "7d",
+        }
+      );
 
       // Set cookie
       res.cookie("jwt", token, {
@@ -60,9 +69,18 @@ const SignupRout = async (req, res) => {
     const savedUser = await newUser.save();
 
     // Generate JWT
-    const token = jwt.sign({ id: savedUser._id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
+    const token = jwt.sign(
+      {
+        id: savedUser._id,
+        role: savedUser.role,
+        email: savedUser.email,
+        name: savedUser.name,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1d",
+      }
+    );
 
     // Set cookie
     res.cookie("jwt", token, {

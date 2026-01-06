@@ -62,12 +62,12 @@ const cancelOrder = async (req, res) => {
       refundResult = await razorpayService.refundPayment(
         order.razorpayPaymentId,
         {
-          amount: Math.round(safeRefundAmount * 100),
+          amount: safeRefundAmount,
           reason,
         }
       );
 
-      order.razorpayRefundId = refundResult.data.refundId;
+      order.razorpayRefundId = refundResult.data?.refundId;
       order.refundAmount = safeRefundAmount;
       order.paymentStatus = "REFUND_INITIATED";
     }
@@ -101,6 +101,7 @@ const cancelOrder = async (req, res) => {
     // 3️⃣ Update Order
     // -----------------------------
     order.status = "CANCELLED";
+    order.shipmentStatus = "CANCELLED";
     order.cancelReason = reason;
     order.cancelledAt = new Date();
 

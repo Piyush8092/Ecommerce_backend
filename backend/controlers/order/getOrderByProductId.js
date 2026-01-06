@@ -14,11 +14,17 @@ const getOrderByProductId = async (req, res) => {
       });
     }
 
+    let query = { productId: productId };
+
+    if (req.user.role === "EMPLOYEE") {
+      query.status = { $ne: "PENDING" };
+    }
+
     const pageNumber = Number(page);
     const limitNumber = Number(limit);
     const skip = (pageNumber - 1) * limitNumber;
 
-    const orders = await Order.find({ productId })
+    const orders = await Order.find(query)
       .skip(skip)
       .limit(limitNumber)
       .populate("userId", "name email phone")
@@ -26,7 +32,7 @@ const getOrderByProductId = async (req, res) => {
       .populate("productId", "name price image length breadth height weight")
       .sort({ createdAt: -1 });
 
-    const total = await Order.countDocuments({ productId });
+    const total = await Order.countDocuments(query);
 
     res.status(200).json({
       message: "Orders fetched successfully",

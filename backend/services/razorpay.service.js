@@ -1,6 +1,7 @@
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
 const razorpayConfig = require("../config/razorpay.config");
+const { rupeesToPaise } = require("../utils/money");
 
 /**
  * Razorpay Service
@@ -29,7 +30,7 @@ class RazorpayService {
   async createOrder({ amount, currency = "INR", receipt }) {
     try {
       // Convert amount to paise (Razorpay expects amount in smallest currency unit)
-      const amountInPaise = Math.round(amount * 100);
+      const amountInPaise = rupeesToPaise(amount);
 
       const options = {
         amount: amountInPaise,
@@ -143,7 +144,7 @@ class RazorpayService {
     try {
       const options = { reason }; // Optional reason for refund
       if (amount) {
-        options.amount = Math.round(amount * 100); // Convert to paise
+        options.amount = rupeesToPaise(amount); // Convert to paise (Razorpay expects amount in smallest currency unit)
       }
 
       const refund = await this.razorpay.payments.refund(paymentId, options);

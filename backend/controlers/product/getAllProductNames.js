@@ -2,16 +2,6 @@ let Product = require("../../models/productModel");
 
 const getAllProductNames = async (req, res) => {
   try {
-    let role = req.user.role;
-
-    if (role !== "ADMIN") {
-      return res.status(401).json({
-        message: "Unauthorized",
-        success: false,
-        error: true,
-      });
-    }
-
     const products = await Product.find({}, { name: 1 })
       .sort({ name: 1 })
       .lean();

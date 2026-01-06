@@ -11,12 +11,17 @@ const getOrderByPaymentStatus = async (req, res) => {
     const userId = req.user._id;
 
     // roles that can see all orders by payment status
-    const elevatedRoles = ["ADMIN", "MANAGER"];
+    const elevatedRoles = ["ADMIN", "MANAGER", "EMPLOYEE"];
 
     // build filter condition
-    const filter = elevatedRoles.includes(role)
+    let filter = elevatedRoles.includes(role)
       ? { paymentStatus }
       : { paymentStatus, userId };
+
+    // EMPLOYEE should NOT see pending orders
+    if (role === "EMPLOYEE") {
+      filter.status = { $ne: "PENDING" };
+    }
 
     // count for pagination
     const total = await Order.countDocuments(filter);
