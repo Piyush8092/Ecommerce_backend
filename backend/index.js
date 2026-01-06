@@ -17,7 +17,7 @@ app.use(
   express.json({
     limit: "50mb",
     verify: (req, res, buf) => {
-      if (req.originalUrl.startsWith("/shipments/webhook")) {
+      if (req.originalUrl.startsWith("/webhook/shipments")) {
         req.rawBody = buf;
       }
       if (req.originalUrl.startsWith("/razorpay/webhook")) {
