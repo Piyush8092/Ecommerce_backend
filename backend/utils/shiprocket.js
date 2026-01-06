@@ -12,7 +12,7 @@ const verifyShiprocketSignature = (req) => {
     .update(req.rawBody)
     .digest("hex");
 
-  const signature = req.headers["x-shiprocket-signature"];
+  const signature = req.headers["x-api-key"];
 
   return hash === signature;
 };
