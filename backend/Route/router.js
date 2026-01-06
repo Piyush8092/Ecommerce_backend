@@ -348,7 +348,7 @@ router.get(
   permit("ADMIN"),
   getTotalProductCount
 );
-router.get("/getAllProductNames", authGuard, getAllProductNames);
+router.get("/getAllProductNames", authGuard, permit("ADMIN", "MANAGER", "EMPLOYEE"), getAllProductNames);
 // product image upload URL
 router.post("/getProductImageUploadUrl", authGuard, getProductImageUploadUrl);
 
@@ -480,13 +480,14 @@ router.get("/getOrderByShipmentStatus", authGuard, getOrderByShipmentStatus);
 router.get(
   "/getOrderByProductId/:productId",
   authGuard,
-  permit("ADMIN", "MANAGER"),
+  permit("ADMIN", "MANAGER", "EMPLOYEE"),
   getOrderByProductId
 ); // for admin dashboard and manager dashboard
 router.get("/queryOrder", queryOrder); // for admin dashboard
 router.get(
   "/getAllorderAdminAndMannegerView",
   authGuard,
+  permit("ADMIN", "MANAGER", "EMPLOYEE"),
   getAllorderAdminAndMannegerView
 );
 router.get("/getAllCancelOrder", authGuard, getAllCancelOrder);
@@ -506,19 +507,19 @@ router.post(
 router.get(
   "/getTotalOrderCount",
   authGuard,
-  permit("ADMIN"),
+  permit("ADMIN", "MANAGER", "EMPLOYEE"),
   getTotalOrderCount
 ); // for admin dashboard
 router.get(
   "/getTotalPendingOrderCount",
   authGuard,
-  permit("ADMIN"),
+  permit("ADMIN", "MANAGER", "EMPLOYEE"),
   getTotalPendingOrderCount
 ); // for admin dashboard
 router.get(
   "/getTotalAcceptedOrderCount",
   authGuard,
-  permit("ADMIN"),
+  permit("ADMIN", "MANAGER", "EMPLOYEE"),
   getTotalAcceptedOrderCount
 ); // for admin dashboard
 

@@ -10,7 +10,7 @@ const getAllShiftedOrder = async (req, res) => {
     const userId = req.user._id;
 
     // roles that can see all shipped orders
-    const elevatedRoles = ["ADMIN", "MANAGER"];
+    const elevatedRoles = ["ADMIN", "MANAGER", "EMPLOYEE"];
 
     // build filter condition
     const filter = elevatedRoles.includes(role)

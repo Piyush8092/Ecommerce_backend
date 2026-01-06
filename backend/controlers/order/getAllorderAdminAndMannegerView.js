@@ -2,17 +2,22 @@ let Order = require("../../models/orderModel");
 
 const getAllorderAdminAndMannegerView = async (req, res) => {
   try {
-    let page = req.query.page || 1;
-    let limit = req.query.limit || 10;
-    let skip = (page - 1) * limit;
-    let total = await Order.countDocuments();
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+    let total = await Order.countDocuments({ status: { $ne: "PENDING" } });
     let totalPages = Math.ceil(total / limit);
 
-    if (req.user.role !== "ADMIN" && req.user.role !== "MANAGER") {
-      return res.status(401).json({ message: "Unauthorized" });
+    const role = req.user.role.toUpperCase(); // convert role to uppercase for consistency
+
+    let query = {};
+
+    // EMPLOYEE should NOT see pending orders
+    if (role === "EMPLOYEE") {
+      query.status = { $ne: "PENDING" };
     }
 
-    const order = await Order.find()
+    const order = await Order.find(query)
       .skip(skip)
       .limit(limit)
       .populate("userId", "name email phone")
