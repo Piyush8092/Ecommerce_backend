@@ -610,7 +610,7 @@ router.get("/getCouponByCode", authGuard, getCouponByCode);
 router.put("/UsedCoupon", authGuard, UsedCoupon);
 
 // Shiprocket shipment routes
-router.post("/shiprocket/webhook", shiprocketWebhook); // Public endpoint for Shiprocket webhooks
+router.post("/webhook/shipments", shiprocketWebhook); // Public endpoint for Shiprocket webhooks
 router.get("/shipments/checkPincodeDelivery", checkPincodeDelivery); // Public endpoint for Shiprocket webhooks (no auth)
 router.post(
   "/shipments/:orderId/generate-awb",
