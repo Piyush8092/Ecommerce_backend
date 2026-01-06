@@ -223,6 +223,7 @@ const {
   verifyRazorpayPayment,
 } = require("../controlers/payment/verifyRazorpayPayment");
 const { getRazorpayKey } = require("../controlers/payment/getRazorpayKey");
+const razorpayWebhook = require("../controlers/payment/razorpayWebhook");
 
 // Shiprocket shipment controllers
 const { createShipment } = require("../controlers/shipment/createShipment");
@@ -554,6 +555,11 @@ router.get("/queryPayment", queryPayment); // for admin dashboard
 router.get("/razorpay/key", getRazorpayKey);
 router.post("/razorpay/create-order", authGuard, createRazorpayOrder);
 router.post("/razorpay/verify-payment", authGuard, verifyRazorpayPayment);
+router.post(
+  "/razorpay/webhook",
+  express.raw({ type: "application/json" }),
+  razorpayWebhook
+); // Razorpay webhook handler
 
 // subscription route
 router.post("/createSubscription", authGuard, createSubscription);

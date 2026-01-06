@@ -22,7 +22,7 @@ let orderSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["PENDING", "SHIPPED", "DELIVERED", "CANCELLED", "ACCEPTED"],
+      enum: ["PENDING", "SHIPPED", "DELIVERED", "CANCELLED", "ACCEPTED", "RETURNED"],
       default: "PENDING",
     },
     cancelReason: {
