@@ -153,7 +153,6 @@ const shipmentSchema = new mongoose.Schema(
 );
 
 // Indexes for faster queries
-shipmentSchema.index({ orderId: 1 });
 shipmentSchema.index({ shiprocketOrderId: 1 });
 shipmentSchema.index({ awb: 1 });
 shipmentSchema.index({ shipmentStatus: 1 });

@@ -5,9 +5,6 @@ const getAllorderAdminAndMannegerView = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
-    let total = await Order.countDocuments({ status: { $ne: "PENDING" } });
-    let totalPages = Math.ceil(total / limit);
-
     const role = req.user.role.toUpperCase(); // convert role to uppercase for consistency
 
     let query = {};
@@ -17,12 +14,14 @@ const getAllorderAdminAndMannegerView = async (req, res) => {
       query.status = { $ne: "PENDING" };
     }
 
+    let total = await Order.countDocuments(query);
+    let totalPages = Math.ceil(total / limit);
+
     const order = await Order.find(query)
       .skip(skip)
       .limit(limit)
       .populate("userId", "name email phone")
-      .populate("deliveryAddressId")
-      .populate("productId", "name price image length breadth height weight");
+      .populate("deliveryAddressId");
     res.json({
       message: "Order fetched successfully",
       status: 200,

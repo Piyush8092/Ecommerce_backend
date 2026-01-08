@@ -33,7 +33,6 @@ const getOrderByPaymentStatus = async (req, res) => {
       .limit(limit)
       .populate("userId", "name email phone")
       .populate("deliveryAddressId")
-      .populate("productId", "name price image length breadth height weight")
       .sort({ createdAt: -1 });
 
     res.status(200).json({

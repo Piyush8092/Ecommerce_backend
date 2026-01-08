@@ -1,22 +1,33 @@
 const Order = require("../../models/orderModel");
 
-const getAllPendingOrder = async (req, res) => {
+function buildSort(req) {
+  const { sortBy } = req.query;
+
+  // You can customize sort options
+  const sortOptions = {
+    price_low_to_high: { totalAmount: 1 },
+    price_high_to_low: { totalAmount: -1 },
+    newest: { createdAt: -1 },
+    oldest: { createdAt: 1 },
+  };
+
+  return sortOptions[sortBy] || { createdAt: -1 };
+}
+
+const getOrderByStatus = async (req, res) => {
   try {
+    const orderStatus = req.query.orderStatus.toUpperCase(); // convert status to uppercase for consistency
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
-    const role = req.user.role.toUpperCase(); // convert role to uppercase for consistency
-    const userId = req.user._id;
+    const userId = req.user._id; // get the user ID from the request object
 
-    // roles that can see all pending orders
-    const elevatedRoles = ["ADMIN", "MANAGER"];
+    let filter = { userId }; // initialize filter object with the user ID
 
-    // build filter condition
-    const filter = elevatedRoles.includes(role)
-      ? { status: "PENDING" }
-      : { status: "PENDING", userId };
-
+    if (orderStatus !== "ALL") {
+      filter.status = orderStatus;
+    }
     // count for pagination
     const total = await Order.countDocuments(filter);
     const totalPages = Math.ceil(total / limit);
@@ -25,9 +36,8 @@ const getAllPendingOrder = async (req, res) => {
     const orders = await Order.find(filter)
       .skip(skip)
       .limit(limit)
-      .populate("userId", "name email phone")
       .populate("deliveryAddressId")
-      .sort({ createdAt: -1 });
+      .sort(buildSort(req)); // use the buildSort function to build the sort object
 
     res.status(200).json({
       message: "Orders fetched successfully",
@@ -50,4 +60,4 @@ const getAllPendingOrder = async (req, res) => {
   }
 };
 
-module.exports = { getAllPendingOrder };
+module.exports = { getOrderByStatus };

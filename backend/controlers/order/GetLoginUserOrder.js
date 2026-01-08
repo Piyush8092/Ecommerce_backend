@@ -16,14 +16,7 @@ const getLoginUserOrder = async (req, res) => {
       .skip(skip)
       .limit(limit)
       .populate("userId", "name email")
-      .populate(
-        "deliveryAddressId",
-        "name email phoneNo Address city state zip landmark optionalPhoneNo"
-      )
-      .populate({
-        path: "productId", // array of ObjectIds
-        select: "_id name price image description",
-      });
+      .populate("deliveryAddressId");
 
     res.status(200).json({
       message: "Orders fetched successfully",
