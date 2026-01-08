@@ -14,10 +14,10 @@ const getOrderByProductId = async (req, res) => {
       });
     }
 
-    let query = { productId: productId };
+    let query = { "items.productId": productId };
 
     if (req.user.role === "EMPLOYEE") {
-      query.status = { $ne: "PENDING" };
+      query.status = { $ne: "PENDING" }; // Exclude pending orders for employees
     }
 
     const pageNumber = Number(page);
@@ -29,7 +29,6 @@ const getOrderByProductId = async (req, res) => {
       .limit(limitNumber)
       .populate("userId", "name email phone")
       .populate("deliveryAddressId")
-      .populate("productId", "name price image length breadth height weight")
       .sort({ createdAt: -1 });
 
     const total = await Order.countDocuments(query);

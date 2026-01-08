@@ -16,7 +16,7 @@ const canUserReviewProduct = async (req, res) => {
 
     const order = await Order.findOne({
       userId: userId,
-      productId: productId,
+      "items.productId": productId,
       status: "DELIVERED",
     }).select("_id");
 

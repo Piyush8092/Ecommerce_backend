@@ -1,6 +1,7 @@
 const shiprocketService = require("../../services/shiprocket.service");
 const Order = require("../../models/orderModel");
 const shipmentConfig = require("../../config/shiprocket.config");
+const { getOrderItemsDimensions } = require("../../utils/shiprocket");
 
 /**
  * Get Available Couriers
@@ -12,9 +13,7 @@ const getAvailableCouriers = async (req, res) => {
     const { pickupPostcode } = req.query;
 
     // Find the order
-    const order = await Order.findById(orderId)
-      .populate("deliveryAddressId")
-      .populate("productId", "weight");
+    const order = await Order.findById(orderId).populate("deliveryAddressId");
     if (!order) {
       return res.status(404).json({
         message: "Order not found",
@@ -24,11 +23,20 @@ const getAvailableCouriers = async (req, res) => {
       });
     }
 
+    const { length, breadth, height, weight } = getOrderItemsDimensions(
+      order.items
+    );
+
+    console.log("dimesion", length, breadth, height, weight);
+
     // Get available couriers
     const couriersResult = await shiprocketService.getAvailableCouriers({
       pickupPostcode: pickupPostcode || shipmentConfig.defaultPickupPincode, // Default pickup postcode
       deliveryPostcode: order.deliveryAddressId.zip,
-      weight: order.productId.weight,
+      weight,
+      length,
+      breadth,
+      height,
       cod: order.paymentMethod === "COD" ? 1 : 0,
     });
 

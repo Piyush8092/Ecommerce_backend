@@ -12,13 +12,7 @@ const getPaymentHistory = async (req, res) => {
       .skip(skip)
       .limit(limit)
       .populate("userId", "name email phone image")
-      .populate({
-        path: "orderId",
-        populate: {
-          path: "productId",
-          select: "name image",
-        },
-      });
+      .populate("orderId");
     res.json({
       message: "Payment fetched successfully",
       status: 200,

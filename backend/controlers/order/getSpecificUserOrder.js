@@ -17,11 +17,6 @@ const getSpecificUserOrder = async (req, res) => {
       .limit(limit)
       .populate("deliveryAddressId")
       .populate("userId", "name email phone")
-      .populate({
-        path: "productId", // array of ObjectIds
-        select: "name price image",
-        options: { slice: { image: 1 } },
-      });
 
     res.status(200).json({
       message: "Orders fetched successfully",

@@ -2,6 +2,7 @@ const shiprocketService = require("../../services/shiprocket.service");
 const Order = require("../../models/orderModel");
 const Shipment = require("../../models/shipmentModel");
 const shiprocketConfig = require("../../config/shiprocket.config");
+const { getOrderItemsDimensions } = require("../../utils/shiprocket");
 
 /**
  * Create Shipment
@@ -15,8 +16,7 @@ const createShipment = async (req, res) => {
     // Find the order
     const order = await Order.findById(orderId)
       .populate("userId", "name email phone")
-      .populate("deliveryAddressId")
-      .populate("productId", "name price image length breadth height weight");
+      .populate("deliveryAddressId");
 
     if (!order) {
       return res.status(404).json({
@@ -49,13 +49,17 @@ const createShipment = async (req, res) => {
     }
 
     // Prepare order items for Shiprocket
-    const orderItems = order.productId.map((product) => ({
-      name: product.name,
-      sku: product._id.toString(),
-      units: 1,
-      selling_price: product.price,
+    const orderItems = order.items.map((item) => ({
+      name: item.name,
+      sku: item.productId.toString(),
+      units: item.quantity,
+      selling_price: item.price,
       discount: 0,
     }));
+
+    const { length, breadth, height, weight } = getOrderItemsDimensions(
+      order.items
+    );
 
     // Prepare Shiprocket order data
     const shiprocketOrderData = {
@@ -74,10 +78,10 @@ const createShipment = async (req, res) => {
       orderItems: orderItems,
       paymentMethod: order.paymentMethod === "COD" ? "COD" : "Prepaid",
       subTotal: order.totalAmount,
-      length: order.productId[0].length,
-      breadth: order.productId[0].breadth,
-      height: order.productId[0].height,
-      weight: order.productId[0].weight,
+      length,
+      breadth,
+      height,
+      weight,
     };
 
     console.log("shiprocketOrderData", shiprocketOrderData);
@@ -117,6 +121,7 @@ const createShipment = async (req, res) => {
         shipment.courierName = awbResult.data.response.data.courier_name;
         shipment.courierId = courierId;
         shipment.shipmentStatus = "PICKUP_SCHEDULED";
+        shipment.expectedDeliveryDate = awbResult.data.response.data.expected_delivery_date; // Expected delivery date from Shiprocket
       }
     }
 
@@ -124,6 +129,7 @@ const createShipment = async (req, res) => {
 
     // Update order shipment status
     order.shipmentStatus = shipment.shipmentStatus;
+    order.expectedDeliveryDate = shipment.expectedDeliveryDate;
     await order.save();
 
     res.json({

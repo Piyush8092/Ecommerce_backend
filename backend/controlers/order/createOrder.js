@@ -8,8 +8,8 @@ const createOrder = async (req, res) => {
     // Validate required fields
     if (
       !payload.deliveryAddressId ||
-      !payload.productId ||
-      payload.productId.length === 0 ||
+      !payload.items ||
+      payload.items.length === 0 ||
       !payload.totalAmount
     ) {
       return res.status(400).json({
@@ -57,7 +57,6 @@ const createOrder = async (req, res) => {
     const populatedOrder = await Order.findById(savedOrder._id)
       .populate("userId", "name email phone")
       .populate("deliveryAddressId")
-      .populate("productId", "name price image length breadth height weight");
 
     res.json({
       message: "Order created successfully",

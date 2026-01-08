@@ -94,9 +94,6 @@ const {
 // const { getAllDeliveredOrder } = require('../controlers/order/getAllDeliveredOrder');
 const { getAllCancelOrder } = require("../controlers/order/getAllCancelOrder");
 const {
-  updateOrderStatus,
-} = require("../controlers/order/UpdateOrderStatusMannegerAndAdminAndLoginUser");
-const {
   updateOrderStatusEmploye,
 } = require("../controlers/order/updateOrderStatusEmploye");
 const {
@@ -303,6 +300,8 @@ const { getAllShipments } = require("../controlers/shipment/getAllShipments");
 const { cancelOrder } = require("../controlers/order/cancelOrder");
 const { cancelPickup } = require("../controlers/shipment/cancelPickup");
 const { retryPickup } = require("../controlers/shipment/retryPickup");
+const { getOrderByStatus } = require("../controlers/order/getOrderByStatus");
+const { getSpecificOrder } = require("../controlers/order/getSpecificOrder");
 
 cookieParser();
 
@@ -475,6 +474,7 @@ router.delete("/deleteCart/:id", authGuard, deleteCart);
 // order
 router.post("/createOrder", authGuard, createOrder);
 router.get("/getLoginUserOrder", authGuard, getLoginUserOrder);
+router.get("/getSpecificOrder/:orderId", authGuard, getSpecificOrder);
 router.get("/getSpecificUserOrder/:userId", authGuard, getSpecificUserOrder); // for admin dashboard and manager dashboard
 router.get("/getAllPendingOrder", authGuard, getAllPendingOrder);
 router.get("/getAllAcceptedOrder", authGuard, getAllAcceptedOrder);
@@ -482,13 +482,14 @@ router.get("/getAllShiftedOrder", authGuard, getAllShiftedOrder);
 // router.get('/getAllDeliveredOrder', authGuard, getAllDeliveredOrder);
 router.get("/getOrderByPaymentStatus", authGuard, getOrderByPaymentStatus);
 router.get("/getOrderByShipmentStatus", authGuard, getOrderByShipmentStatus);
+router.get("/getOrderByStatus", authGuard, getOrderByStatus);
 router.get(
   "/getOrderByProductId/:productId",
   authGuard,
   permit("ADMIN", "MANAGER", "EMPLOYEE"),
   getOrderByProductId
 ); // for admin dashboard and manager dashboard
-router.get("/queryOrder", queryOrder); // for admin dashboard
+router.get("/queryOrder", authGuard, queryOrder); // for admin dashboard
 router.get(
   "/getAllorderAdminAndMannegerView",
   authGuard,
@@ -496,7 +497,6 @@ router.get(
   getAllorderAdminAndMannegerView
 );
 router.get("/getAllCancelOrder", authGuard, getAllCancelOrder);
-router.put("/updateOrderStatusByManneger/:id", authGuard, updateOrderStatus);
 router.put(
   "/updateOrderStatusByEmploye/:id",
   authGuard,

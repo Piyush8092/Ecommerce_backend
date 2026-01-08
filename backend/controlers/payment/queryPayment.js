@@ -38,13 +38,7 @@ const queryPayment = async (req, res) => {
       .skip(skip)
       .limit(limitNumber)
       .populate("userId", "name email phone image")
-      .populate({
-        path: "orderId",
-        populate: {
-          path: "productId",
-          select: "name image",
-        },
-      })
+      .populate("orderId")
       .sort({ createdAt: -1 });
 
     const total = await Payment.countDocuments(filter);
