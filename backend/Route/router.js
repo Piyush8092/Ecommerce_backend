@@ -302,6 +302,10 @@ const { cancelPickup } = require("../controlers/shipment/cancelPickup");
 const { retryPickup } = require("../controlers/shipment/retryPickup");
 const { getOrderByStatus } = require("../controlers/order/getOrderByStatus");
 const { getSpecificOrder } = require("../controlers/order/getSpecificOrder");
+const {
+  updateCodSetting,
+} = require("../controlers/codSetting/updateCodSetting");
+const { getCodSetting } = require("../controlers/codSetting/getCodSetting");
 
 cookieParser();
 
@@ -709,5 +713,9 @@ router.post(
   permit("ADMIN", "MANAGER", "EMPLOYEE"),
   requestPickupBulk
 );
+
+//COD routes
+router.put("/updateCodSetting", authGuard, permit("ADMIN"), updateCodSetting);
+router.get("/getCodSetting", authGuard, getCodSetting);
 
 module.exports = router;

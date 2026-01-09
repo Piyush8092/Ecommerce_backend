@@ -1,4 +1,6 @@
-let Order = require("../../models/orderModel");
+const Order = require("../../models/orderModel");
+const Cart = require("../../models/cartModel");
+const Product = require("../../models/productModel");
 
 const createOrder = async (req, res) => {
   try {
@@ -23,8 +25,8 @@ const createOrder = async (req, res) => {
     payload.userId = userId;
 
     // Validate Razorpay payment - Only PREPAID payments accepted
-    if (!payload.paymentMethod) {
-      payload.paymentMethod = "PREPAID";
+    if (!payload.paymentType) {
+      payload.paymentType = "PREPAID";
     }
 
     // Verify Razorpay payment details are present
@@ -48,15 +50,40 @@ const createOrder = async (req, res) => {
 
     // Create new order
     const newOrder = new Order(payload);
-
-    // TODO: Update stock number after order placed
-
     const savedOrder = await newOrder.save();
+
+    // Update stock number after order placed
+    if (payload.orderSource === "CART") {
+      await Promise.all(
+        payload.items.map(async (item) => {
+          const product = await Product.findById(item.productId);
+          if (product) {
+            console.log(product);
+            product.stock -= item.quantity;
+            await product.save();
+          }
+        })
+      );
+    } else if (payload.orderSource === "BUY_NOW") {
+      const item = payload.items[0];
+      const product = await Product.findById(item.productId);
+      if (product) {
+        console.log(product.stock);
+        product.stock -= item.quantity;
+        console.log(product.stock);
+        await product.save();
+      }
+    }
+
+    // empty the user's cart after order creation
+    if (payload.orderSource === "CART") {
+      await Cart.deleteMany({ userId });
+    }
 
     // Populate order details for response
     const populatedOrder = await Order.findById(savedOrder._id)
       .populate("userId", "name email phone")
-      .populate("deliveryAddressId")
+      .populate("deliveryAddressId");
 
     res.json({
       message: "Order created successfully",

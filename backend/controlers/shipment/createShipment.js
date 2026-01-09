@@ -76,7 +76,7 @@ const createShipment = async (req, res) => {
       billingPhone: order.deliveryAddressId.phoneNo,
       shippingIsBilling: true,
       orderItems: orderItems,
-      paymentMethod: order.paymentMethod === "COD" ? "COD" : "Prepaid",
+      paymentType: order.paymentType === "COD" ? "COD" : "Prepaid",
       subTotal: order.totalAmount,
       length,
       breadth,
@@ -121,7 +121,8 @@ const createShipment = async (req, res) => {
         shipment.courierName = awbResult.data.response.data.courier_name;
         shipment.courierId = courierId;
         shipment.shipmentStatus = "PICKUP_SCHEDULED";
-        shipment.expectedDeliveryDate = awbResult.data.response.data.expected_delivery_date; // Expected delivery date from Shiprocket
+        shipment.expectedDeliveryDate =
+          awbResult.data.response.data.expected_delivery_date; // Expected delivery date from Shiprocket
       }
     }
 

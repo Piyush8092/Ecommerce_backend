@@ -65,18 +65,27 @@ let orderSchema = new mongoose.Schema(
       default: null,
     },
     // Payment details
-    paymentMethod: {
+    paymentType: {
       type: String,
-      enum: ["PREPAID", "CARD", "UPI", "COD"], // Razorpay payment methods only
+      enum: ["PREPAID", "COD", "PARTIAL_COD"],
       default: "PREPAID",
     },
     totalAmount: {
       type: Number,
       required: true,
     },
+    prepaidAmount: {
+      type: Number,
+      default: 0, // Amount paid via Razorpay
+    },
+
+    codAmount: {
+      type: Number,
+      default: 0, // Amount to be collected by courier
+    },
     paymentStatus: {
       type: String,
-      enum: ["PAID", "FAILED", "UNPAID", "REFUND_INITIATED", "REFUNDED"], // Razorpay payment statuses
+      enum: ["PAID", "FAILED", "UNPAID", "REFUND_INITIATED", "REFUNDED"], // Payment status
       default: "UNPAID",
     },
     // Razorpay payment details
@@ -94,6 +103,29 @@ let orderSchema = new mongoose.Schema(
     },
     razorpayRefundId: {
       type: String,
+      default: null,
+    },
+    // COD tracking
+    codStatus: {
+      type: String,
+      enum: [
+        "NOT_APPLICABLE",
+        "COD_PENDING",
+        "COD_IN_TRANSIT",
+        "COD_COLLECTED",
+        "COD_REMITTED",
+        "COD_FAILED",
+      ],
+      default: "NOT_APPLICABLE",
+    },
+
+    codCollectedAt: {
+      type: Date,
+      default: null,
+    },
+
+    codRemittedAt: {
+      type: Date,
       default: null,
     },
     // Shipment tracking
@@ -126,6 +158,7 @@ let orderSchema = new mongoose.Schema(
 orderSchema.index({ userId: 1, createdAt: -1 });
 orderSchema.index({ "items.productId": 1 });
 orderSchema.index({ paymentStatus: 1 });
+orderSchema.index({ codStatus: 1 });
 orderSchema.index({ shipmentStatus: 1 });
 
 module.exports = Order = mongoose.model("Order", orderSchema);

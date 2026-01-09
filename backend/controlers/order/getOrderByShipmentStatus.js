@@ -21,12 +21,13 @@ const getOrderByShipmentStatus = async (req, res) => {
       });
     }
 
-    let filter = {}; // initialize filter object
+    let filter = {
+      shipmentStatus: shipmentStatus,
+    }; // initialize filter object with shipment status
 
     // EMPLOYEE should NOT see pending orders
     if (role === "EMPLOYEE") {
       filter.status = { $ne: "PENDING" };
-      filter.shipmentStatus = shipmentStatus;
     }
 
     // count for pagination

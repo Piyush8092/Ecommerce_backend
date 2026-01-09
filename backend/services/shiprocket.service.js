@@ -100,7 +100,7 @@ class ShiprocketService {
         billing_phone: orderData.billingPhone,
         shipping_is_billing: orderData.shippingIsBilling !== false,
         order_items: orderData.orderItems,
-        payment_method: orderData.paymentMethod || "Prepaid",
+        payment_method: orderData.paymentType || "Prepaid",
         sub_total: orderData.subTotal,
         length: orderData.length || shiprocketConfig.options.length,
         breadth: orderData.breadth || shiprocketConfig.options.breadth,
