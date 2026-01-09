@@ -7,7 +7,7 @@ const createPayment = async (req, res) => {
     if (
       !payload.orderId ||
       !payload.amount ||
-      !payload.paymentMethod ||
+      !payload.paymentType ||
       !payload.paymentId ||
       !payload.paymentStatus
     ) {

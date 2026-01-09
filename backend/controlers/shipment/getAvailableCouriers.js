@@ -37,7 +37,7 @@ const getAvailableCouriers = async (req, res) => {
       length,
       breadth,
       height,
-      cod: order.paymentMethod === "COD" ? 1 : 0,
+      cod: order.paymentType === "COD" ? 1 : 0,
     });
 
     if (!couriersResult.success) {

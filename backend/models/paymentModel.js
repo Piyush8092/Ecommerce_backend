@@ -11,7 +11,7 @@ let paymentSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    paymentMethod: {
+    paymentType: {
       type: String,
       enum: ["CASH", "CARD", "UPI", "PREPAID"],
       default: "CASH",

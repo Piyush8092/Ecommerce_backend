@@ -7,7 +7,8 @@ const Order = require("../../models/orderModel");
  */
 const verifyRazorpayPayment = async (req, res) => {
   try {
-    const { razorpayOrderId, razorpayPaymentId, razorpaySignature, orderId } = req.body;
+    const { razorpayOrderId, razorpayPaymentId, razorpaySignature, orderId } =
+      req.body;
 
     // Validate required fields
     if (!razorpayOrderId || !razorpayPaymentId || !razorpaySignature) {
@@ -38,14 +39,14 @@ const verifyRazorpayPayment = async (req, res) => {
     // If orderId is provided, update the order with payment details
     if (orderId) {
       const order = await Order.findById(orderId);
-      
+
       if (order) {
         order.razorpayOrderId = razorpayOrderId;
         order.razorpayPaymentId = razorpayPaymentId;
         order.razorpaySignature = razorpaySignature;
         order.paymentStatus = "PAID";
-        order.paymentMethod = "PREPAID";
-        
+        order.paymentType = "PREPAID";
+
         await order.save();
       }
     }
@@ -74,4 +75,3 @@ const verifyRazorpayPayment = async (req, res) => {
 };
 
 module.exports = { verifyRazorpayPayment };
-

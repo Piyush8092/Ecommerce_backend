@@ -25,8 +25,8 @@ const createOrder = async (req, res) => {
     payload.userId = userId;
 
     // Validate Razorpay payment - Only PREPAID payments accepted
-    if (!payload.paymentMethod) {
-      payload.paymentMethod = "PREPAID";
+    if (!payload.paymentType) {
+      payload.paymentType = "PREPAID";
     }
 
     // Verify Razorpay payment details are present
