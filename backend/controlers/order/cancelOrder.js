@@ -2,6 +2,7 @@ const Order = require("../../models/orderModel");
 const Shipment = require("../../models/shipmentModel");
 const shiprocketService = require("../../services/shiprocket.service");
 const razorpayService = require("../../services/razorpay.service");
+const Product = require("../../models/productModel");
 
 /**
  * Cancel Order
@@ -106,6 +107,21 @@ const cancelOrder = async (req, res) => {
     order.cancelledAt = new Date();
 
     await order.save();
+
+    // -----------------------------
+    // 4️⃣ Update product stock if order is cancelled
+    // -----------------------------
+    await Promise.all(
+      order.items.map(async (item) => {
+        const product = await Product.findById(item.productId);
+        if (product) {
+          console.log(product);
+          product.stock += item.quantity;
+          console.log(product.stock);
+          await product.save();
+        }
+      })
+    );
 
     res.json({
       message: "Order cancelled successfully",
