@@ -4,11 +4,9 @@ let carsoleSchema = new mongoose.Schema(
   {
     heading: {
       type: String,
-      required: true,
     },
     title: {
       type: String,
-      required: true,
     },
     image: {
       type: String,

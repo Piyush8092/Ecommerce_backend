@@ -23,11 +23,27 @@ const getAvailableCouriers = async (req, res) => {
       });
     }
 
+    if (!order.deliveryAddressId?.zip) {
+      return res.status(400).json({
+        message: "Delivery pincode not found",
+        success: false,
+        error: true,
+      });
+    }
+
     const { length, breadth, height, weight } = getOrderItemsDimensions(
       order.items
     );
 
-    console.log("dimesion", length, breadth, height, weight);
+    if (!weight || weight <= 0) {
+      return res.status(400).json({
+        message: "Shipment weight is empty or invalid",
+        success: false,
+        error: true,
+      });
+    }
+
+    const isCodOrder = order.codAmount > 0;
 
     // Get available couriers
     const couriersResult = await shiprocketService.getAvailableCouriers({
@@ -37,7 +53,7 @@ const getAvailableCouriers = async (req, res) => {
       length,
       breadth,
       height,
-      cod: order.paymentType === "COD" ? 1 : 0,
+      cod: isCodOrder ? 1 : 0, // COD flag for Shiprocket
     });
 
     if (!couriersResult.success) {

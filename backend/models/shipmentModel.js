@@ -79,6 +79,24 @@ const shipmentSchema = new mongoose.Schema(
       ],
       default: "PENDING",
     },
+    //COD Details
+    isCod: {
+      type: Boolean,
+      default: false,
+    },
+    codAmount: {
+      type: Number,
+      default: 0,
+    },
+    codCollectedAt: {
+      type: Date,
+      default: null,
+    },
+    codRemittedAt: {
+      type: Date,
+      default: null,
+    },
+    // Pickup Details
     pickupRetryCount: { type: Number, default: 0 },
     pickupFailureReason: { type: String, default: null },
     lastPickupActionAt: Date,

@@ -61,28 +61,38 @@ const createShipment = async (req, res) => {
       order.items
     );
 
-    // Prepare Shiprocket order data
+    const isCodOrder = order.codAmount > 0;
+
     const shiprocketOrderData = {
-      orderId: order._id.toString(),
-      orderDate: order.createdAt.toISOString().split("T")[0],
-      billingCustomerName: order.deliveryAddressId.name,
-      billingLastName: "",
-      billingAddress: order.deliveryAddressId.Address,
-      billingCity: order.deliveryAddressId.city,
-      billingPincode: order.deliveryAddressId.zip,
-      billingState: order.deliveryAddressId.state,
-      billingCountry: "India",
-      billingEmail: order.deliveryAddressId.email || order.userId.email,
-      billingPhone: order.deliveryAddressId.phoneNo,
-      shippingIsBilling: true,
-      orderItems: orderItems,
-      paymentType: order.paymentType === "COD" ? "COD" : "Prepaid",
-      subTotal: order.totalAmount,
+      order_id: order._id.toString(),
+      order_date: order.createdAt.toISOString().split("T")[0],
+      pickup_location: shiprocketConfig.defaultPickupLocation,
+
+      billing_customer_name: order.deliveryAddressId.name,
+      billing_last_name: "",
+      billing_address: order.deliveryAddressId.Address,
+      billing_city: order.deliveryAddressId.city,
+      billing_pincode: order.deliveryAddressId.zip,
+      billing_state: order.deliveryAddressId.state,
+      billing_country: "India",
+      billing_email: order.deliveryAddressId.email || order.userId.email,
+      billing_phone: order.deliveryAddressId.phoneNo,
+
+      shipping_is_billing: true,
+      order_items: orderItems,
+
+      payment_method: isCodOrder ? "COD" : "Prepaid",
+      sub_total: order.totalAmount,
+
       length,
       breadth,
       height,
       weight,
     };
+
+    if (isCodOrder) {
+      shiprocketOrderData.cod_amount = order.codAmount;
+    }
 
     console.log("shiprocketOrderData", shiprocketOrderData);
 
@@ -107,6 +117,8 @@ const createShipment = async (req, res) => {
       shiprocketShipmentId: shiprocketResult.data.shipment_id,
       shipmentStatus: "PENDING",
       pickupLocation: shiprocketConfig.defaultPickupLocation,
+      isCod: isCodOrder,
+      codAmount: isCodOrder ? order.codAmount : 0,
     });
 
     // If courier ID is provided, generate AWB
@@ -131,6 +143,9 @@ const createShipment = async (req, res) => {
     // Update order shipment status
     order.shipmentStatus = shipment.shipmentStatus;
     order.expectedDeliveryDate = shipment.expectedDeliveryDate;
+    if (isCodOrder) {
+      order.codStatus = "IN_TRANSIT";
+    }
     await order.save();
 
     res.json({
