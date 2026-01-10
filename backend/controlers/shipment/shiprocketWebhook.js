@@ -6,13 +6,13 @@ const shiprocketWebhook = async (req, res) => {
   try {
     const payload = req.body;
 
+    // Signature verification. Log only, never block Shiprocket
     if (!verifyShiprocketSignature(req)) {
-      // Log but DO NOT reject
       console.warn("Invalid Shiprocket signature");
       return res.status(200).send("OK");
     }
 
-    console.log("Shiprocket Webhook:",payload);
+    console.log("Shiprocket Webhook:", payload);
 
     const {
       awb,
@@ -33,7 +33,15 @@ const shiprocketWebhook = async (req, res) => {
       return res.status(200).json({ success: true });
     }
 
-    // Status priority map (prevents downgrade)
+    const order = await Order.findById(shipment.orderId);
+    if (!order) {
+      return res.status(200).json({ success: true });
+    }
+
+    /* ----------------------------------
+       STATUS HANDLING
+    ---------------------------------- */
+
     const STATUS_PRIORITY = {
       CREATED: 1,
       AWB_GENERATED: 2,
@@ -64,7 +72,6 @@ const shiprocketWebhook = async (req, res) => {
     const incomingStatus =
       STATUS_MAPPING[current_status] || shipment.shipmentStatus;
 
-    // Prevent status downgrade
     if (
       STATUS_PRIORITY[incomingStatus] >=
       STATUS_PRIORITY[shipment.shipmentStatus]
@@ -72,12 +79,19 @@ const shiprocketWebhook = async (req, res) => {
       shipment.shipmentStatus = incomingStatus;
     }
 
+    /* ----------------------------------
+       BASIC SHIPMENT FIELDS
+    ---------------------------------- */
+
     if (courier_name) shipment.courierName = courier_name;
     if (pickup_scheduled_date)
       shipment.pickupScheduledDate = new Date(pickup_scheduled_date);
     if (delivered_date) shipment.actualDeliveryDate = new Date(delivered_date);
 
-    // Append tracking history safely
+    /* ----------------------------------
+       TRACKING HISTORY (SHIPMENT ONLY)
+    ---------------------------------- */
+
     if (Array.isArray(tracking_data)) {
       tracking_data.forEach((event) => {
         const exists = shipment.trackingHistory.some(
@@ -99,25 +113,63 @@ const shiprocketWebhook = async (req, res) => {
     }
 
     shipment.lastSyncedAt = new Date();
-    await shipment.save();
 
-    // Update order shipment status safely
-    const order = await Order.findById(shipment.orderId);
-    if (order && order.status !== "CANCELLED") {
+    /* ----------------------------------
+       ORDER STATUS UPDATE
+    ---------------------------------- */
+
+    if (order.status !== "CANCELLED") {
       order.shipmentStatus = shipment.shipmentStatus;
 
       if (shipment.shipmentStatus === "DELIVERED") {
         order.status = "DELIVERED";
+
+        // COD collected at delivery
+        if (
+          (order.paymentType === "COD" ||
+            order.paymentType === "PARTIAL_COD") &&
+          !order.codCollectedAt
+        ) {
+          order.codCollectedAt = new Date(delivered_date || Date.now());
+          order.codStatus = "COLLECTED";
+
+          shipment.codCollectedAt = order.codCollectedAt;
+        }
+      }
+    }
+
+    /* ----------------------------------
+       COD REMITTANCE
+       (ONLY WHEN SHIPROCKET SENDS IT)
+    ---------------------------------- */
+
+    if (
+      current_status &&
+      current_status.toLowerCase().includes("remitted") &&
+      (order.paymentType === "COD" || order.paymentType === "PARTIAL_COD")
+    ) {
+      if (!order.codRemittedAt) {
+        order.codRemittedAt = new Date();
+        order.codStatus = "REMITTED";
       }
 
-      await order.save();
+      if (!shipment.codRemittedAt) {
+        shipment.codRemittedAt = order.codRemittedAt;
+      }
     }
+
+    /* ----------------------------------
+       SAVE
+    ---------------------------------- */
+
+    await shipment.save();
+    await order.save();
 
     return res.status(200).json({ success: true });
   } catch (error) {
     console.error("Shiprocket Webhook Error:", error.message);
 
-    // ALWAYS return 200 to Shiprocket
+    // ALWAYS return 200
     return res.status(200).json({ success: false });
   }
 };

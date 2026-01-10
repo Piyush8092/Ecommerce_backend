@@ -84,33 +84,9 @@ class ShiprocketService {
     try {
       const client = await this.getAuthenticatedClient();
 
-      const payload = {
-        order_id: orderData.orderId,
-        order_date:
-          orderData.orderDate || new Date().toISOString().split("T")[0],
-        pickup_location: shiprocketConfig.defaultPickupLocation,
-        billing_customer_name: orderData.billingCustomerName,
-        billing_last_name: orderData.billingLastName || "",
-        billing_address: orderData.billingAddress,
-        billing_city: orderData.billingCity,
-        billing_pincode: orderData.billingPincode,
-        billing_state: orderData.billingState,
-        billing_country: orderData.billingCountry || "India",
-        billing_email: orderData.billingEmail,
-        billing_phone: orderData.billingPhone,
-        shipping_is_billing: orderData.shippingIsBilling !== false,
-        order_items: orderData.orderItems,
-        payment_method: orderData.paymentType || "Prepaid",
-        sub_total: orderData.subTotal,
-        length: orderData.length || shiprocketConfig.options.length,
-        breadth: orderData.breadth || shiprocketConfig.options.breadth,
-        height: orderData.height || shiprocketConfig.options.height,
-        weight: orderData.weight || shiprocketConfig.options.weight,
-      };
+      console.log("Shiprocket Order:", orderData);
 
-      console.log("Shiprocket Order Payload:", payload);
-
-      const response = await client.post("/orders/create/adhoc", payload);
+      const response = await client.post("/orders/create/adhoc", orderData);
 
       return {
         success: true,
