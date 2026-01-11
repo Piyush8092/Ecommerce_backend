@@ -11,7 +11,7 @@ const getAllProduct = async (req, res) => {
     let products = await Product.find()
       .skip(skip)
       .limit(limit)
-      .populate("categoryId", "name");
+      .populate("categoryIds", "name");
 
     res.json({
       message: "Product fetched successfully",

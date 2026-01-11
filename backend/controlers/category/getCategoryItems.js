@@ -28,17 +28,34 @@ const getCategoryItems = async (req, res) => {
       });
     }
 
+    // Construct query based on type
+    let query;
+    if (type === "product") {
+      query = { categoryIds: categoryId };
+    } else {
+      query = { categoryId };
+    }
+
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
     // Fetch total count for pagination UI
-    const totalItems = await Model.countDocuments({ categoryId });
+    const totalItems = await Model.countDocuments(query);
 
-    // Fetch paginated documents
-    const data = await Model.find({ categoryId })
-      .populate("categoryId", "name")
-      .skip(skip)
-      .limit(parseInt(limit))
-      .sort({ createdAt: -1 }); // optional: newest first
+    // Fetch paginated data with correct population
+    let data;
+    if (type === "product") {
+      data = await Model.find(query)
+        .populate("categoryIds", "name") // populate array of categoryIds
+        .skip(skip)
+        .limit(parseInt(limit))
+        .sort({ createdAt: -1 });
+    } else {
+      data = await Model.find(query)
+        .populate("categoryId", "name") // populate single categoryId
+        .skip(skip)
+        .limit(parseInt(limit))
+        .sort({ createdAt: -1 });
+    }
 
     return res.status(200).json({
       total: totalItems,

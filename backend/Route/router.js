@@ -306,6 +306,7 @@ const {
   updateCodSetting,
 } = require("../controlers/codSetting/updateCodSetting");
 const { getCodSetting } = require("../controlers/codSetting/getCodSetting");
+const { getProductByCategoryIds } = require("../controlers/product/getProductByCategoryIds");
 
 cookieParser();
 
@@ -340,6 +341,7 @@ router.delete("/deleteProduct/:id", authGuard, deleteProduct);
 router.get("/queryProduct", productQueryBuilder, queryProduct);
 router.get("/getProductSearchFilters", getProductSearchFilters);
 router.get("/getProductByCategory/:categoryId", getProductByCategory);
+router.get("/getProductByCategoryIds", getProductByCategoryIds);
 // new lonch product by dataa
 router.get("/new-launch-product", getNewLaunchProduct);
 // top seling product // by admin => // admin will manage top selling product {topSelling: true}

@@ -6,13 +6,20 @@ const createProduct = async (req, res) => {
     if (role !== "ADMIN") {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    const { name, price, description, categoryId, stock } = req.body;
+    const { name, price, description, categoryIds, stock } = req.body;
 
-    if (!name || !price || !description || !categoryId || !stock) {
+    if (!name || !price || !description || !stock) {
       return res.status(400).json({
-        message: "Name, price, description, category, and stock are required",
+        message: "Name, price, description and stock are required",
       });
     }
+    
+    if (!Array.isArray(categoryIds) || categoryIds.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "At least one category is required" });
+    }
+
     // Create new product (images can be added later via update)
     const newProduct = new Product(req.body);
 

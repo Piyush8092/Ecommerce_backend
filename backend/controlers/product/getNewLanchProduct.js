@@ -12,7 +12,7 @@ const getNewLaunchProduct = async (req, res) => {
     })
       .sort({ createdAt: -1 }) // newest first
       .limit(10)
-      .populate("categoryId", "name");
+      .populate("categoryIds", "name");
 
     res.json({
       message: "Newly launched products fetched successfully",

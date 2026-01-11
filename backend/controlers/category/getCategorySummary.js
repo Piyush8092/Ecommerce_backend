@@ -48,7 +48,7 @@ const getCategorySummary = async (req, res) => {
           pipeline: [
             {
               $match: {
-                $expr: { $eq: ["$categoryId", "$$categoryId"] },
+                $expr: { $in: ["$$categoryId", "$categoryIds"] }, // check if category _id is in product's categoryIds array
               },
             },
             { $count: "totalProducts" },
