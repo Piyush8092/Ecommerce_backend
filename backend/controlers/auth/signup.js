@@ -44,7 +44,7 @@ const SignupRout = async (req, res) => {
       };
       return res.status(200).json({
         data: userResponse,
-        message: "User already exists.",
+        message: "login successfully",
         success: true,
       });
     }
