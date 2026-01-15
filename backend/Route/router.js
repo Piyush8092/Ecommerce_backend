@@ -3,6 +3,7 @@ let router = require("express").Router();
 let cookieParser = require("cookie-parser");
 let authGuard = require("../middleware/auth");
 const optionalAuth = require("../middleware/optionalAuth");
+const checkUserBlocked = require("../middleware/checkUserBlocked");
 const { SignupRout } = require("../controlers/auth/signup");
 const { LogoutRout } = require("../controlers/auth/logout");
 const { createCarsole } = require("../controlers/carsole/createCarsole");
@@ -306,7 +307,10 @@ const {
   updateCodSetting,
 } = require("../controlers/codSetting/updateCodSetting");
 const { getCodSetting } = require("../controlers/codSetting/getCodSetting");
-const { getProductByCategoryIds } = require("../controlers/product/getProductByCategoryIds");
+const {
+  getProductByCategoryIds,
+} = require("../controlers/product/getProductByCategoryIds");
+const { adminLogin } = require("../controlers/auth/adminLogin");
 
 cookieParser();
 
@@ -321,6 +325,7 @@ router.post("/verify-otp", verifyOtp);
 
 // ceate user
 router.post("/signup", SignupRout);
+router.post("/adminLogin", adminLogin);
 router.get("/logout", authGuard, LogoutRout);
 router.post("/complete-profile", completeProfile);
 
@@ -369,7 +374,7 @@ router.put("/updateProductFAQ/:id/:faqId", authGuard, updateProductFAQ);
 router.delete("/deleteProductFAQ/:id/:faqId", authGuard, deleteProductFAQ);
 
 // product review
-router.post("/createReview", authGuard, createReview);
+router.post("/createReview", authGuard, checkUserBlocked, createReview);
 router.get("/getProductReviews/:id", optionalAuth, getProductReviews);
 router.get("/getMyProductReview", authGuard, getMyProductReview);
 router.get("/getFeaturedReviews", getFeaturedReviews);
@@ -478,7 +483,7 @@ router.put("/updateCart/:id", authGuard, updateCart);
 router.delete("/deleteCart/:id", authGuard, deleteCart);
 
 // order
-router.post("/createOrder", authGuard, createOrder);
+router.post("/createOrder", authGuard, checkUserBlocked, createOrder);
 router.get("/getLoginUserOrder", authGuard, getLoginUserOrder);
 router.get("/getSpecificOrder/:orderId", authGuard, getSpecificOrder);
 router.get("/getSpecificUserOrder/:userId", authGuard, getSpecificUserOrder); // for admin dashboard and manager dashboard
@@ -554,7 +559,7 @@ router.delete("/deleteContact/:id", authGuard, deleteContact);
 router.get("/queryContact", queryContact);
 
 // payment route
-router.post("/createPayment", authGuard, createPayment);
+router.post("/createPayment", authGuard, checkUserBlocked, createPayment);
 router.get("/getAllPaymentAdminView", authGuard, getAllPaymentAdminView);
 router.get("/getAllFaildPayment", authGuard, getAllFaildPayment);
 router.get("/getAllSuccessPayment", authGuard, getAllSuccessPayment);
@@ -565,7 +570,12 @@ router.get("/queryPayment", queryPayment); // for admin dashboard
 
 // Razorpay payment routes
 router.get("/razorpay/key", getRazorpayKey);
-router.post("/razorpay/create-order", authGuard, createRazorpayOrder);
+router.post(
+  "/razorpay/create-order",
+  authGuard,
+  checkUserBlocked,
+  createRazorpayOrder
+);
 router.post("/razorpay/verify-payment", authGuard, verifyRazorpayPayment);
 router.post("/razorpay/webhook", razorpayWebhook); // Razorpay webhook handler
 
