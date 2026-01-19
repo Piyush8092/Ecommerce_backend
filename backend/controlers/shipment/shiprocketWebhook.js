@@ -123,6 +123,7 @@ const shiprocketWebhook = async (req, res) => {
 
       if (shipment.shipmentStatus === "DELIVERED") {
         order.status = "DELIVERED";
+        order.deliveredAt = new Date(delivered_date || Date.now());
 
         // COD collected at delivery
         if (

@@ -517,7 +517,6 @@ router.put("/updateOrder/:id", authGuard, updateOrder);
 router.post(
   "/cancelOrder/:orderId",
   authGuard,
-  permit("ADMIN", "MANAGER", "EMPLOYEE"),
   cancelOrder
 );
 router.get(
