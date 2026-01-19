@@ -60,6 +60,11 @@ let orderSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    cancelBy: {
+      type: String,
+      enum: ["USER", "ADMIN", "SYSTEM", "EMPLOYEE", "MANAGER"],
+      default: null,
+    },
     refundAmount: {
       type: Number,
       default: null,
@@ -70,6 +75,11 @@ let orderSchema = new mongoose.Schema(
       enum: ["PREPAID", "COD", "PARTIAL_COD"],
       default: "PREPAID",
     },
+    subtotalAmount: { type: Number, required: true },
+    shippingChargeAmount: { type: Number, default: 0 },
+    taxAmount: { type: Number, default: 0 },
+    discountAmount: { type: Number, default: 0 },
+    couponCode: { type: String, default: null },
     totalAmount: {
       type: Number,
       required: true,
@@ -151,6 +161,14 @@ let orderSchema = new mongoose.Schema(
       default: "NOT_CREATED",
     },
     cancelledAt: {
+      type: Date,
+      default: null,
+    },
+    returnedAt: {
+      type: Date,
+      default: null,
+    },
+    deliveredAt: {
       type: Date,
       default: null,
     },

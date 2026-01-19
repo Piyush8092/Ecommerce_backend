@@ -11,15 +11,8 @@ const Product = require("../../models/productModel");
 const cancelOrder = async (req, res) => {
   try {
     const { orderId } = req.params;
-    const { reason, refundAmount } = req.body;
-
-    if (!reason || !reason.trim()) {
-      return res.status(400).json({
-        message: "Cancellation reason is required",
-        success: false,
-        error: true,
-      });
-    }
+    const user = req.user;
+    const { reason, refundAmount } = req.body || {};
 
     const order = await Order.findById(orderId);
     if (!order) {
@@ -49,32 +42,44 @@ const cancelOrder = async (req, res) => {
       });
     }
 
-    let refundResult = null;
+    const isStaff = ["ADMIN", "MANAGER", "EMPLOYEE"].includes(user.role);
+    const isCreator = order.userId.toString() === user._id.toString();
 
-    // -----------------------------
-    // 1️⃣ Handle Refund
-    // -----------------------------
-    if (order.paymentStatus === "PAID" && order.razorpayPaymentId) {
-      const safeRefundAmount =
-        typeof refundAmount === "number" && refundAmount > 0
-          ? Math.min(refundAmount, order.totalAmount)
-          : order.totalAmount;
+    // Not staff and not creator → blocked
+    if (!isStaff && !isCreator) {
+      return res.status(403).json({
+        message: "Forbidden - You don't have permission",
+        success: false,
+        error: true,
+      });
+    }
 
-      refundResult = await razorpayService.refundPayment(
-        order.razorpayPaymentId,
-        {
-          amount: safeRefundAmount,
-          reason,
-        }
-      );
+    let finalReason = reason;
+    let finalRefundAmount = refundAmount;
 
-      order.razorpayRefundId = refundResult.data?.refundId;
-      order.refundAmount = safeRefundAmount;
-      order.paymentStatus = "REFUND_INITIATED";
+    if (isCreator) {
+      if (!["PENDING", "ACCEPTED"].includes(order.status)) {
+        return res.status(400).json({
+          message: "You can cancel only pending or accepted orders",
+          success: false,
+          error: true,
+        });
+      }
+
+      finalRefundAmount = order.prepaidAmount;
+      finalReason = "Cancelled by user";
+    }
+
+    if (!finalReason || !finalReason.trim()) {
+      return res.status(400).json({
+        message: "Cancellation reason is required",
+        success: false,
+        error: true,
+      });
     }
 
     // -----------------------------
-    // 2️⃣ Cancel Shipment if exists
+    // Cancel Shipment if exists
     // -----------------------------
     const shipment = await Shipment.findOne({ orderId });
 
@@ -98,18 +103,43 @@ const cancelOrder = async (req, res) => {
       await shipment.save();
     }
 
+    let refundResult = null;
+
     // -----------------------------
-    // 3️⃣ Update Order
+    // Handle Refund
+    // -----------------------------
+    if (order.paymentStatus === "PAID" && order.razorpayPaymentId) {
+      const safeRefundAmount =
+        typeof finalRefundAmount === "number" && finalRefundAmount > 0
+          ? Math.min(finalRefundAmount, order.prepaidAmount)
+          : order.prepaidAmount;
+
+      refundResult = await razorpayService.refundPayment(
+        order.razorpayPaymentId,
+        {
+          amount: safeRefundAmount,
+          reason: finalReason,
+        }
+      );
+
+      order.razorpayRefundId = refundResult.data?.refundId;
+      order.refundAmount = safeRefundAmount;
+      order.paymentStatus = "REFUND_INITIATED";
+    }
+
+    // -----------------------------
+    // Update Order
     // -----------------------------
     order.status = "CANCELLED";
     order.shipmentStatus = "CANCELLED";
-    order.cancelReason = reason;
+    order.cancelReason = finalReason;
+    order.cancelBy = isStaff ? user.role : "USER";
     order.cancelledAt = new Date();
 
     await order.save();
 
     // -----------------------------
-    // 4️⃣ Update product stock if order is cancelled
+    // Update product stock if order is cancelled
     // -----------------------------
     await Promise.all(
       order.items.map(async (item) => {
