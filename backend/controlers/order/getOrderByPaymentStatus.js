@@ -10,18 +10,19 @@ const getOrderByPaymentStatus = async (req, res) => {
     const role = req.user.role.toUpperCase(); // convert role to uppercase for consistency
     const userId = req.user._id;
 
-    // roles that can see all orders by payment status
-    const elevatedRoles = ["ADMIN", "MANAGER", "EMPLOYEE"];
-
     // build filter condition
-    let filter = elevatedRoles.includes(role)
-      ? { paymentStatus }
-      : { paymentStatus, userId };
+    let filter = { paymentStatus };
 
-    // EMPLOYEE should NOT see pending orders
+    // ROLE-BASED VISIBILITY
     if (role === "EMPLOYEE") {
+      // employee sees only assigned orders
+      filter.assignedEmployeeId = userId;
       filter.status = { $ne: "PENDING" };
+    } else if (!["ADMIN", "MANAGER"].includes(role)) {
+      // normal user sees only his orders
+      filter.userId = userId;
     }
+    // ADMIN & MANAGER see all orders
 
     // count for pagination
     const total = await Order.countDocuments(filter);
@@ -33,6 +34,7 @@ const getOrderByPaymentStatus = async (req, res) => {
       .limit(limit)
       .populate("userId", "name email phone")
       .populate("deliveryAddressId")
+      .populate("assignedEmployeeId", "name email phone image") // populate assigned employee details
       .sort({ createdAt: -1 });
 
     res.status(200).json({

@@ -195,6 +195,9 @@ const {
 } = require("../controlers/getInTouchAndSocalLink/deleteGetInTouch");
 const { getAllUserNames } = require("../controlers/users/getAllUserNames");
 const {
+  getAllEmployeeNames,
+} = require("../controlers/users/getAllEmployeeNames");
+const {
   getQueryDeliveryAddress,
 } = require("../controlers/deliveryAddress/getQueryDeliveryAddress");
 const productQueryBuilder = require("../middleware/productQueryBuilder");
@@ -448,6 +451,7 @@ router.get("/queryAdminUser", authGuard, queryAdminUser);
 // update user self image add and other thing add
 router.put("/updateUserSelf", authGuard, updateUserSelf);
 router.get("/getAllUserNames", authGuard, permit("ADMIN"), getAllUserNames);
+router.get("/getAllEmployeeNames", authGuard, permit("ADMIN", "MANAGER"), getAllEmployeeNames);
 router.post(
   "/getUserProfileImageUploadUrl",
   authGuard,
@@ -486,7 +490,7 @@ router.delete("/deleteCart/:id", authGuard, deleteCart);
 router.post("/createOrder", authGuard, checkUserBlocked, createOrder);
 router.get("/getLoginUserOrder", authGuard, getLoginUserOrder);
 router.get("/getSpecificOrder/:orderId", authGuard, getSpecificOrder);
-router.get("/getSpecificUserOrder/:userId", authGuard, getSpecificUserOrder); // for admin dashboard and manager dashboard
+router.get("/getSpecificUserOrder/:userId", authGuard, permit("ADMIN"), getSpecificUserOrder); // for admin dashboard
 router.get("/getAllPendingOrder", authGuard, getAllPendingOrder);
 router.get("/getAllAcceptedOrder", authGuard, getAllAcceptedOrder);
 router.get("/getAllShiftedOrder", authGuard, getAllShiftedOrder);
@@ -514,11 +518,7 @@ router.put(
   updateOrderStatusEmploye
 );
 router.put("/updateOrder/:id", authGuard, updateOrder);
-router.post(
-  "/cancelOrder/:orderId",
-  authGuard,
-  cancelOrder
-);
+router.post("/cancelOrder/:orderId", authGuard, cancelOrder);
 router.get(
   "/getTotalOrderCount",
   authGuard,

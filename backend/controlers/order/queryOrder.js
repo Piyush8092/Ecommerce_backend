@@ -11,13 +11,15 @@ const queryOrder = async (req, res) => {
     const limitNumber = Number(limit);
     const skip = (pageNumber - 1) * limitNumber;
 
-    // roles that can see all orders
-    const elevatedRoles = ["ADMIN", "MANAGER", "EMPLOYEE"];
+    // BASE FILTER BY ROLE
+    let filter = {};
 
-    // build filter condition
-    let filter = elevatedRoles.includes(role)
-      ? {} // all orders for admin, manager, and employee
-      : { userId }; // only user's orders for other roles
+    if (role === "EMPLOYEE") {
+      filter.assignedEmployeeId = userId;
+      filter.status = { $ne: "PENDING" };
+    } else if (!["ADMIN", "MANAGER"].includes(role)) {
+      filter.userId = userId;
+    }
 
     if (query && query.trim() !== "") {
       const searchConditions = [];
@@ -65,7 +67,8 @@ const queryOrder = async (req, res) => {
       .skip(skip)
       .limit(limitNumber)
       .populate("userId", "name email phone")
-      .populate("deliveryAddressId");
+      .populate("deliveryAddressId")
+      .populate("assignedEmployeeId", "name email phone image"); // populate assigned employee details
 
     const total = await Order.countDocuments(filter);
 
