@@ -17,6 +17,8 @@ const getSpecificUserOrder = async (req, res) => {
       .limit(limit)
       .populate("deliveryAddressId")
       .populate("userId", "name email phone")
+      .populate("assignedEmployeeId", "name email phone image") // populate assigned employee details
+      .sort({ createdAt: -1 });
 
     res.status(200).json({
       message: "Orders fetched successfully",

@@ -7,6 +7,10 @@ let orderSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    assignedEmployeeId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
     deliveryAddressId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "DeliveryAddress",

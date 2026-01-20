@@ -9,13 +9,18 @@ const getAllAcceptedOrder = async (req, res) => {
     const role = req.user.role.toUpperCase(); // convert role to uppercase for consistency
     const userId = req.user._id;
 
-    // roles that can see all accepted orders
-    const elevatedRoles = ["ADMIN", "MANAGER", "EMPLOYEE"];
-
     // build filter condition
-    const filter = elevatedRoles.includes(role)
-      ? { status: "ACCEPTED" }
-      : { status: "ACCEPTED", userId };
+    let filter = { status: "ACCEPTED" };
+
+    // ROLE-BASED VISIBILITY
+    if (role === "EMPLOYEE") {
+      // employee sees only assigned orders
+      filter.assignedEmployeeId = userId;
+    } else if (!["ADMIN", "MANAGER"].includes(role)) {
+      // normal user sees only his orders
+      filter.userId = userId;
+    }
+    // ADMIN & MANAGER see all orders
 
     // count for pagination
     const total = await Order.countDocuments(filter);
@@ -27,6 +32,7 @@ const getAllAcceptedOrder = async (req, res) => {
       .limit(limit)
       .populate("userId", "name email phone")
       .populate("deliveryAddressId")
+      .populate("assignedEmployeeId", "name email phone image") // populate assigned employee details
       .sort({ createdAt: -1 });
 
     res.status(200).json({

@@ -12,6 +12,7 @@ const getAllorderAdminAndMannegerView = async (req, res) => {
     // EMPLOYEE should NOT see pending orders
     if (role === "EMPLOYEE") {
       query.status = { $ne: "PENDING" };
+      query.assignedEmployeeId = req.user._id;
     }
 
     let total = await Order.countDocuments(query);
@@ -21,7 +22,8 @@ const getAllorderAdminAndMannegerView = async (req, res) => {
       .skip(skip)
       .limit(limit)
       .populate("userId", "name email phone")
-      .populate("deliveryAddressId");
+      .populate("deliveryAddressId")
+      .populate("assignedEmployeeId", "name email phone image"); // populate assigned employee details
     res.json({
       message: "Order fetched successfully",
       status: 200,

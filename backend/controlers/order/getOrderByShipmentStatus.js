@@ -8,6 +8,7 @@ const getOrderByShipmentStatus = async (req, res) => {
     const skip = (page - 1) * limit;
 
     const role = req.user.role.toUpperCase(); // convert role to uppercase for consistency
+    const userId = req.user._id;
 
     // roles that can see all orders by shipment status
     const elevatedRoles = ["ADMIN", "MANAGER", "EMPLOYEE"];
@@ -21,14 +22,16 @@ const getOrderByShipmentStatus = async (req, res) => {
       });
     }
 
-    let filter = {
-      shipmentStatus: shipmentStatus,
-    }; // initialize filter object with shipment status
+    // build filter condition
+    let filter = { shipmentStatus };
 
-    // EMPLOYEE should NOT see pending orders
+    // ROLE-BASED VISIBILITY
     if (role === "EMPLOYEE") {
+      // employee sees only assigned orders
+      filter.assignedEmployeeId = userId;
       filter.status = { $ne: "PENDING" };
     }
+    // ADMIN & MANAGER see all orders
 
     // count for pagination
     const total = await Order.countDocuments(filter);
@@ -40,6 +43,7 @@ const getOrderByShipmentStatus = async (req, res) => {
       .limit(limit)
       .populate("userId", "name email phone")
       .populate("deliveryAddressId")
+      .populate("assignedEmployeeId", "name email phone image") // populate assigned employee details
       .sort({ createdAt: -1 });
 
     res.status(200).json({
