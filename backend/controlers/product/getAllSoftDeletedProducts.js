@@ -1,20 +1,22 @@
-let Product = require("../../models/productModel");
+const Product = require("../../models/productModel");
 
-const getAllProduct = async (req, res) => {
+const getAllSoftDeletedProducts = async (req, res) => {
   try {
     let page = req.query.page || 1;
     let limit = req.query.limit || 10;
     let skip = (page - 1) * limit;
 
-    let total = await Product.countDocuments({ isDeleted: false });
+    let total = await Product.countDocuments({ isDeleted: true });
     let totalPages = Math.ceil(total / limit);
-    let products = await Product.find({ isDeleted: false })
+
+    let products = await Product.find({ isDeleted: true })
       .skip(skip)
       .limit(limit)
+      .sort({ deletedAt: -1 })
       .populate("categoryIds", "name");
 
     res.json({
-      message: "Product fetched successfully",
+      message: "Deleted products fetched successfully",
       status: 200,
       data: products,
       success: true,
@@ -26,11 +28,10 @@ const getAllProduct = async (req, res) => {
     res.json({
       message: "Something went wrong",
       status: 500,
-      data: e,
       success: false,
       error: true,
     });
   }
 };
 
-module.exports = { getAllProduct };
+module.exports = { getAllSoftDeletedProducts };

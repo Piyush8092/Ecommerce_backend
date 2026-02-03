@@ -48,6 +48,7 @@ const getCategorySummary = async (req, res) => {
           pipeline: [
             {
               $match: {
+                isDeleted: false,
                 $expr: { $in: ["$$categoryId", "$categoryIds"] }, // check if category _id is in product's categoryIds array
               },
             },

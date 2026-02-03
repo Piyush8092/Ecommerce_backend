@@ -2,7 +2,7 @@ let Product = require("../../models/productModel");
 
 const getAllProductNames = async (req, res) => {
   try {
-    const products = await Product.find({}, { name: 1 })
+    const products = await Product.find({ isDeleted: false }, { name: 1 })
       .sort({ name: 1 })
       .lean();
 

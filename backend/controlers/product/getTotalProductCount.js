@@ -2,7 +2,9 @@ let productModel = require("../../models/productModel");
 
 const getTotalProductCount = async (req, res) => {
   try {
-    let totalProductCount = await productModel.countDocuments();
+    let totalProductCount = await productModel.countDocuments({
+      isDeleted: false,
+    });
     res.status(200).json({
       message: "Total product count retrieved successfully",
       data: totalProductCount,
