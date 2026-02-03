@@ -69,6 +69,25 @@ let productSchema = new mongoose.Schema(
         },
       },
     ],
+    productInfoSections: [
+      {
+        title: {
+          type: String,
+          required: true,
+        },
+        type: {
+          type: String,
+          enum: ["LIST", "STEPS", "TEXT"],
+          required: true,
+        },
+        content: [
+          {
+            heading: String,
+            text: String,
+          },
+        ],
+      },
+    ],
     colors: [String],
     sizes: [String],
     length: { type: Number, default: 10 }, // cm
@@ -81,6 +100,15 @@ let productSchema = new mongoose.Schema(
     topSelling: {
       type: Boolean,
       default: false,
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+    deletedAt: {
+      type: Date,
+      default: null,
     },
   },
   { timestamps: true }

@@ -4,7 +4,11 @@ const getSpacificFAQ = async (req, res) => {
   try {
     let id = req.params.id;
 
-    const product = await Product.findById(id);
+    const product = await Product.findOne({
+      _id: id,
+      isDeleted: false,
+    });
+    
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }

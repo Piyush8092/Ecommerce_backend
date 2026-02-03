@@ -57,6 +57,7 @@ const queryCategory = async (req, res) => {
           pipeline: [
             {
               $match: {
+                isDeleted: false,
                 $expr: { $eq: ["$categoryId", "$$categoryId"] },
               },
             },

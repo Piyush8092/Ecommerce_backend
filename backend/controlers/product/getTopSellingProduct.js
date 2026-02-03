@@ -2,7 +2,12 @@ let Product = require("../../models/productModel");
 
 const getTopSellingProduct = async (req, res) => {
   try {
-    const products = await Product.find({ topSelling: true });
+    const products = await Product.find({ topSelling: true, isDeleted: false });
+
+    if (!products) {
+      return res.status(404).json({ message: "No top selling products found" });
+    }
+
     res.json({
       message: "Top selling products fetched successfully",
       status: 200,

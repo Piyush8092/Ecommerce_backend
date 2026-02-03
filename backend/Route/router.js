@@ -17,6 +17,15 @@ const {
 } = require("../controlers/product/getSpecificProduct");
 const { updateProduct } = require("../controlers/product/updateProduct");
 const { deleteProduct } = require("../controlers/product/deleteProduct");
+const {
+  softDeleteProduct,
+} = require("../controlers/product/softDeleteProduct");
+const {
+  restoreSoftDeletedProduct,
+} = require("../controlers/product/restoreSoftDeletedProduct");
+const {
+  getAllSoftDeletedProducts,
+} = require("../controlers/product/getAllSoftDeletedProducts");
 const { queryProduct } = require("../controlers/product/queryProduct");
 const { createProductFAQ } = require("../controlers/product/createProductFAQ");
 const { getSpacificFAQ } = require("../controlers/product/getSpacificFAQ");
@@ -344,8 +353,26 @@ router.post("/getCarouselImageUploadUrl", authGuard, getCarouselImageUploadUrl);
 router.post("/createProduct", authGuard, createProduct);
 router.get("/getAllProduct", getAllProduct);
 router.get("/getSpecificProduct/:id", getSpecificProduct);
-router.put("/updateProduct/:id", authGuard, updateProduct);
+router.put("/updateProduct/:id", authGuard, permit("ADMIN", "MANAGER"), updateProduct);
 router.delete("/deleteProduct/:id", authGuard, deleteProduct);
+router.patch(
+  "/softDeleteProduct/:id",
+  authGuard,
+  permit("ADMIN", "MANAGER"),
+  softDeleteProduct
+);
+router.patch(
+  "/restoreSoftDeletedProduct/:id",
+  authGuard,
+  permit("ADMIN", "MANAGER"),
+  restoreSoftDeletedProduct
+);
+router.get(
+  "/getAllSoftDeletedProducts",
+  authGuard,
+  permit("ADMIN", "MANAGER"),
+  getAllSoftDeletedProducts
+);
 router.get("/queryProduct", productQueryBuilder, queryProduct);
 router.get("/getProductSearchFilters", getProductSearchFilters);
 router.get("/getProductByCategory/:categoryId", getProductByCategory);
@@ -358,7 +385,7 @@ router.get("/top-selling-product", getTopSellingProduct);
 router.get(
   "/getTotalProductCount",
   authGuard,
-  permit("ADMIN"),
+  permit("ADMIN", "MANAGER"),
   getTotalProductCount
 );
 router.get(
@@ -423,7 +450,7 @@ router.get("/queryCategory", authGuard, permit("ADMIN"), queryCategory);
 router.get(
   "/getAllCategoryNames",
   authGuard,
-  permit("ADMIN"),
+  permit("ADMIN", "MANAGER"),
   getAllCategoryNames
 );
 // category image upload URL
@@ -451,7 +478,12 @@ router.get("/queryAdminUser", authGuard, queryAdminUser);
 // update user self image add and other thing add
 router.put("/updateUserSelf", authGuard, updateUserSelf);
 router.get("/getAllUserNames", authGuard, permit("ADMIN"), getAllUserNames);
-router.get("/getAllEmployeeNames", authGuard, permit("ADMIN", "MANAGER"), getAllEmployeeNames);
+router.get(
+  "/getAllEmployeeNames",
+  authGuard,
+  permit("ADMIN", "MANAGER"),
+  getAllEmployeeNames
+);
 router.post(
   "/getUserProfileImageUploadUrl",
   authGuard,
@@ -490,7 +522,12 @@ router.delete("/deleteCart/:id", authGuard, deleteCart);
 router.post("/createOrder", authGuard, checkUserBlocked, createOrder);
 router.get("/getLoginUserOrder", authGuard, getLoginUserOrder);
 router.get("/getSpecificOrder/:orderId", authGuard, getSpecificOrder);
-router.get("/getSpecificUserOrder/:userId", authGuard, permit("ADMIN"), getSpecificUserOrder); // for admin dashboard
+router.get(
+  "/getSpecificUserOrder/:userId",
+  authGuard,
+  permit("ADMIN"),
+  getSpecificUserOrder
+); // for admin dashboard
 router.get("/getAllPendingOrder", authGuard, getAllPendingOrder);
 router.get("/getAllAcceptedOrder", authGuard, getAllAcceptedOrder);
 router.get("/getAllShiftedOrder", authGuard, getAllShiftedOrder);
