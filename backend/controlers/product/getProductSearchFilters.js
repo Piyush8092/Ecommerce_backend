@@ -4,7 +4,7 @@ const getProductSearchFilters = async (req, res) => {
   try {
     const { query } = req.query;
     // Build search filter
-    const searchFilter = { isDeleted: false };
+    const searchFilter = { isDeleted: false, approvalStatus: "APPROVED" };
 
     if (query) {
       searchFilter.$or = [

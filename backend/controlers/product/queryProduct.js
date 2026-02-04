@@ -6,14 +6,17 @@ const queryProduct = async (req, res) => {
     const { page = 1, limit = 10 } = req.query;
     const skip = (page - 1) * limit;
 
-    // 1. total matched products count
-    const totalDocuments = await Product.countDocuments({
+    const filter = {
       ...mongoQuery,
       isDeleted: false,
-    });
+      approvalStatus: "APPROVED",
+    };
+
+    // 1. total matched products count
+    const totalDocuments = await Product.countDocuments(filter);
 
     // 2. paginated list
-    const products = await Product.find({ ...mongoQuery, isDeleted: false })
+    const products = await Product.find(filter)
       .skip(skip)
       .limit(Number(limit))
       .sort(sort);

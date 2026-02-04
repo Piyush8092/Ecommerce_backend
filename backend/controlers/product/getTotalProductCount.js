@@ -4,6 +4,7 @@ const getTotalProductCount = async (req, res) => {
   try {
     let totalProductCount = await productModel.countDocuments({
       isDeleted: false,
+      approvalStatus: "APPROVED",
     });
     res.status(200).json({
       message: "Total product count retrieved successfully",

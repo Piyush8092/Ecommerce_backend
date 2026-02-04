@@ -36,6 +36,7 @@ const getProductByCategoryIds = async (req, res) => {
     const products = await Product.find({
       categoryIds: { $in: categoryIds },
       isDeleted: false,
+      approvalStatus: "APPROVED",
     }).limit(limit);
 
     return res.status(200).json({

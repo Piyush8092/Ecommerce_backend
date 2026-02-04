@@ -7,6 +7,7 @@ const getSpacificFAQ = async (req, res) => {
     const product = await Product.findOne({
       _id: id,
       isDeleted: false,
+      approvalStatus: "APPROVED",
     });
     
     if (!product) {

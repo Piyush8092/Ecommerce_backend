@@ -18,6 +18,15 @@ const {
 const { updateProduct } = require("../controlers/product/updateProduct");
 const { deleteProduct } = require("../controlers/product/deleteProduct");
 const {
+  getProductByApprovalStatus,
+} = require("../controlers/product/getProductByApprovalStatus");
+const {
+  getProductCountByApprovalStatus,
+} = require("../controlers/product/getProductCountByApprovalStatus");
+const {
+  updateProductApprovalStatus,
+} = require("../controlers/product/updateProductApprovalStatus");
+const {
   softDeleteProduct,
 } = require("../controlers/product/softDeleteProduct");
 const {
@@ -350,11 +359,34 @@ router.delete("/deleteCarsole/:id", authGuard, deleteCarsole);
 router.post("/getCarouselImageUploadUrl", authGuard, getCarouselImageUploadUrl);
 
 // product
-router.post("/createProduct", authGuard, createProduct);
+router.post(
+  "/createProduct",
+  authGuard,
+  permit("ADMIN", "MANAGER"),
+  createProduct
+);
 router.get("/getAllProduct", getAllProduct);
 router.get("/getSpecificProduct/:id", getSpecificProduct);
-router.put("/updateProduct/:id", authGuard, permit("ADMIN", "MANAGER"), updateProduct);
+router.put(
+  "/updateProduct/:id",
+  authGuard,
+  permit("ADMIN", "MANAGER"),
+  updateProduct
+);
 router.delete("/deleteProduct/:id", authGuard, deleteProduct);
+router.get("/getProductByApprovalStatus", authGuard, permit("ADMIN"), getProductByApprovalStatus);
+router.get(
+  "/getProductCountByApprovalStatus",
+  authGuard,
+  permit("ADMIN"),
+  getProductCountByApprovalStatus
+);
+router.patch(
+  "/updateProductApprovalStatus/:id",
+  authGuard,
+  permit("ADMIN"),
+  updateProductApprovalStatus
+);
 router.patch(
   "/softDeleteProduct/:id",
   authGuard,
