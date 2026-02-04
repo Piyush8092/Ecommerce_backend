@@ -64,6 +64,9 @@ const {
   getProductImageUploadUrl,
 } = require("../controlers/product/getProductImageUploadUrl");
 const {
+  validateCartProducts,
+} = require("../controlers/product/validateCartProducts");
+const {
   getCategoryImageUploadUrl,
 } = require("../controlers/category/getCategoryImageUploadUrl");
 const {
@@ -428,6 +431,7 @@ router.get(
 );
 // product image upload URL
 router.post("/getProductImageUploadUrl", authGuard, getProductImageUploadUrl);
+router.post("/validateCartProducts", authGuard, validateCartProducts);
 
 // product FAQ
 router.post("/createProductFAQ/:id", authGuard, createProductFAQ);
