@@ -2,7 +2,7 @@ let Product = require("../../models/productModel");
 
 const getTopSellingProduct = async (req, res) => {
   try {
-    const products = await Product.find({ topSelling: true, isDeleted: false });
+    const products = await Product.find({ topSelling: true, isDeleted: false, approvalStatus: "APPROVED" });
 
     if (!products) {
       return res.status(404).json({ message: "No top selling products found" });

@@ -31,7 +31,7 @@ const getCategoryItems = async (req, res) => {
     // Construct query based on type
     let query;
     if (type === "product") {
-      query = { categoryIds: categoryId, isDeleted: false };
+      query = { categoryIds: categoryId, isDeleted: false, approvalStatus: "APPROVED" };
     } else {
       query = { categoryId };
     }

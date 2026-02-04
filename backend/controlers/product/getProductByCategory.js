@@ -5,7 +5,7 @@ const getProductByCategory = async (req, res) => {
     let categoryId = req.params.categoryId;
     let limit = req.query.limit || 20;
 
-    const products = await Product.find({ categoryIds: categoryId,  isDeleted: false }).limit(
+    const products = await Product.find({ categoryIds: categoryId,  isDeleted: false, approvalStatus: "APPROVED" }).limit(
       limit
     );
     res.json({

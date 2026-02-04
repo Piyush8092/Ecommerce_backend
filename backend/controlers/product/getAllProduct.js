@@ -6,9 +6,9 @@ const getAllProduct = async (req, res) => {
     let limit = req.query.limit || 10;
     let skip = (page - 1) * limit;
 
-    let total = await Product.countDocuments({ isDeleted: false });
+    let total = await Product.countDocuments({ isDeleted: false, approvalStatus: "APPROVED" });
     let totalPages = Math.ceil(total / limit);
-    let products = await Product.find({ isDeleted: false })
+    let products = await Product.find({ isDeleted: false, approvalStatus: "APPROVED" })
       .skip(skip)
       .limit(limit)
       .populate("categoryIds", "name");

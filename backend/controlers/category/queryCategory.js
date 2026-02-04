@@ -58,6 +58,7 @@ const queryCategory = async (req, res) => {
             {
               $match: {
                 isDeleted: false,
+                approvalStatus: "APPROVED",
                 $expr: { $eq: ["$categoryId", "$$categoryId"] },
               },
             },

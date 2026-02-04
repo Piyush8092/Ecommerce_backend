@@ -3,9 +3,6 @@ let Product = require("../../models/productModel");
 const createProduct = async (req, res) => {
   try {
     let role = req.user.role;
-    if (role !== "ADMIN") {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
     const { name, price, description, categoryIds, stock } = req.body;
 
     if (!name || !price || !description || !stock) {
@@ -13,15 +10,26 @@ const createProduct = async (req, res) => {
         message: "Name, price, description and stock are required",
       });
     }
-    
+
     if (!Array.isArray(categoryIds) || categoryIds.length === 0) {
       return res
         .status(400)
         .json({ message: "At least one category is required" });
     }
 
+    let payload = req.body;
+
+    if (role === "MANAGER") {
+      payload.approvalStatus = "PENDING";
+    }
+
+    // for admin created products
+    if (role === "ADMIN") {
+      payload.approvalStatus = "APPROVED";
+    }
+
     // Create new product (images can be added later via update)
-    const newProduct = new Product(req.body);
+    const newProduct = new Product(payload);
 
     const savedProduct = await newProduct.save();
 

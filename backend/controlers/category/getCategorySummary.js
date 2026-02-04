@@ -49,6 +49,7 @@ const getCategorySummary = async (req, res) => {
             {
               $match: {
                 isDeleted: false,
+                approvalStatus: "APPROVED",
                 $expr: { $in: ["$$categoryId", "$categoryIds"] }, // check if category _id is in product's categoryIds array
               },
             },

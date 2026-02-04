@@ -9,7 +9,8 @@ const getNewLaunchProduct = async (req, res) => {
     // Find all products created in the last 7 days
     const products = await Product.find({
       createdAt: { $gte: oneWeekAgo }, // greater than or equal to 1 week ago
-      isDeleted: false
+      isDeleted: false,
+      approvalStatus: "APPROVED"
     })
       .sort({ createdAt: -1 }) // newest first
       .limit(10)
