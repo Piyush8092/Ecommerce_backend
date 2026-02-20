@@ -64,10 +64,15 @@ const queryOrder = async (req, res) => {
 
     // fetch orders with pagination and populate related data fields
     const orders = await Order.find(filter)
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limitNumber)
       .populate("userId", "name email phone")
       .populate("deliveryAddressId")
+      .populate({
+        path: "items.productId",
+        select: "name isComboProduct",
+      })
       .populate("assignedEmployeeId", "name email phone image"); // populate assigned employee details
 
     const total = await Order.countDocuments(filter);

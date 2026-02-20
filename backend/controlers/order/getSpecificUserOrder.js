@@ -13,12 +13,16 @@ const getSpecificUserOrder = async (req, res) => {
 
     // Fetch orders with all related details
     const orders = await Order.find({ userId })
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .populate("deliveryAddressId")
       .populate("userId", "name email phone")
-      .populate("assignedEmployeeId", "name email phone image") // populate assigned employee details
-      .sort({ createdAt: -1 });
+      .populate({
+        path: "items.productId",
+        select: "name isComboProduct",
+      })
+      .populate("assignedEmployeeId", "name email phone image"); // populate assigned employee details
 
     res.status(200).json({
       message: "Orders fetched successfully",

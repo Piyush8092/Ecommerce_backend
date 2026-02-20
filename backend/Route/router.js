@@ -40,6 +40,8 @@ const { createProductFAQ } = require("../controlers/product/createProductFAQ");
 const { getSpacificFAQ } = require("../controlers/product/getSpacificFAQ");
 const { updateProductFAQ } = require("../controlers/product/updateProductFAQ");
 const { deleteProductFAQ } = require("../controlers/product/deleteFAQ");
+const { getAllComboProductsForAdmin } = require("../controlers/product/getAllComboProductsForAdmin");
+const { getAllComboProducts } = require("../controlers/product/getAllComboProducts");
 const createReview = require("../controlers/review/createReview");
 const getProductReviews = require("../controlers/review/getProductReviews");
 const getMyProductReview = require("../controlers/review/getMyProductReview");
@@ -458,6 +460,10 @@ router.post("/createProductFAQ/:id", authGuard, createProductFAQ);
 router.get("/getSpacificFAQ/:id", getSpacificFAQ);
 router.put("/updateProductFAQ/:id/:faqId", authGuard, updateProductFAQ);
 router.delete("/deleteProductFAQ/:id/:faqId", authGuard, deleteProductFAQ);
+
+//product combo
+router.get("/getAllComboProductsForAdmin", authGuard, permit("ADMIN", "MANAGER"), getAllComboProductsForAdmin);
+router.get("/getAllComboProducts", getAllComboProducts);
 
 // product review
 router.post("/createReview", authGuard, checkUserBlocked, createReview);

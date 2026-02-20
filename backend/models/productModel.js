@@ -28,6 +28,10 @@ let productSchema = new mongoose.Schema(
         required: true,
       },
     ],
+    isComboProduct: {
+      type: Boolean,
+      default: false,
+    },
     discount: {
       type: Number,
       required: false,
