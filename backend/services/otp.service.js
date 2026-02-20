@@ -1,7 +1,7 @@
 const axios = require("axios");
 const OTP = require("../models/otpModel");
 
-const OTP_EXPIRY_MINUTES = 5;
+const OTP_EXPIRY_MINUTES = 10;
 const MAX_ATTEMPTS = 5;
 
 /**

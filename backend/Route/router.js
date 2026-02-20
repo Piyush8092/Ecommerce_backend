@@ -90,6 +90,21 @@ const {
 const {
   deleteDeliveryAddress,
 } = require("../controlers/deliveryAddress/deleteDeliveryAddress");
+const createPromotionalHighlight = require("../controlers/promotionalHighlight/createPromotionalHighlight");
+const getAllPromotionalHighlights = require("../controlers/promotionalHighlight/getAllPromotionalHighlights");
+const getActivePromotionalHighlights = require("../controlers/promotionalHighlight/getActivePromotionalHighlights");
+const updatePromotionalHighlight = require("../controlers/promotionalHighlight/updatePromotionalHighlight");
+const deletePromotionalHighlight = require("../controlers/promotionalHighlight/deletePromotionalHighlight");
+const reorderPromotionalHighlights = require("../controlers/promotionalHighlight/reorderPromotionalHighlights");
+
+const { createAnnouncementMessage } = require("../controlers/announcementMessage/createAnnouncementMessage");
+const { getAllAnnouncementMessage } = require("../controlers/announcementMessage/getAllAnnouncementMessage");
+const { getActiveAnnouncementMessage } = require("../controlers/announcementMessage/getActiveAnnouncementMessage");
+const { updateAnnouncementMessage } = require("../controlers/announcementMessage/updateAnnouncementMessage");
+const { deleteAnnouncementMessage } = require("../controlers/announcementMessage/deleteAnnouncementMessage");
+const { reorderAnnouncementMessage } = require("../controlers/announcementMessage/reorderAnnouncementMessage");
+
+
 const { createCart } = require("../controlers/cart/createCart");
 const { getAllCart } = require("../controlers/cart/getAllCart");
 const { updateCart } = require("../controlers/cart/updateCart");
@@ -377,7 +392,12 @@ router.put(
   updateProduct
 );
 router.delete("/deleteProduct/:id", authGuard, deleteProduct);
-router.get("/getProductByApprovalStatus", authGuard, permit("ADMIN"), getProductByApprovalStatus);
+router.get(
+  "/getProductByApprovalStatus",
+  authGuard,
+  permit("ADMIN"),
+  getProductByApprovalStatus
+);
 router.get(
   "/getProductCountByApprovalStatus",
   authGuard,
@@ -547,6 +567,86 @@ router.get(
   permit("ADMIN"),
   getQueryDeliveryAddress
 ); // for admin dashboard
+
+// Promotional Highlight Routes
+router.post(
+  "/createPromotionalHighlight",
+  authGuard,
+  permit("ADMIN"),
+  createPromotionalHighlight
+);
+
+router.get(
+  "/getAllPromotionalHighlights",
+  authGuard,
+  permit("ADMIN"),
+  getAllPromotionalHighlights
+);
+
+router.get("/getActivePromotionalHighlights", getActivePromotionalHighlights);
+
+router.put(
+  "/updatePromotionalHighlight/:id",
+  authGuard,
+  permit("ADMIN"),
+  updatePromotionalHighlight
+);
+
+router.delete(
+  "/deletePromotionalHighlight/:id",
+  authGuard,
+  permit("ADMIN"),
+  deletePromotionalHighlight
+);
+
+router.put(
+  "/reorderPromotionalHighlights",
+  authGuard,
+  permit("ADMIN"),
+  reorderPromotionalHighlights
+);
+
+// Announcement Routes
+router.post(
+  "/createAnnouncementMessage",
+  authGuard,
+  permit("ADMIN"),
+  createAnnouncementMessage
+);
+
+router.get(
+  "/getAllAnnouncementMessage",
+  authGuard,
+  permit("ADMIN"),
+  getAllAnnouncementMessage
+);
+
+router.get(
+  "/getActiveAnnouncementMessage",
+  getActiveAnnouncementMessage
+);
+
+router.put(
+  "/updateAnnouncementMessage/:id",
+  authGuard,
+  permit("ADMIN"),
+  updateAnnouncementMessage
+);
+
+router.delete(
+  "/deleteAnnouncementMessage/:id",
+  authGuard,
+  permit("ADMIN"),
+  deleteAnnouncementMessage
+);
+
+router.put(
+  "/reorderAnnouncementMessage",
+  authGuard,
+  permit("ADMIN"),
+  reorderAnnouncementMessage
+);
+
 
 // cart
 router.post("/createCart", authGuard, createCart);
