@@ -21,6 +21,12 @@ let productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    relatedProducts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
     categoryIds: [
       {
         type: mongoose.Schema.Types.ObjectId,

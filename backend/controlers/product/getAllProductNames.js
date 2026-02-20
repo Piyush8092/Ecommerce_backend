@@ -2,7 +2,10 @@ let Product = require("../../models/productModel");
 
 const getAllProductNames = async (req, res) => {
   try {
-    const products = await Product.find({ isDeleted: false, approvalStatus: "APPROVED" }, { name: 1 })
+    const products = await Product.find(
+      { isDeleted: false, approvalStatus: "APPROVED" },
+      { name: 1, image: { $slice: 1 } }
+    )
       .sort({ name: 1 })
       .lean();
 
