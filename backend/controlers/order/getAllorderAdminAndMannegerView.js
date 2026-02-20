@@ -19,10 +19,15 @@ const getAllorderAdminAndMannegerView = async (req, res) => {
     let totalPages = Math.ceil(total / limit);
 
     const order = await Order.find(query)
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .populate("userId", "name email phone")
       .populate("deliveryAddressId")
+      .populate({
+        path: "items.productId",
+        select: "name isComboProduct",
+      })
       .populate("assignedEmployeeId", "name email phone image"); // populate assigned employee details
     res.json({
       message: "Order fetched successfully",

@@ -34,10 +34,14 @@ const getOrderByStatus = async (req, res) => {
 
     // fetch orders
     const orders = await Order.find(filter)
+      .sort(buildSort(req)) // use the buildSort function to build the sort object
       .skip(skip)
       .limit(limit)
-      .populate("deliveryAddressId")
-      .sort(buildSort(req)); // use the buildSort function to build the sort object
+      .populate({
+        path: "items.productId",
+        select: "name isComboProduct",
+      })
+      .populate("deliveryAddressId");
 
     res.status(200).json({
       message: "Orders fetched successfully",

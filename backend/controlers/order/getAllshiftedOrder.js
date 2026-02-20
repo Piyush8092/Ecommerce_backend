@@ -28,12 +28,16 @@ const getAllShiftedOrder = async (req, res) => {
 
     // fetch orders
     const orders = await Order.find(filter)
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .populate("userId", "name email phone")
       .populate("deliveryAddressId")
-      .populate("assignedEmployeeId", "name email phone image") // populate assigned employee details
-      .sort({ createdAt: -1 });
+      .populate({
+        path: "items.productId",
+        select: "name isComboProduct",
+      })
+      .populate("assignedEmployeeId", "name email phone image"); // populate assigned employee details
 
     res.status(200).json({
       message: "Orders fetched successfully",

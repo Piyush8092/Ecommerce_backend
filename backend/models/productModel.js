@@ -21,6 +21,12 @@ let productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    relatedProducts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
     categoryIds: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -28,6 +34,10 @@ let productSchema = new mongoose.Schema(
         required: true,
       },
     ],
+    isComboProduct: {
+      type: Boolean,
+      default: false,
+    },
     discount: {
       type: Number,
       required: false,

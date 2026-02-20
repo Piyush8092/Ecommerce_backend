@@ -26,12 +26,16 @@ const getOrderByProductId = async (req, res) => {
     const skip = (pageNumber - 1) * limitNumber;
 
     const orders = await Order.find(query)
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limitNumber)
       .populate("userId", "name email phone")
       .populate("deliveryAddressId")
-      .populate("assignedEmployeeId", "name email phone image") // populate assigned employee details
-      .sort({ createdAt: -1 });
+      .populate({
+        path: "items.productId",
+        select: "name isComboProduct",
+      })
+      .populate("assignedEmployeeId", "name email phone image"); // populate assigned employee details
 
     const total = await Order.countDocuments(query);
 
