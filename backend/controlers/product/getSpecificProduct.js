@@ -8,8 +8,15 @@ const getSpecificProduct = async (req, res) => {
       _id: id,
       isDeleted: false,
       approvalStatus: "APPROVED",
+    }).populate({
+      path: "relatedProducts",
+      select: {
+        name: 1,
+        price: 1,
+        image: { $slice: 1 },
+      },
     });
-    
+
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
