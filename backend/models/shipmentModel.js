@@ -11,7 +11,6 @@ const shipmentSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Order",
       required: true,
-      unique: true, // One shipment per order
     },
 
     // Shiprocket IDs
